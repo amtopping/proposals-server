@@ -35,7 +35,6 @@
       gap: 24px;
     }
 
-    /* ── Controls ── */
     .controls {
       display: flex;
       gap: 12px;
@@ -55,15 +54,8 @@
       transition: opacity 0.15s, transform 0.1s;
     }
     .btn:hover { opacity: 0.88; transform: translateY(-1px); }
-    .btn-primary {
-      background: var(--gradient);
-      color: var(--white);
-    }
-    .btn-secondary {
-      background: var(--white);
-      color: var(--primary);
-      border: 1.5px solid var(--border);
-    }
+    .btn-primary { background: var(--gradient); color: var(--white); }
+    .btn-secondary { background: var(--white); color: var(--primary); border: 1.5px solid var(--border); }
 
     #dl-status {
       font-family: 'Outfit', sans-serif;
@@ -72,7 +64,6 @@
       letter-spacing: 0.04em;
     }
 
-    /* ── Invoice Paper ── */
     #capture-target {
       width: 760px;
       background: var(--white);
@@ -81,13 +72,8 @@
       box-shadow: 0 8px 48px rgba(13,31,45,0.12);
     }
 
-    /* ── Gradient top bar ── */
-    .inv-topbar {
-      height: 5px;
-      background: var(--gradient);
-    }
+    .inv-topbar { height: 5px; background: var(--gradient); }
 
-    /* ── Header ── */
     .inv-header {
       background: var(--primary);
       padding: 36px 52px 32px;
@@ -97,19 +83,13 @@
       gap: 24px;
     }
 
-    .inv-logo {
-      height: 32px;
-      width: auto;
-      display: block;
-      margin-bottom: 12px;
-    }
+    .inv-logo { height: 32px; width: auto; display: block; margin-bottom: 12px; }
 
     .inv-from-sub {
       font-family: 'Inter', sans-serif;
       font-size: 12px;
       color: rgba(255,255,255,0.50);
       font-weight: 300;
-      letter-spacing: 0.01em;
     }
 
     .inv-word { text-align: right; }
@@ -136,7 +116,6 @@
       line-height: 1;
     }
 
-    /* ── Meta strip ── */
     .inv-meta {
       background: var(--surface);
       padding: 18px 52px;
@@ -162,7 +141,6 @@
       color: var(--primary);
     }
 
-    /* ── Body ── */
     .inv-body { padding: 44px 52px; }
 
     .billed-row {
@@ -200,7 +178,6 @@
       font-weight: 400;
     }
 
-    /* Service card */
     .inv-desc-label {
       font-family: 'Outfit', sans-serif;
       font-size: 8.5px;
@@ -234,16 +211,8 @@
       color: var(--muted);
     }
 
-    /* Table */
-    .inv-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 28px;
-    }
-
-    .inv-table thead tr {
-      border-bottom: 2px solid var(--primary);
-    }
+    .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
+    .inv-table thead tr { border-bottom: 2px solid var(--primary); }
 
     .inv-table thead th {
       font-family: 'Outfit', sans-serif;
@@ -273,11 +242,7 @@
       color: var(--primary);
     }
 
-    .td-desc {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      color: var(--primary);
-    }
+    .td-desc { font-family: 'Inter', sans-serif; font-weight: 500; color: var(--primary); }
 
     .td-sub {
       font-family: 'Inter', sans-serif;
@@ -288,13 +253,7 @@
       line-height: 1.5;
     }
 
-    /* Totals */
-    .inv-totals {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 44px;
-    }
-
+    .inv-totals { display: flex; justify-content: flex-end; margin-bottom: 44px; }
     .totals-block { min-width: 270px; }
 
     .totals-row {
@@ -313,18 +272,8 @@
       padding-top: 14px;
     }
 
-    .totals-label {
-      font-family: 'Inter', sans-serif;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .totals-value {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      font-variant-numeric: tabular-nums;
-      color: var(--text);
-    }
+    .totals-label { font-family: 'Inter', sans-serif; color: var(--muted); font-size: 12px; }
+    .totals-value { font-family: 'Inter', sans-serif; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--text); }
 
     .totals-row.total .totals-label {
       font-family: 'Outfit', sans-serif;
@@ -345,7 +294,6 @@
       background-clip: text;
     }
 
-    /* Payment block */
     .inv-payment {
       background: var(--primary);
       border-radius: 10px;
@@ -404,7 +352,6 @@
       color: var(--white);
     }
 
-    /* Footer */
     .inv-footer {
       display: flex;
       justify-content: space-between;
@@ -413,22 +360,10 @@
       border-top: 1px solid var(--border);
     }
 
-    .inv-footer-brand {
-      font-family: 'Outfit', sans-serif;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--muted);
-    }
+    .inv-footer-brand { font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 500; color: var(--muted); }
 
-    .inv-footer-note {
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      color: var(--muted);
-      text-align: right;
-      line-height: 1.6;
-    }
+    .inv-footer-note { font-family: 'Inter', sans-serif; font-size: 10px; color: var(--muted); text-align: right; line-height: 1.6; }
 
-    /* Status badge */
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -445,12 +380,7 @@
       border: 1px solid rgba(26,158,158,0.25);
     }
 
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--cyan);
-    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); }
 
     @media print {
       body { background: white; padding: 0; }
@@ -473,12 +403,7 @@
 
     <div class="inv-header">
       <div>
-        <img
-          class="inv-logo"
-          src="https://res.cloudinary.com/dialhpycd/image/upload/v1770670281/rerev_labs_title_logo_afrgnu.png"
-          alt="ReRev Labs"
-          crossorigin="anonymous"
-        />
+        <img class="inv-logo" src="https://res.cloudinary.com/dialhpycd/image/upload/v1770670281/rerev_labs_title_logo_afrgnu.png" alt="ReRev Labs" crossorigin="anonymous" />
         <div class="inv-from-sub">keyona@rerev.io &nbsp;·&nbsp; 225-312-1615</div>
       </div>
       <div class="inv-word">
@@ -532,7 +457,7 @@
 
       <div class="inv-desc-label">Services Rendered</div>
       <div class="inv-desc-card">
-        <div class="inv-desc-title">April Chief of Staff Services for Prismm</div>
+        <div class="inv-desc-title">April Fractional Chief of Staff Services for Prismm</div>
         <div class="inv-desc-period">April 1 – April 30, 2026</div>
       </div>
 
@@ -546,7 +471,7 @@
         <tbody>
           <tr>
             <td>
-              <div class="td-desc">April Chief of Staff Services for Prismm</div>
+              <div class="td-desc">April Fractional Chief of Staff Services for Prismm</div>
               <div class="td-sub">Supporting the C-Suite, and especially CEO, in the strategy and execution of operations and growth initiatives</div>
             </td>
             <td>$2,500.00</td>
@@ -601,25 +526,15 @@
       const btn = document.getElementById('download-btn');
       const status = document.getElementById('dl-status');
       const target = document.getElementById('capture-target');
-
       btn.disabled = true;
       btn.textContent = 'Capturing...';
       status.textContent = '';
-
       try {
-        const canvas = await html2canvas(target, {
-          scale: 2,
-          useCORS: true,
-          allowTaint: false,
-          backgroundColor: '#FFFFFF',
-          logging: false
-        });
-
+        const canvas = await html2canvas(target, { scale: 2, useCORS: true, allowTaint: false, backgroundColor: '#FFFFFF', logging: false });
         const link = document.createElement('a');
         link.download = 'prismm-invoice-april-2026.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
-
         status.textContent = '✓ Saved to Downloads.';
         status.style.color = '#1A9E9E';
       } catch (err) {
