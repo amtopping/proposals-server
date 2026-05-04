@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoice · Prismm · April 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #1F2937;
+      --gold:   #F5C070;
+      --coral:  #F9655B;
+      --purple: #6658EA;
+      --cream:  #FAF8F5;
+      --ink:    #111827;
+      --muted:  #6B7280;
+      --border: #E5E0D8;
+      --white:  #FFFFFF;
+    }
+
+    body {
+      background: #EFEFED;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 48px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: var(--navy); color: var(--white); }
+    .btn-secondary { background: var(--white); color: var(--navy); border: 1px solid var(--border); }
+
+    #dl-status {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    #capture-target {
+      width: 760px;
+      background: var(--white);
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.10);
+    }
+
+    .inv-header {
+      background: var(--navy);
+      padding: 40px 52px 36px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 24px;
+    }
+
+    .inv-from-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .inv-from-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .inv-from-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+      letter-spacing: 0.01em;
+    }
+
+    .inv-word { text-align: right; }
+
+    .inv-word-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px;
+      color: rgba(255,255,255,0.12);
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+
+    .inv-number {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.08em;
+      margin-top: 6px;
+    }
+
+    .inv-meta {
+      background: var(--cream);
+      padding: 20px 52px;
+      display: flex;
+      gap: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .meta-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 8.5px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .meta-value {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .inv-body { padding: 44px 52px; }
+
+    .billed-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 44px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .billed-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .billed-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 18px;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .billed-detail {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .inv-desc-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .inv-desc-card {
+      background: var(--cream);
+      border-left: 3px solid var(--purple);
+      border-radius: 0 4px 4px 0;
+      padding: 20px 24px;
+      margin-bottom: 36px;
+    }
+
+    .inv-desc-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .inv-desc-period {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .inv-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 28px;
+    }
+
+    .inv-table thead tr { border-bottom: 1.5px solid var(--navy); }
+
+    .inv-table thead th {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 0 10px;
+      text-align: left;
+    }
+
+    .inv-table thead th:last-child { text-align: right; }
+    .inv-table tbody tr { border-bottom: 1px solid var(--border); }
+
+    .inv-table tbody td {
+      padding: 16px 0;
+      font-size: 13.5px;
+      color: var(--ink);
+      vertical-align: top;
+    }
+
+    .inv-table tbody td:last-child {
+      text-align: right;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .td-desc { font-weight: 500; }
+
+    .td-sub {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 3px;
+      font-weight: 300;
+    }
+
+    .inv-totals {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 48px;
+    }
+
+    .totals-block { min-width: 260px; }
+
+    .totals-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .totals-row:last-child {
+      border-bottom: none;
+      border-top: 2px solid var(--navy);
+      margin-top: 4px;
+      padding-top: 14px;
+    }
+
+    .totals-label { color: var(--muted); font-size: 12px; }
+    .totals-value { font-weight: 500; font-variant-numeric: tabular-nums; }
+
+    .totals-row.total .totals-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .totals-row.total .totals-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--navy);
+    }
+
+    .inv-payment {
+      background: var(--navy);
+      border-radius: 6px;
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .payment-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .payment-method {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .payment-due { text-align: right; }
+
+    .payment-due-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 6px;
+    }
+
+    .payment-due-date {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--white);
+    }
+
+    .inv-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .inv-footer-brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .inv-footer-note {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FEF3C7;
+      color: #92400E;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #D97706;
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .controls { display: none; }
+      #capture-target { box-shadow: none; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <button class="btn btn-primary" id="download-btn" onclick="downloadAsImage()">⬇ Download as PNG</button>
+    <button class="btn btn-secondary" onclick="window.print()">🖨 Print / Save PDF</button>
+    <p id="dl-status"></p>
+  </div>
+
+  <div id="capture-target">
+
+    <div class="inv-header">
+      <div>
+        <div class="inv-from-label">Issued by</div>
+        <div class="inv-from-name">ReRev LLC</div>
+        <div class="inv-from-sub">keyona@rerev.io &nbsp;·&nbsp; 225-312-1615</div>
+      </div>
+      <div class="inv-word">
+        <div class="inv-word-text">INVOICE</div>
+        <div class="inv-number"># 00000046</div>
+      </div>
+    </div>
+
+    <div class="inv-meta">
+      <div class="meta-block">
+        <div class="meta-label">Issue Date</div>
+        <div class="meta-value">May 3, 2026</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Service Period</div>
+        <div class="meta-value">April 2026</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Due Date</div>
+        <div class="meta-value">Upon Receipt</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Status</div>
+        <div class="meta-value">
+          <span class="status-badge"><span class="status-dot"></span>Awaiting Payment</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="inv-body">
+
+      <div class="billed-row">
+        <div>
+          <div class="billed-label">Billed To</div>
+          <div class="billed-name">Wunderwood DBA Prismm</div>
+          <div class="billed-detail">
+            591 Collaboration Way, Suite 605<br>
+            Newark, DE US 19713
+          </div>
+        </div>
+        <div>
+          <div class="billed-label">From</div>
+          <div class="billed-name">ReRev LLC</div>
+          <div class="billed-detail">
+            1124 20th St S #208<br>
+            Birmingham, AL USA 35205<br>
+            keyona@rerev.io
+          </div>
+        </div>
+      </div>
+
+      <div class="inv-desc-label">Services Rendered</div>
+      <div class="inv-desc-card">
+        <div class="inv-desc-title">April Chief of Staff Services for Prismm</div>
+        <div class="inv-desc-period">April 1 – April 30, 2026</div>
+      </div>
+
+      <table class="inv-table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th style="text-align:right;">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="td-desc">April Chief of Staff Services for Prismm</div>
+              <div class="td-sub">Supporting the C-Suite, and especially CEO, in the strategy and execution of operations and growth initiatives</div>
+            </td>
+            <td>$2,500.00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="inv-totals">
+        <div class="totals-block">
+          <div class="totals-row">
+            <span class="totals-label">Subtotal</span>
+            <span class="totals-value">$2,500.00</span>
+          </div>
+          <div class="totals-row">
+            <span class="totals-label">Tax</span>
+            <span class="totals-value">$0.00</span>
+          </div>
+          <div class="totals-row total">
+            <span class="totals-label">Total Due</span>
+            <span class="totals-value">$2,500.00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="inv-payment">
+        <div>
+          <div class="payment-label">Payment</div>
+          <div class="payment-method">
+            Stripe &nbsp;·&nbsp; <a href="https://buy.stripe.com/bJe28raf96Dm5tE1SugUM02" style="color:#F5C070; font-size:12px;">buy.stripe.com/bJe28raf96Dm5tE1SugUM02</a><br>
+            <span style="opacity:0.5; font-size:11px;">Taxes included in pricing &nbsp;·&nbsp; keyona@rerev.io &nbsp;·&nbsp; 225-312-1615</span>
+          </div>
+        </div>
+        <div class="payment-due">
+          <div class="payment-due-label">Due</div>
+          <div class="payment-due-date">Upon Receipt</div>
+        </div>
+      </div>
+
+      <div class="inv-footer">
+        <div class="inv-footer-brand">ReRev LLC × Prismm</div>
+        <div class="inv-footer-note">
+          Thank you for the partnership.<br>
+          Taxes are included in pricing.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    async function downloadAsImage() {
+      const btn = document.getElementById('download-btn');
+      const status = document.getElementById('dl-status');
+      const target = document.getElementById('capture-target');
+
+      btn.disabled = true;
+      btn.textContent = 'Capturing...';
+      status.textContent = '';
+
+      try {
+        const canvas = await html2canvas(target, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#FFFFFF',
+          logging: false
+        });
+
+        const link = document.createElement('a');
+        link.download = 'prismm-invoice-april-2026.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+
+        status.textContent = '✓ Saved to Downloads.';
+        status.style.color = '#6658EA';
+      } catch (err) {
+        status.textContent = '✗ ' + err.message;
+        status.style.color = '#F9655B';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '⬇ Download as PNG';
+      }
+    }
+  </script>
+
+</body>
+</html>
