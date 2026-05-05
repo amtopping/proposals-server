@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyona Meeks — Speaker Pitch for ParsLabs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #C2185B;
+      color: #fff;
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-size: 60px 60px;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 2;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3.5rem 2rem 3rem;
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.65;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      line-height: 1.05;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+
+    .sub {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #FF8A80;
+      margin-bottom: 2.5rem;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.18);
+      margin-bottom: 2rem;
+    }
+
+    .topics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      border: 0.5px solid rgba(255,255,255,0.18);
+      border-radius: 4px;
+      padding: 1.4rem;
+    }
+
+    .card-num {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: #FF8A80;
+      margin-bottom: 0.6rem;
+    }
+
+    .card-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.7rem;
+      line-height: 1.5;
+    }
+
+    .card-body {
+      font-size: 12px;
+      line-height: 1.75;
+      opacity: 0.88;
+    }
+
+    .card-example {
+      margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 0.5px solid rgba(255,255,255,0.15);
+      font-size: 11px;
+      color: #FF8A80;
+      line-height: 1.65;
+    }
+
+    .card-example strong {
+      display: block;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 9px;
+      margin-bottom: 0.35rem;
+      opacity: 0.75;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-top: 1.75rem;
+      border-top: 0.5px solid rgba(255,255,255,0.18);
+    }
+
+    .cta-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      margin-bottom: 0.3rem;
+    }
+
+    .cta-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #FF8A80;
+    }
+
+    .zdp-note {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      opacity: 0.45;
+      text-transform: uppercase;
+      margin-top: 0.3rem;
+    }
+
+    .badge {
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: rgba(255,138,128,0.12);
+      border: 0.5px solid #FF8A80;
+      color: #FF8A80;
+      padding: 5px 12px;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="wrap">
+    <div class="eyebrow">Speaker pitch for ParsLabs &nbsp;·&nbsp; May 2026 Series</div>
+    <h1>Keyona Meeks</h1>
+    <div class="sub">ReRev Labs &nbsp;·&nbsp; AI Implementation Consultant</div>
+
+    <div class="divider"></div>
+
+    <div class="topics">
+
+      <div class="card">
+        <div class="card-num">01</div>
+        <div class="card-title">High-impact AI automation for business in 2026</div>
+        <div class="card-body">I build automation that plugs into the tools teams already use, no new platforms, no retraining required. The result is faster output with the same people.</div>
+        <div class="card-example">
+          <strong>For ParsLabs</strong>
+          For a conversational AI agency, this looks like automating client intake, proposal delivery, and follow-up sequences without leaving your existing workspace.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-num">02</div>
+        <div class="card-title">Real-life AI automations in marketing</div>
+        <div class="card-body">I design human-in-the-loop marketing systems where AI drafts and routes content, but the team stays in control of what goes out and when.</div>
+        <div class="card-example">
+          <strong>For ParsLabs</strong>
+          A content pipeline that turns client case studies into LinkedIn posts, email sequences, and outreach copy, staged for your review before anything publishes.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-num">03</div>
+        <div class="card-title">Best practices for AI-assisted coding</div>
+        <div class="card-body">I use AI coding tools to ship production-ready work directly from the chat interface, including live deployments. The Zero-Deploy HTML Publisher is a live example of this workflow.</div>
+        <div class="card-example">
+          <strong>For ParsLabs</strong>
+          This page was built and deployed without leaving Claude. No separate IDE, no manual push. That is the workflow I teach.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-num">04</div>
+        <div class="card-title">AI implementation risks</div>
+        <div class="card-body">Working across Africa, the Caribbean, and North America, I have seen what breaks in production. Most failures come from systems designed for efficiency, not for the team using them.</div>
+        <div class="card-example">
+          <strong>For ParsLabs</strong>
+          The real risk is adoption failure when AI replaces workflows instead of amplifying them. I speak to this directly from production experience.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <div>
+        <div class="cta-label">Ready to talk</div>
+        <div class="cta-value">keyona@rerev.io</div>
+        <div class="zdp-note">Built with Zero-Deploy HTML Publisher</div>
+      </div>
+      <div>
+        <div class="badge">Available May 18 – 29</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
