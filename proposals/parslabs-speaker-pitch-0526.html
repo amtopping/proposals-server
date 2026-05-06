@@ -11,8 +11,6 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--white);overflow-x:hidden;}
 .container{max-width:var(--max);margin:0 auto;padding:0 var(--pad);}
-
-/* HERO */
 .hero-section{position:relative;height:100vh;min-height:500px;max-height:780px;overflow:hidden;background:var(--magenta);border-bottom:2px solid rgba(255,255,255,0.15);}
 #hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:0.55;}
 .hero-ui{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;padding:2.5rem var(--pad);}
@@ -23,52 +21,37 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .hero-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(3.5rem,10vw,8rem);line-height:0.9;letter-spacing:-0.03em;color:var(--white);margin-bottom:1rem;text-decoration:none;display:block;transition:opacity 0.2s;}
 .hero-name:hover{opacity:0.8;}
 .hero-sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal);}
-
-/* TOPICS */
 .topics-section{padding:3rem 0;border-bottom:2px solid rgba(255,255,255,0.1);}
 .section-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;opacity:0.5;margin-bottom:1.5rem;}
-
-/* CAROUSEL */
 .carousel-wrap{position:relative;}
 .carousel-track{overflow:hidden;}
 .slide{display:none;}
 .slide.active{display:block;}
-
-/* CARD */
 .card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);}
 .card-top{padding:1.75rem 1.75rem 1.25rem;}
 .card-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--teal);margin-bottom:0.6rem;}
 .card-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:900;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:0.8rem;line-height:1.4;}
 .card-body{font-family:'Space Mono',monospace;font-size:10.5px;line-height:1.9;opacity:0.8;}
 .card-panel{padding:1.5rem 1.75rem;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.2);}
-
-/* Evidence */
 .ev-label{font-family:'Outfit',sans-serif;font-size:8px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal);opacity:0.7;margin-bottom:1rem;}
 .ev-bullets{list-style:none;}
 .ev-bullets li{font-family:'Space Mono',monospace;font-size:10px;line-height:1.8;opacity:0.8;padding-left:1.2rem;position:relative;margin-bottom:0.4rem;}
 .ev-bullets li::before{content:'→';position:absolute;left:0;color:var(--teal);opacity:0.7;}
 .ev-story{font-family:'Space Mono',monospace;font-size:10px;line-height:1.9;opacity:0.8;}
 .ev-story strong{font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:0.5rem;}
-
-/* Foundation cards for slide 3 */
 .foundation-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-bottom:1.25rem;}
 @media(max-width:600px){.foundation-grid{grid-template-columns:1fr;}}
 .foundation-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);padding:1rem 1.1rem;}
 .foundation-num{font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:900;opacity:0.12;margin-bottom:0.3rem;}
 .foundation-title{font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.5rem;color:var(--teal);}
-.foundation-body{font-family:'Space Mono',monospace;font-size:9.5px;line-height:1.75;opacity:0.75;margin-bottom:0.6rem;}
-.foundation-why{font-family:'Space Mono',monospace;font-size:9px;line-height:1.7;opacity:0.5;border-left:2px solid rgba(255,255,255,0.15);padding-left:0.6rem;}
+.foundation-body{font-family:'Space Mono',monospace;font-size:9.5px;line-height:1.75;opacity:0.75;}
 .foundation-footer{font-family:'Space Mono',monospace;font-size:9px;line-height:1.75;opacity:0.55;border-top:1px solid rgba(255,255,255,0.08);padding-top:1rem;}
-
-/* CAROUSEL NAV */
 .carousel-nav{display:flex;align-items:center;gap:1rem;margin-top:1rem;}
 .cbtn{font-family:'Space Mono',monospace;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.2);color:var(--white);font-size:10px;padding:6px 14px;cursor:pointer;letter-spacing:0.08em;}
 .cbtn:hover{background:rgba(255,255,255,0.14);}
 .dots{display:flex;gap:6px;align-items:center;}
 .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;}
 .dot.active{background:var(--teal);}
-
-/* MARKETING VIZ */
 .mktg-viz{background:#0a1628;overflow:hidden;}
 .mktg-header-bar{display:flex;background:#111d2e;border-bottom:1px solid rgba(255,255,255,0.08);}
 .mktg-hcell{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:8px 14px;border-right:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);display:flex;align-items:center;}
@@ -96,8 +79,6 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 @keyframes mdash{to{stroke-dashoffset:-100;}}
 .mpkt{fill:var(--teal);}
 .mpkt2{fill:var(--purple);}
-
-/* HOW SECTION */
 .how-section{background:var(--dark);}
 .how-title-row{padding:3rem 0 2rem;border-bottom:1px solid rgba(255,255,255,0.08);}
 .how-title{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(2rem,5vw,3.5rem);line-height:1;letter-spacing:-0.03em;color:var(--white);}
@@ -137,20 +118,17 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .compare-text p{font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.2rem;}
 .compare-text span{font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.7;}
 .compare-footer{display:flex;justify-content:space-between;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.12);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.1em;margin-top:0.5rem;}
-
-/* CTA SECTION */
 .cta-section{background:var(--magenta);border-top:2px solid rgba(255,255,255,0.12);padding:4rem 0;}
 .cta-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;}
-.cta-left{}
 .cta-eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;opacity:0.55;margin-bottom:0.75rem;}
 .cta-heading{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(1.6rem,4vw,2.8rem);line-height:1.05;letter-spacing:-0.02em;color:var(--white);margin-bottom:0.75rem;}
 .cta-body{font-family:'Space Mono',monospace;font-size:10.5px;line-height:1.85;opacity:0.75;max-width:480px;}
-.cta-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.75rem;}
+.cta-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.85rem;}
 .cta-email{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--teal);text-decoration:none;}
 .cta-email:hover{opacity:0.8;}
+.cta-book{font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.04em;background:var(--teal);color:var(--dark);padding:12px 24px;text-decoration:none;display:inline-block;transition:opacity 0.2s;}
+.cta-book:hover{opacity:0.85;}
 .cta-note{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.35;}
-
-/* FOOTER */
 .proposal-footer{background:var(--dark);border-top:2px solid rgba(255,255,255,0.08);padding:1.5rem 0;}
 .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
 .footer-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:1.1rem;letter-spacing:-0.02em;color:var(--white);}
@@ -183,8 +161,7 @@ float snoise(vec3 v){
 }
 uniform float uTime;varying vec3 vNormal;varying vec3 vPosition;varying float vNoise;
 void main(){
-  vNormal=normal;
-  float n=snoise(vec3(position.x*1.2,position.y*1.2,position.z*1.2+uTime*0.15));
+  vNormal=normal;float n=snoise(vec3(position.x*1.2,position.y*1.2,position.z*1.2+uTime*0.15));
   vNoise=n;vec3 disp=position+normal*(n*0.5);vPosition=disp;
   gl_Position=projectionMatrix*modelViewMatrix*vec4(disp,1.0);
 }
@@ -204,7 +181,6 @@ void main(){
 </head>
 <body>
 
-<!-- HERO -->
 <div class="hero-section">
   <canvas id="hero-canvas"></canvas>
   <div class="hero-ui">
@@ -219,14 +195,12 @@ void main(){
   </div>
 </div>
 
-<!-- TOPICS CAROUSEL -->
 <div class="topics-section">
   <div class="container">
     <div class="section-label">In response to your post</div>
     <div class="carousel-wrap">
       <div class="carousel-track">
 
-        <!-- SLIDE 01 AUTOMATION -->
         <div class="slide active">
           <div class="card">
             <div class="card-top">
@@ -247,7 +221,6 @@ void main(){
           </div>
         </div>
 
-        <!-- SLIDE 02 MARKETING -->
         <div class="slide">
           <div class="card">
             <div class="card-top">
@@ -282,17 +255,25 @@ void main(){
                     <div class="mktg-col-label" style="left:25%;width:25%;"><span>② Supabase</span></div>
                     <div class="mktg-col-label" style="left:50%;width:25%;"><span>③ AI Engine</span></div>
                     <div class="mktg-col-label" style="left:75%;width:25%;border-right:none;"><span>④ Output</span></div>
-                    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 800 320" preserveAspectRatio="none">
-                      <path id="mp1" class="mline" d="M 130 105 C 130 150, 200 145, 200 168"/>
+                    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid meet">
+                      <path id="mp1" class="mline" d="M 130 105 C 130 150 200 145 200 168"/>
                       <path id="mp2" class="mline" d="M 130 188 L 200 183"/>
-                      <path id="mp3" class="mline" d="M 300 175 C 360 175, 360 122, 400 122"/>
+                      <path id="mp3" class="mline" d="M 300 175 C 360 175 360 122 400 122"/>
                       <path id="mp4" class="mline" d="M 430 138 L 430 218"/>
-                      <path id="mp5" class="mline" d="M 500 122 C 540 122, 540 155, 570 155"/>
-                      <path id="mp6" class="mline" d="M 620 180 C 620 238, 500 242, 430 242"/>
-                      <path id="mp7" class="mline" d="M 500 242 C 580 242, 620 210, 660 205"/>
-                      <path id="mp8" class="mline" d="M 665 222 C 665 298, 350 305, 130 295 L 130 252"/>
-                      <circle r="5" class="mpkt"><animateMotion dur="4s" repeatCount="indefinite" path="M 60 105 C 130 105, 200 150, 200 168 C 300 175, 360 122, 570 122"/></circle>
-                      <circle r="4" class="mpkt2" opacity="0.8"><animateMotion dur="5.5s" repeatCount="indefinite" begin="1.5s" path="M 200 175 C 360 175, 430 122, 430 242 C 580 242, 665 210, 665 298 C 350 305, 130 305, 130 252"/></circle>
+                      <path id="mp5" class="mline" d="M 500 122 C 540 122 540 155 570 155"/>
+                      <path id="mp6" class="mline" d="M 620 180 C 620 238 500 242 430 242"/>
+                      <path id="mp7" class="mline" d="M 500 242 C 580 242 620 210 660 205"/>
+                      <path id="mp8" class="mline" d="M 665 222 C 665 298 350 305 130 295 L 130 252"/>
+                      <circle r="5" class="mpkt">
+                        <animateMotion dur="4s" repeatCount="indefinite">
+                          <mpath href="#mp1"/>
+                        </animateMotion>
+                      </circle>
+                      <circle r="4" class="mpkt2" opacity="0.8">
+                        <animateMotion dur="5.5s" repeatCount="indefinite" begin="1.5s">
+                          <mpath href="#mp3"/>
+                        </animateMotion>
+                      </circle>
                     </svg>
                     <div class="mnode" id="mn-gmail" style="left:12px;top:82px;width:112px;" onclick="mtrace('gmail')"><div class="mnode-lbl">INTAKE</div><div class="mnode-title">Gmail Inbox</div><div class="mnode-sub">loom-queue label</div></div>
                     <div class="mnode" id="mn-filter" style="left:12px;top:163px;width:112px;" onclick="mtrace('filter')"><div class="mnode-lbl">FILTER</div><div class="mnode-title">Gmail Filter</div><div class="mnode-sub">auto-labels newsletters</div></div>
@@ -309,7 +290,6 @@ void main(){
           </div>
         </div>
 
-        <!-- SLIDE 03 CODING — FULL FOUNDATION -->
         <div class="slide">
           <div class="card">
             <div class="card-top">
@@ -320,38 +300,32 @@ void main(){
             <div class="card-panel">
               <div class="ev-label">The foundation I teach non-coders</div>
               <div class="foundation-grid">
-
                 <div class="foundation-card">
                   <div class="foundation-num">01</div>
                   <div class="foundation-title">A browser speaks three languages</div>
                   <div class="foundation-body">HTML = structure · CSS = style · JavaScript = behavior. When you ask for a login form, the AI outputs all three. If you don't know what each part does, you can't say "the button works but the colors are wrong" — you'll just accept whatever it gives you.</div>
                 </div>
-
                 <div class="foundation-card">
                   <div class="foundation-num">02</div>
                   <div class="foundation-title">Data lives somewhere else</div>
                   <div class="foundation-body">Most useful tools need to save, load, or share information. That data doesn't live in the webpage — it lives in a backend like Google Sheets, Airtable, or a database. Without this concept, you waste hours trying to make a page remember things it structurally can't.</div>
                 </div>
-
                 <div class="foundation-card">
                   <div class="foundation-num">03</div>
                   <div class="foundation-title">Everything has a "state"</div>
                   <div class="foundation-body">A button can be enabled or disabled. A task can be pending or done. A form can be empty or submitted. When you learn to say "preserve the state when I reload", the AI can give you something that works like an app, not a picture of one.</div>
                 </div>
-
                 <div class="foundation-card">
                   <div class="foundation-num">04</div>
                   <div class="foundation-title">AI is a fast intern, not a mind reader</div>
                   <div class="foundation-body">You give instructions. It produces code. If the code is wrong, you don't start over — you point to what's wrong and redirect. The skill is not writing perfect prompts. It's recognizing a mistake and saying "the button is at the top, move it to the bottom."</div>
                 </div>
-
               </div>
               <div class="foundation-footer">Most teams I work with go from "I don't know where to start" to shipping a working internal tool in one session — because once these four concepts click, the AI becomes an extension of their thinking, not a black box. (This page was built entirely inside Claude — no terminal, no IDE, no separate deployment workflow.)</div>
             </div>
           </div>
         </div>
 
-        <!-- SLIDE 04 RISKS -->
         <div class="slide">
           <div class="card">
             <div class="card-top">
@@ -369,7 +343,6 @@ void main(){
         </div>
 
       </div>
-
       <div class="carousel-nav">
         <button class="cbtn" id="prev">← Prev</button>
         <div class="dots">
@@ -384,7 +357,6 @@ void main(){
   </div>
 </div>
 
-<!-- HOW I BUILT THIS -->
 <div class="how-section">
   <div class="container">
     <div class="how-title-row">
@@ -457,16 +429,16 @@ void main(){
   </div>
 </div>
 
-<!-- CTA -->
 <div class="cta-section">
   <div class="container">
     <div class="cta-inner">
       <div class="cta-left">
-        <div class="cta-eyebrow">This page is a demonstration of competence, not a full proposal</div>
+        <div class="cta-eyebrow">This page is a demonstration of alignment, not a full proposal</div>
         <div class="cta-heading">Would you like a full speaker proposal?</div>
         <div class="cta-body">Let's book a call. I'd love to learn more about what your managers are actually navigating, and build a session that speaks directly to where they are. A tailored proposal takes about 48 hours once we've talked.</div>
       </div>
       <div class="cta-right">
+        <a href="https://calendar.app.google/jJVwkhb2VRWhcjz89" target="_blank" rel="noopener" class="cta-book">Book a call →</a>
         <a href="mailto:keyona@rerev.io" class="cta-email">keyona@rerev.io</a>
         <div class="cta-note">or find me on LinkedIn</div>
       </div>
@@ -474,7 +446,6 @@ void main(){
   </div>
 </div>
 
-<!-- FOOTER -->
 <div class="proposal-footer">
   <div class="container">
     <div class="footer-inner">
@@ -508,11 +479,7 @@ void main(){
 const slides=document.querySelectorAll('.slide');
 const dots=document.querySelectorAll('.dot');
 let cur=0;
-function go(n){
-  slides[cur].classList.remove('active');dots[cur].classList.remove('active');
-  cur=(n+slides.length)%slides.length;
-  slides[cur].classList.add('active');dots[cur].classList.add('active');
-}
+function go(n){slides[cur].classList.remove('active');dots[cur].classList.remove('active');cur=(n+slides.length)%slides.length;slides[cur].classList.add('active');dots[cur].classList.add('active');}
 document.getElementById('prev').addEventListener('click',()=>go(cur-1));
 document.getElementById('next').addEventListener('click',()=>go(cur+1));
 dots.forEach(d=>d.addEventListener('click',()=>go(+d.dataset.i)));
