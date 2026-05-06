@@ -33,21 +33,13 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .slide{display:none;}
 .slide.active{display:block;}
 
-/* CARD */
+/* CARD — no toggle, always fully open */
 .card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);}
-.card-top{padding:1.75rem;cursor:pointer;}
-.card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:0.8rem;}
-.card-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--teal);}
-.card-expand-hint{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--teal);opacity:0.6;display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.card-expand-arrow{transition:transform 0.25s;display:inline-block;}
-.card-top.expanded .card-expand-arrow{transform:rotate(90deg);}
+.card-top{padding:1.75rem 1.75rem 1.25rem;}
+.card-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--teal);margin-bottom:0.6rem;}
 .card-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:900;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:0.8rem;line-height:1.4;}
 .card-body{font-family:'Space Mono',monospace;font-size:10.5px;line-height:1.9;opacity:0.8;}
-
-/* EXPAND PANEL */
-.card-expand{max-height:0;overflow:hidden;transition:max-height 0.45s cubic-bezier(0.4,0,0.2,1);}
-.card-expand.open{max-height:1200px;}
-.expand-inner{padding:1.5rem 1.75rem;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.2);}
+.card-panel{padding:1.5rem 1.75rem;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.2);}
 
 /* Evidence */
 .ev-label{font-family:'Outfit',sans-serif;font-size:8px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal);opacity:0.7;margin-bottom:1rem;}
@@ -142,84 +134,47 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .footer-badge{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;border:1px solid var(--teal);color:var(--teal);padding:5px 12px;}
 </style>
 
-<!-- SHADERS -->
 <script id="vShader" type="x-shader/x-vertex">
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x,289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
 float snoise(vec3 v){
-  const vec2 C=vec2(1.0/6.0,1.0/3.0);
-  const vec4 D=vec4(0.0,0.5,1.0,2.0);
-  vec3 i=floor(v+dot(v,C.yyy));
-  vec3 x0=v-i+dot(i,C.xxx);
-  vec3 g=step(x0.yzx,x0.xyz);
-  vec3 l=1.0-g;
-  vec3 i1=min(g.xyz,l.zxy);
-  vec3 i2=max(g.xyz,l.zxy);
-  vec3 x1=x0-i1+C.xxx;
-  vec3 x2=x0-i2+2.0*C.xxx;
-  vec3 x3=x0-1.0+3.0*C.xxx;
+  const vec2 C=vec2(1.0/6.0,1.0/3.0);const vec4 D=vec4(0.0,0.5,1.0,2.0);
+  vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);
+  vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.0-g;
+  vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);
+  vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+2.0*C.xxx;vec3 x3=x0-1.0+3.0*C.xxx;
   i=mod(i,289.0);
   vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));
-  float n_=1.0/7.0;
-  vec3 ns=n_*D.wyz-D.xzx;
-  vec4 j=p-49.0*floor(p*ns.z*ns.z);
-  vec4 x_=floor(j*ns.z);
-  vec4 y_=floor(j-7.0*x_);
-  vec4 x=x_*ns.x+ns.yyyy;
-  vec4 y=y_*ns.x+ns.yyyy;
-  vec4 h=1.0-abs(x)-abs(y);
-  vec4 b0=vec4(x.xy,y.xy);
-  vec4 b1=vec4(x.zw,y.zw);
-  vec4 s0=floor(b0)*2.0+1.0;
-  vec4 s1=floor(b1)*2.0+1.0;
-  vec4 sh=-step(h,vec4(0.0));
-  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;
-  vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
-  vec3 p0=vec3(a0.xy,h.x);
-  vec3 p1=vec3(a0.zw,h.y);
-  vec3 p2=vec3(a1.xy,h.z);
-  vec3 p3=vec3(a1.zw,h.w);
+  float n_=1.0/7.0;vec3 ns=n_*D.wyz-D.xzx;
+  vec4 j=p-49.0*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.0*x_);
+  vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.0-abs(x)-abs(y);
+  vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);
+  vec4 s0=floor(b0)*2.0+1.0;vec4 s1=floor(b1)*2.0+1.0;vec4 sh=-step(h,vec4(0.0));
+  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+  vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);
   vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
   p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
-  vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);
-  m=m*m;
+  vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);m=m*m;
   return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
 }
-uniform float uTime;
-varying vec3 vNormal;
-varying vec3 vPosition;
-varying float vNoise;
+uniform float uTime;varying vec3 vNormal;varying vec3 vPosition;varying float vNoise;
 void main(){
   vNormal=normal;
   float n=snoise(vec3(position.x*1.2,position.y*1.2,position.z*1.2+uTime*0.15));
-  vNoise=n;
-  vec3 disp=position+normal*(n*0.5);
-  vPosition=disp;
+  vNoise=n;vec3 disp=position+normal*(n*0.5);vPosition=disp;
   gl_Position=projectionMatrix*modelViewMatrix*vec4(disp,1.0);
 }
 </script>
 <script id="fShader" type="x-shader/x-fragment">
-uniform float uTime;
-uniform vec3 uC1;
-uniform vec3 uC2;
-uniform vec3 uC3;
-varying vec3 vNormal;
-varying vec3 vPosition;
-varying float vNoise;
+uniform float uTime;uniform vec3 uC1;uniform vec3 uC2;uniform vec3 uC3;
+varying vec3 vNormal;varying vec3 vPosition;varying float vNoise;
 float rnd(vec2 st){return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);}
 void main(){
-  vec3 vd=normalize(cameraPosition-vPosition);
-  float dp=dot(vNormal,vd);
-  float edge=smoothstep(0.0,0.6,dp);
-  float m1=smoothstep(-1.0,1.0,vNoise+sin(uTime*0.4));
-  float m2=smoothstep(-1.0,1.0,vPosition.y+cos(uTime*0.25));
-  vec3 col=mix(uC1,uC2,m1);
-  col=mix(col,uC3,m2*0.45);
-  float grain=rnd(vPosition.xy*8.0+uTime)*0.12;
-  col+=grain;
-  float alpha=edge*0.88;
-  if(alpha<0.05)discard;
-  gl_FragColor=vec4(col,alpha);
+  vec3 vd=normalize(cameraPosition-vPosition);float dp=dot(vNormal,vd);float edge=smoothstep(0.0,0.6,dp);
+  float m1=smoothstep(-1.0,1.0,vNoise+sin(uTime*0.4));float m2=smoothstep(-1.0,1.0,vPosition.y+cos(uTime*0.25));
+  vec3 col=mix(uC1,uC2,m1);col=mix(col,uC3,m2*0.45);
+  col+=rnd(vPosition.xy*8.0+uTime)*0.12;
+  float alpha=edge*0.88;if(alpha<0.05)discard;gl_FragColor=vec4(col,alpha);
 }
 </script>
 </head>
@@ -250,25 +205,20 @@ void main(){
         <!-- SLIDE 01 AUTOMATION -->
         <div class="slide active">
           <div class="card">
-            <div class="card-top" onclick="toggleExpand(this)">
-              <div class="card-header">
-                <div class="card-num">01 / 04</div>
-                <div class="card-expand-hint">See examples <span class="card-expand-arrow">›</span></div>
-              </div>
+            <div class="card-top">
+              <div class="card-num">01 / 04</div>
               <div class="card-title">High-impact AI automation for business in 2026</div>
               <div class="card-body">I have built dozens of automation systems for startups and small businesses across Africa, the Caribbean, and North America. My specialty is acute automation: systems that plug into existing workflows and amplify output without requiring teams to retool.</div>
             </div>
-            <div class="card-expand">
-              <div class="expand-inner">
-                <div class="ev-label">Built systems include</div>
-                <ul class="ev-bullets">
-                  <li>Post-meeting intelligence engine: transcripts auto-processed, action items extracted, Gmail drafts staged, tasks logged, zero manual steps</li>
-                  <li>Proposal publisher: full HTML proposals designed, approved, and deployed live from a single chat interface with no terminal or IDE</li>
-                  <li>Client outreach pipeline: sequences drafted, reviewed, and published to a live portal with one-click approve or reject</li>
-                  <li>Daily email agent: briefings compiled and sent each morning from a standing instruction set, no manual trigger needed</li>
-                  <li>Utility bill parser: dual AI extraction pipeline with a self-managing queue and a web app dashboard</li>
-                </ul>
-              </div>
+            <div class="card-panel">
+              <div class="ev-label">Built systems include</div>
+              <ul class="ev-bullets">
+                <li>Post-meeting intelligence engine: transcripts auto-processed, action items extracted, Gmail drafts staged, tasks logged, zero manual steps</li>
+                <li>Proposal publisher: full HTML proposals designed, approved, and deployed live from a single chat interface with no terminal or IDE</li>
+                <li>Client outreach pipeline: sequences drafted, reviewed, and published to a live portal with one-click approve or reject</li>
+                <li>Daily email agent: briefings compiled and sent each morning from a standing instruction set, no manual trigger needed</li>
+                <li>Utility bill parser: dual AI extraction pipeline with a self-managing queue and a web app dashboard</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -276,63 +226,58 @@ void main(){
         <!-- SLIDE 02 MARKETING -->
         <div class="slide">
           <div class="card">
-            <div class="card-top" onclick="toggleExpand(this)">
-              <div class="card-header">
-                <div class="card-num">02 / 04</div>
-                <div class="card-expand-hint">See a system I built <span class="card-expand-arrow">›</span></div>
-              </div>
+            <div class="card-top">
+              <div class="card-num">02 / 04</div>
               <div class="card-title">Real-life AI automations in marketing</div>
               <div class="card-body">I design human-in-the-loop marketing pipelines where AI handles intake, processing, and drafting, but the team stays in control of what goes out. The system adapts to their comfort level, not the other way around.</div>
             </div>
-            <div class="card-expand">
-              <div class="expand-inner" style="padding:0;">
-                <div style="padding:1rem 1.25rem;font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.8;border-bottom:1px solid rgba(255,255,255,0.08);">The following is a live architecture diagram for a content automation system built for Katherine the Client. The result: a steady stream of publish-ready drafts, sourced from newsletters she already reads, waiting for her approval — nothing goes live without her sign-off.</div>
-                <div class="mktg-viz">
-                  <div class="mktg-header-bar">
-                    <div class="mktg-hcell">CONTENT ENGINE V2.0</div>
-                    <div class="mktg-hcell" style="flex:1;">GAS + SUPABASE + GEMINI · Click any node to trace its path</div>
+            <div class="card-panel" style="padding:0;">
+              <div style="padding:1rem 1.25rem;font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.8;border-bottom:1px solid rgba(255,255,255,0.08);">The following is a live architecture diagram for a content automation system built for Katherine the Client. The result: a steady stream of publish-ready drafts, sourced from newsletters she already reads, waiting for her approval — nothing goes live without her sign-off.</div>
+              <div class="mktg-viz">
+                <div class="mktg-header-bar">
+                  <div class="mktg-hcell">CONTENT ENGINE V2.0</div>
+                  <div class="mktg-hcell" style="flex:1;">GAS + SUPABASE + GEMINI · Click any node to trace its path</div>
+                </div>
+                <div class="mktg-canvas-wrap">
+                  <div class="mktg-legend">
+                    <div class="mktg-legend-title">Legend</div>
+                    <div class="mktg-legend-item"><div class="mktg-ldot" style="background:var(--teal);border-color:var(--teal);"></div><div class="mktg-llabel">Active path</div></div>
+                    <div class="mktg-legend-item"><div class="mktg-ldot" style="background:var(--purple);border-color:var(--purple);"></div><div class="mktg-llabel">AI processing</div></div>
+                    <div class="mktg-legend-item"><div class="mktg-ldot" style="background:rgba(255,255,255,0.05);"></div><div class="mktg-llabel">System node</div></div>
+                    <div class="mktg-layer-legend">
+                      <div class="mktg-legend-title">Layers</div>
+                      <div class="mktg-layer-line">① Intake — Gmail + GAS</div>
+                      <div class="mktg-layer-line">② Process — Supabase</div>
+                      <div class="mktg-layer-line">③ AI — Gemini</div>
+                      <div class="mktg-layer-line">④ Output — GH Pages</div>
+                    </div>
                   </div>
-                  <div class="mktg-canvas-wrap">
-                    <div class="mktg-legend">
-                      <div class="mktg-legend-title">Legend</div>
-                      <div class="mktg-legend-item"><div class="mktg-ldot" style="background:var(--teal);border-color:var(--teal);"></div><div class="mktg-llabel">Active path</div></div>
-                      <div class="mktg-legend-item"><div class="mktg-ldot" style="background:var(--purple);border-color:var(--purple);"></div><div class="mktg-llabel">AI processing</div></div>
-                      <div class="mktg-legend-item"><div class="mktg-ldot" style="background:rgba(255,255,255,0.05);"></div><div class="mktg-llabel">System node</div></div>
-                      <div class="mktg-layer-legend">
-                        <div class="mktg-legend-title">Layers</div>
-                        <div class="mktg-layer-line">① Intake — Gmail + GAS</div>
-                        <div class="mktg-layer-line">② Process — Supabase</div>
-                        <div class="mktg-layer-line">③ AI — Gemini</div>
-                        <div class="mktg-layer-line">④ Output — GH Pages</div>
-                      </div>
-                    </div>
-                    <div class="mktg-canvas" id="mktg-canvas">
-                      <div class="mktg-grid"></div>
-                      <div class="mktg-col-label" style="left:0;width:25%;"><span>① Intake</span></div>
-                      <div class="mktg-col-label" style="left:25%;width:25%;"><span>② Supabase</span></div>
-                      <div class="mktg-col-label" style="left:50%;width:25%;"><span>③ AI Engine</span></div>
-                      <div class="mktg-col-label" style="left:75%;width:25%;border-right:none;"><span>④ Output</span></div>
-                      <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 800 320" preserveAspectRatio="none">
-                        <path id="mp1" class="mline" d="M 130 105 C 130 150, 200 145, 200 168"/>
-                        <path id="mp2" class="mline" d="M 130 188 L 200 183"/>
-                        <path id="mp3" class="mline" d="M 300 175 C 360 175, 360 122, 400 122"/>
-                        <path id="mp4" class="mline" d="M 430 138 L 430 218"/>
-                        <path id="mp5" class="mline" d="M 500 122 C 540 122, 540 155, 570 155"/>
-                        <path id="mp6" class="mline" d="M 620 180 C 620 238, 500 242, 430 242"/>
-                        <path id="mp7" class="mline" d="M 500 242 C 580 242, 620 210, 660 205"/>
-                        <path id="mp8" class="mline" d="M 665 222 C 665 298, 350 305, 130 295 L 130 252"/>
-                        <circle r="5" class="mpkt"><animateMotion dur="4s" repeatCount="indefinite" path="M 60 105 C 130 105, 200 150, 200 168 C 300 175, 360 122, 570 122"/></circle>
-                        <circle r="4" class="mpkt2" opacity="0.8"><animateMotion dur="5.5s" repeatCount="indefinite" begin="1.5s" path="M 200 175 C 360 175, 430 122, 430 242 C 580 242, 665 210, 665 298 C 350 305, 130 305, 130 252"/></circle>
-                      </svg>
-                      <div class="mnode" id="mn-gmail" style="left:12px;top:82px;width:112px;" onclick="mtrace('gmail')"><div class="mnode-lbl">INTAKE</div><div class="mnode-title">Gmail Inbox</div><div class="mnode-sub">loom-queue label</div></div>
-                      <div class="mnode" id="mn-filter" style="left:12px;top:163px;width:112px;" onclick="mtrace('filter')"><div class="mnode-lbl">FILTER</div><div class="mnode-title">Gmail Filter</div><div class="mnode-sub">auto-labels newsletters</div></div>
-                      <div class="mnode" id="mn-gas" style="left:172px;top:150px;width:125px;" onclick="mtrace('gas')"><div class="mnode-lbl">REPLACES MAILGUN</div><div class="mnode-title">Apps Script</div><div class="mnode-sub">fires every 5 min</div></div>
-                      <div class="mnode" id="mn-edge" style="left:368px;top:100px;width:128px;" onclick="mtrace('edge')"><div class="mnode-lbl">12 EDGE FUNCTIONS</div><div class="mnode-title">Supabase Edge</div><div class="mnode-sub">process-newsletter</div></div>
-                      <div class="mnode" id="mn-db" style="left:368px;top:210px;width:125px;" onclick="mtrace('db')"><div class="mnode-lbl">RLS ENFORCED</div><div class="mnode-title">PostgreSQL</div><div class="mnode-sub">reference cards stored</div></div>
-                      <div class="mnode" id="mn-gemini" style="left:542px;top:135px;width:112px;" onclick="mtrace('gemini')"><div class="mnode-lbl">AI PROVIDER</div><div class="mnode-title">Google Gemini</div><div class="mnode-sub">client's own API key</div></div>
-                      <div class="mnode" id="mn-gh" style="left:644px;top:188px;width:112px;" onclick="mtrace('ghpages')"><div class="mnode-lbl">OUTPUT</div><div class="mnode-title">GitHub Pages</div><div class="mnode-sub">React · auto-deploy</div></div>
-                      <div class="mnode" id="mn-client" style="left:12px;top:232px;width:112px;border-style:dashed;" onclick="mtrace('client')"><div class="mnode-lbl">END USER</div><div class="mnode-title">Katherine</div><div class="mnode-sub">reviews · approves</div></div>
-                    </div>
+                  <div class="mktg-canvas" id="mktg-canvas">
+                    <div class="mktg-grid"></div>
+                    <div class="mktg-col-label" style="left:0;width:25%;"><span>① Intake</span></div>
+                    <div class="mktg-col-label" style="left:25%;width:25%;"><span>② Supabase</span></div>
+                    <div class="mktg-col-label" style="left:50%;width:25%;"><span>③ AI Engine</span></div>
+                    <div class="mktg-col-label" style="left:75%;width:25%;border-right:none;"><span>④ Output</span></div>
+                    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 800 320" preserveAspectRatio="none">
+                      <path id="mp1" class="mline" d="M 130 105 C 130 150, 200 145, 200 168"/>
+                      <path id="mp2" class="mline" d="M 130 188 L 200 183"/>
+                      <path id="mp3" class="mline" d="M 300 175 C 360 175, 360 122, 400 122"/>
+                      <path id="mp4" class="mline" d="M 430 138 L 430 218"/>
+                      <path id="mp5" class="mline" d="M 500 122 C 540 122, 540 155, 570 155"/>
+                      <path id="mp6" class="mline" d="M 620 180 C 620 238, 500 242, 430 242"/>
+                      <path id="mp7" class="mline" d="M 500 242 C 580 242, 620 210, 660 205"/>
+                      <path id="mp8" class="mline" d="M 665 222 C 665 298, 350 305, 130 295 L 130 252"/>
+                      <circle r="5" class="mpkt"><animateMotion dur="4s" repeatCount="indefinite" path="M 60 105 C 130 105, 200 150, 200 168 C 300 175, 360 122, 570 122"/></circle>
+                      <circle r="4" class="mpkt2" opacity="0.8"><animateMotion dur="5.5s" repeatCount="indefinite" begin="1.5s" path="M 200 175 C 360 175, 430 122, 430 242 C 580 242, 665 210, 665 298 C 350 305, 130 305, 130 252"/></circle>
+                    </svg>
+                    <div class="mnode" id="mn-gmail" style="left:12px;top:82px;width:112px;" onclick="mtrace('gmail')"><div class="mnode-lbl">INTAKE</div><div class="mnode-title">Gmail Inbox</div><div class="mnode-sub">loom-queue label</div></div>
+                    <div class="mnode" id="mn-filter" style="left:12px;top:163px;width:112px;" onclick="mtrace('filter')"><div class="mnode-lbl">FILTER</div><div class="mnode-title">Gmail Filter</div><div class="mnode-sub">auto-labels newsletters</div></div>
+                    <div class="mnode" id="mn-gas" style="left:172px;top:150px;width:125px;" onclick="mtrace('gas')"><div class="mnode-lbl">REPLACES MAILGUN</div><div class="mnode-title">Apps Script</div><div class="mnode-sub">fires every 5 min</div></div>
+                    <div class="mnode" id="mn-edge" style="left:368px;top:100px;width:128px;" onclick="mtrace('edge')"><div class="mnode-lbl">12 EDGE FUNCTIONS</div><div class="mnode-title">Supabase Edge</div><div class="mnode-sub">process-newsletter</div></div>
+                    <div class="mnode" id="mn-db" style="left:368px;top:210px;width:125px;" onclick="mtrace('db')"><div class="mnode-lbl">RLS ENFORCED</div><div class="mnode-title">PostgreSQL</div><div class="mnode-sub">reference cards stored</div></div>
+                    <div class="mnode" id="mn-gemini" style="left:542px;top:135px;width:112px;" onclick="mtrace('gemini')"><div class="mnode-lbl">AI PROVIDER</div><div class="mnode-title">Google Gemini</div><div class="mnode-sub">client's own API key</div></div>
+                    <div class="mnode" id="mn-gh" style="left:644px;top:188px;width:112px;" onclick="mtrace('ghpages')"><div class="mnode-lbl">OUTPUT</div><div class="mnode-title">GitHub Pages</div><div class="mnode-sub">React · auto-deploy</div></div>
+                    <div class="mnode" id="mn-client" style="left:12px;top:232px;width:112px;border-style:dashed;" onclick="mtrace('client')"><div class="mnode-lbl">END USER</div><div class="mnode-title">Katherine</div><div class="mnode-sub">reviews · approves</div></div>
                   </div>
                 </div>
               </div>
@@ -343,25 +288,20 @@ void main(){
         <!-- SLIDE 03 CODING -->
         <div class="slide">
           <div class="card">
-            <div class="card-top" onclick="toggleExpand(this)">
-              <div class="card-header">
-                <div class="card-num">03 / 04</div>
-                <div class="card-expand-hint">What I actually teach <span class="card-expand-arrow">›</span></div>
-              </div>
+            <div class="card-top">
+              <div class="card-num">03 / 04</div>
               <div class="card-title">Best practices for AI-assisted coding</div>
               <div class="card-body">I ship production-ready work directly from a chat interface, including live deployments. This page is a live example. But more importantly, I teach teams the conceptual foundations they need to direct AI coding tools effectively, not just prompt them.</div>
             </div>
-            <div class="card-expand">
-              <div class="expand-inner">
-                <div class="ev-label">The foundation I give teams</div>
-                <ul class="ev-bullets">
-                  <li>Browsers can only interpret three things natively: HTML, CSS, and JavaScript. If you don't know this, you can't effectively direct AI to build anything that actually runs in a browser</li>
-                  <li>Python, for example, cannot render directly in a browser. Understanding what runs where is the prerequisite to building anything real with AI</li>
-                  <li>Prompting for code is not typing instructions and hoping. It requires knowing enough about the output to evaluate it and redirect when it goes wrong</li>
-                  <li>Most teams I work with go from zero to shipping a working internal tool within one session because the foundation clicks fast once it's framed right</li>
-                  <li>This page was built entirely inside Claude with no terminal, no IDE, and no separate deployment workflow</li>
-                </ul>
-              </div>
+            <div class="card-panel">
+              <div class="ev-label">The foundation I give teams</div>
+              <ul class="ev-bullets">
+                <li>Browsers can only interpret three things natively: HTML, CSS, and JavaScript. If you don't know this, you can't effectively direct AI to build anything that actually runs in a browser</li>
+                <li>Python, for example, cannot render directly in a browser. Understanding what runs where is the prerequisite to building anything real with AI</li>
+                <li>Prompting for code is not typing instructions and hoping. It requires knowing enough about the output to evaluate it and redirect when it goes wrong</li>
+                <li>Most teams I work with go from zero to shipping a working internal tool within one session because the foundation clicks fast once it's framed right</li>
+                <li>This page was built entirely inside Claude with no terminal, no IDE, and no separate deployment workflow</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -369,21 +309,16 @@ void main(){
         <!-- SLIDE 04 RISKS -->
         <div class="slide">
           <div class="card">
-            <div class="card-top" onclick="toggleExpand(this)">
-              <div class="card-header">
-                <div class="card-num">04 / 04</div>
-                <div class="card-expand-hint">A real client example <span class="card-expand-arrow">›</span></div>
-              </div>
+            <div class="card-top">
+              <div class="card-num">04 / 04</div>
               <div class="card-title">AI implementation risks</div>
               <div class="card-body">As both a practitioner and an investor, I see AI adoption from two angles. Most failures are not technical. They happen when systems are optimized for efficiency without accounting for how the team actually works or what they actually need to retain.</div>
             </div>
-            <div class="card-expand">
-              <div class="expand-inner">
-                <div class="ev-story"><strong>The problem</strong>A client came to me wanting full AI automation across their knowledge workflow. The initial build could do everything: intake, summarize, categorize, draft, and deliver. From a pure efficiency standpoint, it worked.</div>
-                <div class="ev-story" style="margin-top:1rem;"><strong>What we found</strong>The client had explicitly said their priority was learning retention, encoding knowledge themselves, not just having it processed for them. Full automation was actively working against their goal. The AI was doing so much that they were not absorbing anything.</div>
-                <div class="ev-story" style="margin-top:1rem;"><strong>The redesign</strong>We rebuilt the system so AI functioned as backup and reference, not as primary processor. The client still interacts with material first. The system supports that process rather than replacing it. Same infrastructure, completely different design philosophy.</div>
-                <div class="ev-story" style="margin-top:1rem;color:var(--teal);">This is what I mean by building to the team's goals, not just their output. Efficiency is not always the right metric.</div>
-              </div>
+            <div class="card-panel">
+              <div class="ev-story"><strong>The problem</strong>A client came to me wanting full AI automation across their knowledge workflow. The initial build could do everything: intake, summarize, categorize, draft, and deliver. From a pure efficiency standpoint, it worked.</div>
+              <div class="ev-story" style="margin-top:1rem;"><strong>What we found</strong>The client had explicitly said their priority was learning retention, encoding knowledge themselves, not just having it processed for them. Full automation was actively working against their goal. The AI was doing so much that they were not absorbing anything.</div>
+              <div class="ev-story" style="margin-top:1rem;"><strong>The redesign</strong>We rebuilt the system so AI functioned as backup and reference, not as primary processor. The client still interacts with material first. The system supports that process rather than replacing it. Same infrastructure, completely different design philosophy.</div>
+              <div class="ev-story" style="margin-top:1rem;color:var(--teal);">This is what I mean by building to the team's goals, not just their output. Efficiency is not always the right metric.</div>
             </div>
           </div>
         </div>
@@ -492,124 +427,57 @@ void main(){
 </div>
 
 <script>
-// HERO SHADER BLOB
 (function(){
-  const canvas = document.getElementById('hero-canvas');
-  const hero = canvas.parentElement;
-  function resize(){
-    canvas.width = hero.offsetWidth;
-    canvas.height = hero.offsetHeight;
-    if(renderer){
-      renderer.setSize(hero.offsetWidth, hero.offsetHeight);
-      camera.aspect = hero.offsetWidth / hero.offsetHeight;
-      camera.updateProjectionMatrix();
-    }
-  }
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, hero.offsetWidth/hero.offsetHeight, 0.1, 100);
-  camera.position.z = 5;
-
-  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  const canvas=document.getElementById('hero-canvas');
+  const hero=canvas.parentElement;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(45,hero.offsetWidth/hero.offsetHeight,0.1,100);
+  camera.position.z=5;
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  resize();
-
-  const geo = new THREE.IcosahedronGeometry(2.2, 64);
-  const uniforms = {
-    uTime:{value:0},
-    uC1:{value:new THREE.Color('#C2185B')},
-    uC2:{value:new THREE.Color('#7C3AED')},
-    uC3:{value:new THREE.Color('#1A9E9E')}
-  };
-  const mat = new THREE.ShaderMaterial({
-    vertexShader: document.getElementById('vShader').textContent,
-    fragmentShader: document.getElementById('fShader').textContent,
-    uniforms,
-    transparent:true,
-    side:THREE.DoubleSide,
-    depthWrite:false
-  });
-  const blob = new THREE.Mesh(geo, mat);
-  blob.position.x = 2.5;
-  scene.add(blob);
-
-  const clock = new THREE.Clock();
-  function animate(){
-    requestAnimationFrame(animate);
-    uniforms.uTime.value = clock.getElapsedTime();
-    blob.rotation.y = uniforms.uTime.value * 0.08;
-    blob.rotation.x = uniforms.uTime.value * 0.04;
-    renderer.render(scene, camera);
-  }
+  renderer.setSize(hero.offsetWidth,hero.offsetHeight);
+  const geo=new THREE.IcosahedronGeometry(2.2,64);
+  const uniforms={uTime:{value:0},uC1:{value:new THREE.Color('#C2185B')},uC2:{value:new THREE.Color('#7C3AED')},uC3:{value:new THREE.Color('#1A9E9E')}};
+  const mat=new THREE.ShaderMaterial({vertexShader:document.getElementById('vShader').textContent,fragmentShader:document.getElementById('fShader').textContent,uniforms,transparent:true,side:THREE.DoubleSide,depthWrite:false});
+  const blob=new THREE.Mesh(geo,mat);blob.position.x=2.5;scene.add(blob);
+  const clock=new THREE.Clock();
+  function animate(){requestAnimationFrame(animate);uniforms.uTime.value=clock.getElapsedTime();blob.rotation.y=uniforms.uTime.value*0.08;blob.rotation.x=uniforms.uTime.value*0.04;renderer.render(scene,camera);}
   animate();
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize',()=>{renderer.setSize(hero.offsetWidth,hero.offsetHeight);camera.aspect=hero.offsetWidth/hero.offsetHeight;camera.updateProjectionMatrix();});
 })();
 
-// CAROUSEL
 const slides=document.querySelectorAll('.slide');
 const dots=document.querySelectorAll('.dot');
 let cur=0;
 function go(n){
-  const curTop=slides[cur].querySelector('.card-top');
-  if(curTop&&curTop.classList.contains('expanded')){
-    curTop.classList.remove('expanded');
-    curTop.nextElementSibling.classList.remove('open');
-  }
-  slides[cur].classList.remove('active');
-  dots[cur].classList.remove('active');
+  slides[cur].classList.remove('active');dots[cur].classList.remove('active');
   cur=(n+slides.length)%slides.length;
-  slides[cur].classList.add('active');
-  dots[cur].classList.add('active');
+  slides[cur].classList.add('active');dots[cur].classList.add('active');
 }
 document.getElementById('prev').addEventListener('click',()=>go(cur-1));
 document.getElementById('next').addEventListener('click',()=>go(cur+1));
 dots.forEach(d=>d.addEventListener('click',()=>go(+d.dataset.i)));
 
-function toggleExpand(cardTop){
-  const panel=cardTop.nextElementSibling;
-  const isOpen=panel.classList.contains('open');
-  cardTop.classList.toggle('expanded',!isOpen);
-  panel.classList.toggle('open',!isOpen);
-}
-
-// MAIN DIAGRAM
 function layout(){
-  const canvas=document.getElementById('canvas');
-  if(!canvas)return;
-  const W=canvas.offsetWidth,H=canvas.offsetHeight;
-  const nodes={
-    keyona:{x:W*0.04,y:H*0.1,el:document.getElementById('n-keyona')},
-    pub:{x:W*0.35,y:H*0.1,el:document.getElementById('n-pub')},
-    gh:{x:W*0.72,y:H*0.38,el:document.getElementById('n-gh')},
-    railway:{x:W*0.35,y:H*0.65,el:document.getElementById('n-railway')},
-    output:{x:W*0.04,y:H*0.52,el:document.getElementById('n-output')}
-  };
-  Object.values(nodes).forEach(n=>{n.el.style.left=n.x+'px';n.el.style.top=n.y+'px';});
+  const c=document.getElementById('canvas');if(!c)return;
+  const W=c.offsetWidth,H=c.offsetHeight;
+  const n={keyona:{x:W*0.04,y:H*0.1,el:document.getElementById('n-keyona')},pub:{x:W*0.35,y:H*0.1,el:document.getElementById('n-pub')},gh:{x:W*0.72,y:H*0.38,el:document.getElementById('n-gh')},railway:{x:W*0.35,y:H*0.65,el:document.getElementById('n-railway')},output:{x:W*0.04,y:H*0.52,el:document.getElementById('n-output')}};
+  Object.values(n).forEach(v=>{v.el.style.left=v.x+'px';v.el.style.top=v.y+'px';});
   const nw=140,nh=70,nw2=160;
-  const kR=nodes.keyona.x+nw,kCy=nodes.keyona.y+nh/2;
-  const pL=nodes.pub.x,pR=nodes.pub.x+nw2,pCy=nodes.pub.y+nh/2;
-  const gL=nodes.gh.x,gCy=nodes.gh.y+nh/2;
-  const rL=nodes.railway.x,rR=nodes.railway.x+nw2,rCy=nodes.railway.y+nh/2;
-  const oR=nodes.output.x+nw,oCy=nodes.output.y+nh/2,oT=nodes.output.y;
+  const kR=n.keyona.x+nw,kCy=n.keyona.y+nh/2,pL=n.pub.x,pR=n.pub.x+nw2,pCy=n.pub.y+nh/2,gL=n.gh.x,gCy=n.gh.y+nh/2,rL=n.railway.x,rR=n.railway.x+nw2,rCy=n.railway.y+nh/2,oR=n.output.x+nw,oCy=n.output.y+nh/2,oT=n.output.y;
   document.getElementById('p1').setAttribute('d',`M ${kR} ${kCy} L ${pL} ${pCy}`);
   document.getElementById('p2').setAttribute('d',`M ${pR} ${pCy} L ${gL} ${gCy}`);
   document.getElementById('p3').setAttribute('d',`M ${gL} ${gCy} C ${gL-60} ${gCy} ${rR+60} ${rCy} ${rR} ${rCy}`);
   document.getElementById('p4').setAttribute('d',`M ${rL} ${rCy} L ${oR} ${oCy}`);
-  document.getElementById('p5').setAttribute('d',`M ${nodes.keyona.x+nw/2} ${nodes.keyona.y+nh} L ${nodes.keyona.x+nw/2} ${oT}`);
+  document.getElementById('p5').setAttribute('d',`M ${n.keyona.x+nw/2} ${n.keyona.y+nh} L ${n.keyona.x+nw/2} ${oT}`);
   ['pk1','pk2','pk3'].forEach((id,i)=>{
-    const pk=document.getElementById(id);
-    const ex=pk.querySelector('animateMotion');if(ex)ex.remove();
+    const pk=document.getElementById(id);const ex=pk.querySelector('animateMotion');if(ex)ex.remove();
     const am=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
-    am.setAttribute('dur',i===0?'2.5s':i===1?'3.5s':'4s');
-    am.setAttribute('repeatCount','indefinite');
-    am.setAttribute('begin',i===1?'1s':i===2?'0.5s':'0s');
-    const mp=document.createElementNS('http://www.w3.org/2000/svg','mpath');
-    mp.setAttributeNS('http://www.w3.org/1999/xlink','href','#p'+(i+1));
-    am.appendChild(mp);pk.appendChild(am);
+    am.setAttribute('dur',i===0?'2.5s':i===1?'3.5s':'4s');am.setAttribute('repeatCount','indefinite');am.setAttribute('begin',i===1?'1s':i===2?'0.5s':'0s');
+    const mp=document.createElementNS('http://www.w3.org/2000/svg','mpath');mp.setAttributeNS('http://www.w3.org/1999/xlink','href','#p'+(i+1));am.appendChild(mp);pk.appendChild(am);
   });
 }
-window.addEventListener('load',layout);
-window.addEventListener('resize',layout);
+window.addEventListener('load',layout);window.addEventListener('resize',layout);
 
 function trace(t){
   document.querySelectorAll('.node').forEach(n=>{n.classList.remove('active','active-purple');});
@@ -627,14 +495,10 @@ function mtrace(t){
   document.querySelectorAll('.mline').forEach(l=>l.classList.remove('mhi'));
   const hi=(...ids)=>ids.forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('mhi');});
   const an=id=>{const el=document.getElementById(id);if(el)el.classList.add('mactive');};
-  if(t==='gmail'){an('mn-gmail');hi('mp1');}
-  else if(t==='filter'){an('mn-filter');hi('mp2');}
-  else if(t==='gas'){an('mn-gas');hi('mp1','mp2','mp3');}
-  else if(t==='edge'){an('mn-edge');hi('mp3','mp4','mp5');}
-  else if(t==='db'){an('mn-db');hi('mp4','mp6');}
-  else if(t==='gemini'){an('mn-gemini');hi('mp5','mp6');}
-  else if(t==='ghpages'){an('mn-gh');hi('mp7','mp8');}
-  else if(t==='client'){an('mn-client');hi('mp8');}
+  if(t==='gmail'){an('mn-gmail');hi('mp1');}else if(t==='filter'){an('mn-filter');hi('mp2');}
+  else if(t==='gas'){an('mn-gas');hi('mp1','mp2','mp3');}else if(t==='edge'){an('mn-edge');hi('mp3','mp4','mp5');}
+  else if(t==='db'){an('mn-db');hi('mp4','mp6');}else if(t==='gemini'){an('mn-gemini');hi('mp5','mp6');}
+  else if(t==='ghpages'){an('mn-gh');hi('mp7','mp8');}else if(t==='client'){an('mn-client');hi('mp8');}
 }
 </script>
 </body>
