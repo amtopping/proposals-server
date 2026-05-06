@@ -255,25 +255,17 @@ void main(){
                     <div class="mktg-col-label" style="left:25%;width:25%;"><span>② Supabase</span></div>
                     <div class="mktg-col-label" style="left:50%;width:25%;"><span>③ AI Engine</span></div>
                     <div class="mktg-col-label" style="left:75%;width:25%;border-right:none;"><span>④ Output</span></div>
-                    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid meet">
-                      <path id="mp1" class="mline" d="M 130 105 C 130 150 200 145 200 168"/>
+                    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 800 320" preserveAspectRatio="none">
+                      <path id="mp1" class="mline" d="M 130 105 C 130 150, 200 145, 200 168"/>
                       <path id="mp2" class="mline" d="M 130 188 L 200 183"/>
-                      <path id="mp3" class="mline" d="M 300 175 C 360 175 360 122 400 122"/>
+                      <path id="mp3" class="mline" d="M 300 175 C 360 175, 360 122, 400 122"/>
                       <path id="mp4" class="mline" d="M 430 138 L 430 218"/>
-                      <path id="mp5" class="mline" d="M 500 122 C 540 122 540 155 570 155"/>
-                      <path id="mp6" class="mline" d="M 620 180 C 620 238 500 242 430 242"/>
-                      <path id="mp7" class="mline" d="M 500 242 C 580 242 620 210 660 205"/>
-                      <path id="mp8" class="mline" d="M 665 222 C 665 298 350 305 130 295 L 130 252"/>
-                      <circle r="5" class="mpkt">
-                        <animateMotion dur="4s" repeatCount="indefinite">
-                          <mpath href="#mp1"/>
-                        </animateMotion>
-                      </circle>
-                      <circle r="4" class="mpkt2" opacity="0.8">
-                        <animateMotion dur="5.5s" repeatCount="indefinite" begin="1.5s">
-                          <mpath href="#mp3"/>
-                        </animateMotion>
-                      </circle>
+                      <path id="mp5" class="mline" d="M 500 122 C 540 122, 540 155, 570 155"/>
+                      <path id="mp6" class="mline" d="M 620 180 C 620 238, 500 242, 430 242"/>
+                      <path id="mp7" class="mline" d="M 500 242 C 580 242, 620 210, 660 205"/>
+                      <path id="mp8" class="mline" d="M 665 222 C 665 298, 350 305, 130 295 L 130 252"/>
+                      <circle r="5" class="mpkt"><animateMotion dur="4s" repeatCount="indefinite" path="M 60 105 C 130 105, 200 150, 200 168 C 300 175, 360 122, 570 122"/></circle>
+                      <circle r="4" class="mpkt2" opacity="0.8"><animateMotion dur="5.5s" repeatCount="indefinite" begin="1.5s" path="M 200 175 C 360 175, 430 122, 430 242 C 580 242, 665 210, 665 298 C 350 305, 130 305, 130 252"/></circle>
                     </svg>
                     <div class="mnode" id="mn-gmail" style="left:12px;top:82px;width:112px;" onclick="mtrace('gmail')"><div class="mnode-lbl">INTAKE</div><div class="mnode-title">Gmail Inbox</div><div class="mnode-sub">loom-queue label</div></div>
                     <div class="mnode" id="mn-filter" style="left:12px;top:163px;width:112px;" onclick="mtrace('filter')"><div class="mnode-lbl">FILTER</div><div class="mnode-title">Gmail Filter</div><div class="mnode-sub">auto-labels newsletters</div></div>
