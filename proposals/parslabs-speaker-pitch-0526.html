@@ -4,33 +4,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Keyona Meeks — Speaker Pitch for ParsLabs</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,opsz,wght@1,6..72,400&family=Outfit:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-:root{--magenta:#D94F7A;--teal:#2DD4BF;--purple:#7C3AED;--dark:#0D1F2D;--white:#ffffff;--max:1100px;--pad:2.5rem;}
+:root{--magenta:#D94F7A;--teal:#2DD4BF;--purple:#7C3AED;--dark:#0D1F2D;--white:#fff;--max:1100px;--pad:2.5rem;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--white);overflow-x:hidden;}
 .container{max-width:var(--max);margin:0 auto;padding:0 var(--pad);}
+
+/* HERO */
 .hero-section{position:relative;height:100vh;min-height:500px;max-height:780px;overflow:hidden;background:var(--magenta);border-bottom:2px solid rgba(255,255,255,0.15);}
 #hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:0.55;}
 .hero-ui{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;padding:2.5rem var(--pad);}
 .hero-top{display:flex;justify-content:space-between;align-items:flex-start;max-width:var(--max);margin:0 auto;width:100%;}
 .hero-eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;opacity:0.6;}
-.hero-logo{height:40px;width:auto;opacity:0.9;}
+.hero-logo{height:40px;opacity:0.9;}
 .hero-bottom{max-width:var(--max);margin:0 auto;width:100%;padding-bottom:0.5rem;}
-.hero-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(3.5rem,10vw,8rem);line-height:0.9;letter-spacing:-0.03em;color:var(--white);margin-bottom:1rem;text-decoration:none;display:block;transition:opacity 0.2s;}
+.hero-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(3.5rem,10vw,8rem);line-height:0.9;letter-spacing:-0.03em;color:var(--white);margin-bottom:1rem;text-decoration:none;display:block;}
 .hero-name:hover{opacity:0.8;}
 .hero-sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal);}
+
+/* TOPICS */
 .topics-section{padding:3rem 0;border-bottom:2px solid rgba(255,255,255,0.1);}
-/* Section label matches how-title style */
 .section-label{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(2rem,5vw,3.5rem);line-height:1;letter-spacing:-0.03em;margin-bottom:1.5rem;}
-.carousel-wrap{position:relative;}
-.slide{display:none;}
-.slide.active{display:block;}
+
+/* CAROUSEL — pure CSS, no JS needed for switching */
+.carousel-outer{position:relative;}
+.c-slide{display:none;}
+.c-slide.on{display:block;}
+
+/* CARD */
 .card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);}
 .card-top{padding:1.75rem 1.75rem 1.25rem;}
 .card-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--teal);margin-bottom:0.6rem;}
-.card-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:900;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:0.8rem;line-height:1.4;}
+.card-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:900;text-transform:uppercase;margin-bottom:0.8rem;line-height:1.4;}
 .card-body{font-family:'Space Mono',monospace;font-size:10.5px;line-height:1.9;opacity:0.8;}
 .card-panel{padding:1.5rem 1.75rem;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.2);}
 .ev-label{font-family:'Outfit',sans-serif;font-size:8px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal);opacity:0.7;margin-bottom:1rem;}
@@ -46,12 +53,16 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .foundation-title{font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.5rem;color:var(--teal);}
 .foundation-body{font-family:'Space Mono',monospace;font-size:9.5px;line-height:1.75;opacity:0.75;}
 .foundation-footer{font-family:'Space Mono',monospace;font-size:9px;line-height:1.75;opacity:0.55;border-top:1px solid rgba(255,255,255,0.08);padding-top:1rem;}
-.carousel-nav{display:flex;align-items:center;gap:1rem;margin-top:1rem;}
+
+/* NAV */
+.c-nav{display:flex;align-items:center;gap:1rem;margin-top:1rem;}
 .cbtn{font-family:'Space Mono',monospace;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.2);color:var(--white);font-size:10px;padding:6px 14px;cursor:pointer;letter-spacing:0.08em;}
 .cbtn:hover{background:rgba(255,255,255,0.14);}
-.dots{display:flex;gap:6px;align-items:center;}
-.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;}
-.dot.active{background:var(--teal);}
+.c-dots{display:flex;gap:6px;}
+.c-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;border:none;padding:0;}
+.c-dot.on{background:var(--teal);}
+
+/* MKTG VIZ */
 .mktg-viz{background:#0a1628;overflow:hidden;}
 .mktg-header-bar{display:flex;background:#111d2e;border-bottom:1px solid rgba(255,255,255,0.08);}
 .mktg-hcell{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:8px 14px;border-right:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);display:flex;align-items:center;}
@@ -79,9 +90,11 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 @keyframes mdash{to{stroke-dashoffset:-100;}}
 .mpkt{fill:var(--teal);}
 .mpkt2{fill:var(--purple);}
+
+/* HOW */
 .how-section{background:var(--dark);}
 .how-title-row{padding:3rem 0 2rem;border-bottom:1px solid rgba(255,255,255,0.08);}
-.how-title{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(2rem,5vw,3.5rem);line-height:1;letter-spacing:-0.03em;color:var(--white);}
+.how-title{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(2rem,5vw,3.5rem);line-height:1;letter-spacing:-0.03em;}
 .how-sub{font-family:'Space Mono',monospace;font-size:10px;opacity:0.45;margin-top:0.75rem;line-height:1.9;max-width:540px;}
 .diagram-outer{border-bottom:1px solid rgba(255,255,255,0.08);}
 .diagram-inner{display:flex;}
@@ -101,8 +114,8 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .step-num{font-family:'Outfit',sans-serif;font-size:2rem;font-weight:900;opacity:0.12;margin-bottom:0.75rem;}
 .step-title{font-family:'Outfit',sans-serif;font-size:11px;font-weight:900;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.4rem;}
 .step-desc{font-family:'Space Mono',monospace;font-size:9px;opacity:0.5;line-height:1.7;}
-.step.highlight{background:var(--magenta);}
-.step.highlight .step-num{opacity:0.35;}
+.step.hl{background:var(--magenta);}
+.step.hl .step-num{opacity:0.35;}
 .compare-header{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(1.4rem,3vw,2.2rem);letter-spacing:-0.02em;padding:2rem 0;border-bottom:1px solid rgba(255,255,255,0.08);}
 .compare-grid{display:grid;grid-template-columns:1fr 1fr;}
 .compare-col{padding:2rem 0;}
@@ -113,65 +126,36 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .compare-text p{font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.2rem;}
 .compare-text span{font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.7;}
 .compare-footer{display:flex;justify-content:space-between;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.12);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.1em;margin-top:0.5rem;}
+
+/* CTA */
 .cta-section{background:var(--magenta);border-top:2px solid rgba(255,255,255,0.12);padding:4rem 0;}
 .cta-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;}
 .cta-eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;opacity:0.55;margin-bottom:0.75rem;}
-.cta-heading{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(1.6rem,4vw,2.8rem);line-height:1.05;letter-spacing:-0.02em;color:var(--white);margin-bottom:0.75rem;}
+.cta-heading{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(1.6rem,4vw,2.8rem);line-height:1.05;letter-spacing:-0.02em;margin-bottom:0.75rem;}
 .cta-body{font-family:'Space Mono',monospace;font-size:10.5px;line-height:1.85;opacity:0.75;max-width:480px;}
 .cta-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.85rem;}
 .cta-email{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--teal);text-decoration:none;}
-.cta-email:hover{opacity:0.8;}
-.cta-book{font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.04em;background:var(--teal);color:var(--dark);padding:12px 24px;text-decoration:none;display:inline-block;transition:opacity 0.2s;}
-.cta-book:hover{opacity:0.85;}
+.cta-book{font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.04em;background:var(--teal);color:var(--dark);padding:12px 24px;text-decoration:none;display:inline-block;}
 .cta-note{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.35;}
+
+/* FOOTER */
 .proposal-footer{background:var(--dark);border-top:2px solid rgba(255,255,255,0.08);padding:1.5rem 0;}
 .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
-.footer-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:1.1rem;letter-spacing:-0.02em;color:var(--white);}
+.footer-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:1.1rem;letter-spacing:-0.02em;}
 .footer-note{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;opacity:0.3;text-transform:uppercase;}
 .footer-badge{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;border:1px solid var(--teal);color:var(--teal);padding:5px 12px;}
 </style>
-
 <script id="vShader" type="x-shader/x-vertex">
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x,289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
-float snoise(vec3 v){
-  const vec2 C=vec2(1.0/6.0,1.0/3.0);const vec4 D=vec4(0.0,0.5,1.0,2.0);
-  vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);
-  vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.0-g;
-  vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);
-  vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+2.0*C.xxx;vec3 x3=x0-1.0+3.0*C.xxx;
-  i=mod(i,289.0);
-  vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));
-  float n_=1.0/7.0;vec3 ns=n_*D.wyz-D.xzx;
-  vec4 j=p-49.0*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.0*x_);
-  vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.0-abs(x)-abs(y);
-  vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);
-  vec4 s0=floor(b0)*2.0+1.0;vec4 s1=floor(b1)*2.0+1.0;vec4 sh=-step(h,vec4(0.0));
-  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
-  vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);
-  vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
-  p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
-  vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);m=m*m;
-  return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
-}
+float snoise(vec3 v){const vec2 C=vec2(1.0/6.0,1.0/3.0);const vec4 D=vec4(0.0,0.5,1.0,2.0);vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.0-g;vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+2.0*C.xxx;vec3 x3=x0-1.0+3.0*C.xxx;i=mod(i,289.0);vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));float n_=1.0/7.0;vec3 ns=n_*D.wyz-D.xzx;vec4 j=p-49.0*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.0*x_);vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.0-abs(x)-abs(y);vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);vec4 s0=floor(b0)*2.0+1.0;vec4 s1=floor(b1)*2.0+1.0;vec4 sh=-step(h,vec4(0.0));vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);m=m*m;return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));}
 uniform float uTime;varying vec3 vNormal;varying vec3 vPosition;varying float vNoise;
-void main(){
-  vNormal=normal;float n=snoise(vec3(position.x*1.2,position.y*1.2,position.z*1.2+uTime*0.15));
-  vNoise=n;vec3 disp=position+normal*(n*0.5);vPosition=disp;
-  gl_Position=projectionMatrix*modelViewMatrix*vec4(disp,1.0);
-}
+void main(){vNormal=normal;float n=snoise(vec3(position.x*1.2,position.y*1.2,position.z*1.2+uTime*0.15));vNoise=n;vec3 disp=position+normal*(n*0.5);vPosition=disp;gl_Position=projectionMatrix*modelViewMatrix*vec4(disp,1.0);}
 </script>
 <script id="fShader" type="x-shader/x-fragment">
-uniform float uTime;uniform vec3 uC1;uniform vec3 uC2;uniform vec3 uC3;
-varying vec3 vNormal;varying vec3 vPosition;varying float vNoise;
+uniform float uTime;uniform vec3 uC1;uniform vec3 uC2;uniform vec3 uC3;varying vec3 vNormal;varying vec3 vPosition;varying float vNoise;
 float rnd(vec2 st){return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);}
-void main(){
-  vec3 vd=normalize(cameraPosition-vPosition);float dp=dot(vNormal,vd);float edge=smoothstep(0.0,0.6,dp);
-  float m1=smoothstep(-1.0,1.0,vNoise+sin(uTime*0.4));float m2=smoothstep(-1.0,1.0,vPosition.y+cos(uTime*0.25));
-  vec3 col=mix(uC1,uC2,m1);col=mix(col,uC3,m2*0.45);
-  col+=rnd(vPosition.xy*8.0+uTime)*0.12;
-  float alpha=edge*0.88;if(alpha<0.05)discard;gl_FragColor=vec4(col,alpha);
-}
+void main(){vec3 vd=normalize(cameraPosition-vPosition);float dp=dot(vNormal,vd);float edge=smoothstep(0.0,0.6,dp);float m1=smoothstep(-1.0,1.0,vNoise+sin(uTime*0.4));float m2=smoothstep(-1.0,1.0,vPosition.y+cos(uTime*0.25));vec3 col=mix(uC1,uC2,m1);col=mix(col,uC3,m2*0.45);col+=rnd(vPosition.xy*8.0+uTime)*0.12;float alpha=edge*0.88;if(alpha<0.05)discard;gl_FragColor=vec4(col,alpha);}
 </script>
 </head>
 <body>
@@ -193,9 +177,9 @@ void main(){
 <div class="topics-section">
   <div class="container">
     <div class="section-label">In response to your post</div>
-    <div class="carousel-wrap" id="carousel">
+    <div class="carousel-outer">
 
-      <div class="slide active" id="slide-0">
+      <div id="cs0" class="c-slide on">
         <div class="card">
           <div class="card-top">
             <div class="card-num">01 / 04</div>
@@ -215,7 +199,7 @@ void main(){
         </div>
       </div>
 
-      <div class="slide" id="slide-1">
+      <div id="cs1" class="c-slide">
         <div class="card">
           <div class="card-top">
             <div class="card-num">02 / 04</div>
@@ -223,7 +207,7 @@ void main(){
             <div class="card-body">I design human-in-the-loop marketing pipelines where AI handles intake, processing, and drafting, but the team stays in control of what goes out. The system adapts to their comfort level, not the other way around.</div>
           </div>
           <div class="card-panel" style="padding:0;">
-            <div style="padding:1rem 1.25rem;font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.8;border-bottom:1px solid rgba(255,255,255,0.08);">The following is a live architecture diagram for a content automation system built for Katherine the Client. The result: a steady stream of publish-ready drafts, sourced from newsletters she already reads, waiting for her approval — nothing goes live without her sign-off.</div>
+            <div style="padding:1rem 1.25rem;font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.8;border-bottom:1px solid rgba(255,255,255,0.08);">The following is a live architecture diagram for a content automation system built for Katherine the Client. A steady stream of publish-ready drafts — sourced from newsletters she already reads — waiting for her approval. Nothing goes live without her sign-off.</div>
             <div class="mktg-viz">
               <div class="mktg-header-bar">
                 <div class="mktg-hcell">CONTENT ENGINE V2.0</div>
@@ -250,16 +234,16 @@ void main(){
                   <div class="mktg-col-label" style="left:50%;width:25%;"><span>③ AI Engine</span></div>
                   <div class="mktg-col-label" style="left:75%;width:25%;border-right:none;"><span>④ Output</span></div>
                   <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 800 320" preserveAspectRatio="none">
-                    <path id="mp1" class="mline" d="M 130 105 C 130 150, 200 145, 200 168"/>
+                    <path id="mp1" class="mline" d="M 130 105 C 130 150,200 145,200 168"/>
                     <path id="mp2" class="mline" d="M 130 188 L 200 183"/>
-                    <path id="mp3" class="mline" d="M 300 175 C 360 175, 360 122, 400 122"/>
+                    <path id="mp3" class="mline" d="M 300 175 C 360 175,360 122,400 122"/>
                     <path id="mp4" class="mline" d="M 430 138 L 430 218"/>
-                    <path id="mp5" class="mline" d="M 500 122 C 540 122, 540 155, 570 155"/>
-                    <path id="mp6" class="mline" d="M 620 180 C 620 238, 500 242, 430 242"/>
-                    <path id="mp7" class="mline" d="M 500 242 C 580 242, 620 210, 660 205"/>
-                    <path id="mp8" class="mline" d="M 665 222 C 665 298, 350 305, 130 295 L 130 252"/>
-                    <circle r="5" class="mpkt"><animateMotion dur="4s" repeatCount="indefinite" path="M 60 105 C 130 105, 200 150, 200 168 C 300 175, 360 122, 570 122"/></circle>
-                    <circle r="4" class="mpkt2" opacity="0.8"><animateMotion dur="5.5s" repeatCount="indefinite" begin="1.5s" path="M 200 175 C 360 175, 430 122, 430 242 C 580 242, 665 210, 665 298 C 350 305, 130 305, 130 252"/></circle>
+                    <path id="mp5" class="mline" d="M 500 122 C 540 122,540 155,570 155"/>
+                    <path id="mp6" class="mline" d="M 620 180 C 620 238,500 242,430 242"/>
+                    <path id="mp7" class="mline" d="M 500 242 C 580 242,620 210,660 205"/>
+                    <path id="mp8" class="mline" d="M 665 222 C 665 298,350 305,130 295 L 130 252"/>
+                    <circle r="5" class="mpkt"><animateMotion dur="4s" repeatCount="indefinite" path="M 60 105 C 130 105,200 150,200 168 C 300 175,360 122,570 122"/></circle>
+                    <circle r="4" class="mpkt2" opacity="0.8"><animateMotion dur="5.5s" repeatCount="indefinite" begin="1.5s" path="M 200 175 C 360 175,430 122,430 242 C 580 242,665 210,665 298 C 350 305,130 305,130 252"/></circle>
                   </svg>
                   <div class="mnode" id="mn-gmail" style="left:12px;top:82px;width:112px;" onclick="mtrace('gmail')"><div class="mnode-lbl">INTAKE</div><div class="mnode-title">Gmail Inbox</div><div class="mnode-sub">loom-queue label</div></div>
                   <div class="mnode" id="mn-filter" style="left:12px;top:163px;width:112px;" onclick="mtrace('filter')"><div class="mnode-lbl">FILTER</div><div class="mnode-title">Gmail Filter</div><div class="mnode-sub">auto-labels newsletters</div></div>
@@ -276,7 +260,7 @@ void main(){
         </div>
       </div>
 
-      <div class="slide" id="slide-2">
+      <div id="cs2" class="c-slide">
         <div class="card">
           <div class="card-top">
             <div class="card-num">03 / 04</div>
@@ -286,33 +270,17 @@ void main(){
           <div class="card-panel">
             <div class="ev-label">The foundation I teach non-coders</div>
             <div class="foundation-grid">
-              <div class="foundation-card">
-                <div class="foundation-num">01</div>
-                <div class="foundation-title">A browser speaks three languages</div>
-                <div class="foundation-body">HTML = structure · CSS = style · JavaScript = behavior. When you ask for a login form, the AI outputs all three. If you don't know what each part does, you can't say "the button works but the colors are wrong" — you'll just accept whatever it gives you.</div>
-              </div>
-              <div class="foundation-card">
-                <div class="foundation-num">02</div>
-                <div class="foundation-title">Data lives somewhere else</div>
-                <div class="foundation-body">Most useful tools need to save, load, or share information. That data doesn't live in the webpage — it lives in a backend like Google Sheets, Airtable, or a database. Without this concept, you waste hours trying to make a page remember things it structurally can't.</div>
-              </div>
-              <div class="foundation-card">
-                <div class="foundation-num">03</div>
-                <div class="foundation-title">Everything has a "state"</div>
-                <div class="foundation-body">A button can be enabled or disabled. A task can be pending or done. A form can be empty or submitted. When you learn to say "preserve the state when I reload", the AI can give you something that works like an app, not a picture of one.</div>
-              </div>
-              <div class="foundation-card">
-                <div class="foundation-num">04</div>
-                <div class="foundation-title">AI is a fast intern, not a mind reader</div>
-                <div class="foundation-body">You give instructions. It produces code. If the code is wrong, you don't start over — you point to what's wrong and redirect. The skill is not writing perfect prompts. It's recognizing a mistake and saying "the button is at the top, move it to the bottom."</div>
-              </div>
+              <div class="foundation-card"><div class="foundation-num">01</div><div class="foundation-title">A browser speaks three languages</div><div class="foundation-body">HTML = structure · CSS = style · JavaScript = behavior. When you ask for a login form, the AI outputs all three. If you don't know what each part does, you can't say "the button works but the colors are wrong" — you'll just accept whatever it gives you.</div></div>
+              <div class="foundation-card"><div class="foundation-num">02</div><div class="foundation-title">Data lives somewhere else</div><div class="foundation-body">Most useful tools need to save, load, or share information. That data doesn't live in the webpage — it lives in a backend like Google Sheets, Airtable, or a database. Without this concept, you waste hours trying to make a page remember things it structurally can't.</div></div>
+              <div class="foundation-card"><div class="foundation-num">03</div><div class="foundation-title">Everything has a "state"</div><div class="foundation-body">A button can be enabled or disabled. A task can be pending or done. A form can be empty or submitted. When you learn to say "preserve the state when I reload", the AI can give you something that works like an app, not a picture of one.</div></div>
+              <div class="foundation-card"><div class="foundation-num">04</div><div class="foundation-title">AI is a fast intern, not a mind reader</div><div class="foundation-body">You give instructions. It produces code. If the code is wrong, you don't start over — you point to what's wrong and redirect. The skill is not writing perfect prompts. It's recognizing a mistake and saying "the button is at the top, move it to the bottom."</div></div>
             </div>
             <div class="foundation-footer">Most teams I work with go from "I don't know where to start" to shipping a working internal tool in one session — because once these four concepts click, the AI becomes an extension of their thinking, not a black box. (This page was built entirely inside Claude — no terminal, no IDE, no separate deployment workflow.)</div>
           </div>
         </div>
       </div>
 
-      <div class="slide" id="slide-3">
+      <div id="cs3" class="c-slide">
         <div class="card">
           <div class="card-top">
             <div class="card-num">04 / 04</div>
@@ -321,23 +289,24 @@ void main(){
           </div>
           <div class="card-panel">
             <div class="ev-story"><strong>The problem</strong>A client came to me wanting full AI automation across their knowledge workflow. The initial build could do everything: intake, summarize, categorize, draft, and deliver. From a pure efficiency standpoint, it worked.</div>
-            <div class="ev-story" style="margin-top:1rem;"><strong>What we found</strong>The client had explicitly said their priority was learning retention, encoding knowledge themselves, not just having it processed for them. Full automation was actively working against their goal. The AI was doing so much that they were not absorbing anything.</div>
-            <div class="ev-story" style="margin-top:1rem;"><strong>The redesign</strong>We rebuilt the system so AI functioned as backup and reference, not as primary processor. The client still interacts with material first. The system supports that process rather than replacing it. Same infrastructure, completely different design philosophy.</div>
+            <div class="ev-story" style="margin-top:1rem;"><strong>What we found</strong>The client had explicitly said their priority was learning retention, encoding knowledge themselves, not just having it processed for them. Full automation was actively working against their goal.</div>
+            <div class="ev-story" style="margin-top:1rem;"><strong>The redesign</strong>We rebuilt the system so AI functioned as backup and reference, not as primary processor. The client still interacts with material first. Same infrastructure, completely different design philosophy.</div>
             <div class="ev-story" style="margin-top:1rem;color:var(--teal);">This is what I mean by building to the team's goals, not just their output. Efficiency is not always the right metric.</div>
           </div>
         </div>
       </div>
 
-      <div class="carousel-nav">
-        <button class="cbtn" onclick="cGo(cCur-1)">← Prev</button>
-        <div class="dots" id="cdots">
-          <div class="dot active" onclick="cGo(0)"></div>
-          <div class="dot" onclick="cGo(1)"></div>
-          <div class="dot" onclick="cGo(2)"></div>
-          <div class="dot" onclick="cGo(3)"></div>
+      <div class="c-nav">
+        <button class="cbtn" id="btn-prev">← Prev</button>
+        <div class="c-dots">
+          <button class="c-dot on" id="dot-0"></button>
+          <button class="c-dot" id="dot-1"></button>
+          <button class="c-dot" id="dot-2"></button>
+          <button class="c-dot" id="dot-3"></button>
         </div>
-        <button class="cbtn" onclick="cGo(cCur+1)">Next →</button>
+        <button class="cbtn" id="btn-next">Next →</button>
       </div>
+
     </div>
   </div>
 </div>
@@ -364,41 +333,16 @@ void main(){
           <svg style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid meet">
             <path id="p1" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" d="M 170 54 L 310 54"/>
             <path id="p2" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" d="M 470 54 L 590 162"/>
-            <path id="p3" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" d="M 590 200 C 590 270 470 270 470 270 L 310 270"/>
+            <path id="p3" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" d="M 590 200 C 590 270,470 270,310 270"/>
             <path id="p4" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" d="M 310 252 L 170 216"/>
             <path id="p5" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" d="M 100 90 L 100 180"/>
             <circle r="6" fill="#2DD4BF"><animateMotion dur="3s" repeatCount="indefinite" path="M 170 54 L 470 54 L 590 162 L 590 270 L 310 270"/></circle>
             <circle r="5" fill="#7C3AED" opacity="0.85"><animateMotion dur="4s" repeatCount="indefinite" begin="1.5s" path="M 310 270 L 170 216 L 100 180 L 100 54 L 170 54"/></circle>
-            <g id="n-keyona" onclick="trace('client')" style="cursor:pointer;">
-              <rect x="20" y="36" width="140" height="60" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <text x="30" y="54" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,255,255,0.4)" letter-spacing="1">USR_KYN</text>
-              <text x="30" y="70" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Keyona</text>
-              <text x="30" y="84" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">in Claude</text>
-            </g>
-            <g id="n-pub" onclick="trace('pub')" style="cursor:pointer;">
-              <rect x="310" y="36" width="160" height="60" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <text x="320" y="54" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,255,255,0.4)" letter-spacing="1">AI ORCHESTRATOR</text>
-              <text x="320" y="70" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Zero-Deploy</text>
-              <text x="320" y="84" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Publisher</text>
-            </g>
-            <g id="n-gh" onclick="trace('gh')" style="cursor:pointer;">
-              <rect x="550" y="144" width="140" height="60" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <text x="560" y="162" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,255,255,0.4)" letter-spacing="1">STORAGE</text>
-              <text x="560" y="178" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">GitHub</text>
-              <text x="560" y="192" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">API</text>
-            </g>
-            <g id="n-railway" onclick="trace('railway')" style="cursor:pointer;">
-              <rect x="310" y="252" width="160" height="60" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <text x="320" y="270" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,255,255,0.4)" letter-spacing="1">INFRASTRUCTURE</text>
-              <text x="320" y="286" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Railway</text>
-              <text x="320" y="300" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Auto-Deploy</text>
-            </g>
-            <g id="n-output" onclick="trace('output')" style="cursor:pointer;">
-              <rect x="20" y="180" width="140" height="60" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <text x="30" y="198" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,255,255,0.4)" letter-spacing="1">OUTPUT</text>
-              <text x="30" y="214" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Live URL</text>
-              <text x="30" y="228" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">in Chat</text>
-            </g>
+            <g id="n-keyona" onclick="trace('client')" style="cursor:pointer;"><rect x="20" y="36" width="140" height="60" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><text x="30" y="54" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,255,255,0.4)" letter-spacing="1">USR_KYN</text><text x="30" y="70" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Keyona</text><text x="30" y="84" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">in Claude</text></g>
+            <g id="n-pub" onclick="trace('pub')" style="cursor:pointer;"><rect x="310" y="36" width="160" height="60" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><text x="320" y="54" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,255,255,0.4)" letter-spacing="1">AI ORCHESTRATOR</text><text x="320" y="70" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Zero-Deploy</text><text x="320" y="84" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Publisher</text></g>
+            <g id="n-gh" onclick="trace('gh')" style="cursor:pointer;"><rect x="550" y="144" width="140" height="60" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><text x="560" y="162" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,255,255,0.4)" letter-spacing="1">STORAGE</text><text x="560" y="178" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">GitHub</text><text x="560" y="192" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">API</text></g>
+            <g id="n-railway" onclick="trace('railway')" style="cursor:pointer;"><rect x="310" y="252" width="160" height="60" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><text x="320" y="270" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,255,255,0.4)" letter-spacing="1">INFRASTRUCTURE</text><text x="320" y="286" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Railway</text><text x="320" y="300" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Auto-Deploy</text></g>
+            <g id="n-output" onclick="trace('output')" style="cursor:pointer;"><rect x="20" y="180" width="140" height="60" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><text x="30" y="198" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,255,255,0.4)" letter-spacing="1">OUTPUT</text><text x="30" y="214" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">Live URL</text><text x="30" y="228" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="white">in Chat</text></g>
           </svg>
         </div>
       </div>
@@ -412,7 +356,7 @@ void main(){
         <div class="step"><div class="step-num">02</div><div class="step-title">Design</div><div class="step-desc">Publisher generates full HTML using the design system.</div></div>
         <div class="step"><div class="step-num">03</div><div class="step-title">Approve</div><div class="step-desc">Preview renders in chat. One word to ship.</div></div>
         <div class="step"><div class="step-num">04</div><div class="step-title">Push</div><div class="step-desc">Claude commits to GitHub via MCP. No terminal.</div></div>
-        <div class="step highlight" style="padding-right:var(--pad);border-right:none;"><div class="step-num">05</div><div class="step-title">Live</div><div class="step-desc">Railway deploys. URL returned in chat in ~30s.</div></div>
+        <div class="step hl" style="padding-right:var(--pad);border-right:none;"><div class="step-num">05</div><div class="step-title">Live</div><div class="step-desc">Railway deploys. URL returned in chat in ~30s.</div></div>
       </div>
     </div>
   </div>
@@ -431,7 +375,7 @@ void main(){
         <div class="compare-item"><div class="compare-num">01</div><div class="compare-text"><p>"Deploy this."</p><span>One prompt inside Claude.</span></div></div>
         <div class="compare-item"><div class="compare-num">02</div><div class="compare-text"><p>Pipeline runs</p><span>Auth, commit, and deploy handled internally.</span></div></div>
         <div class="compare-item"><div class="compare-num">03</div><div class="compare-text"><p>Live link</p><span>Permanent URL returned directly in chat.</span></div></div>
-        <div class="compare-footer" style="border-color:rgba(255,255,255,0.12);"><span>&lt; 60 seconds</span><span style="color:var(--teal);">Status: Shipped</span></div>
+        <div class="compare-footer" style="border-color:rgba(255,255,255,0.12);"><span>&lt;60 seconds</span><span style="color:var(--teal);">Status: Shipped</span></div>
       </div>
     </div>
     <div style="padding-bottom:3rem;"></div>
@@ -468,65 +412,64 @@ void main(){
 <script>
 // HERO BLOB
 (function(){
-  const canvas=document.getElementById('hero-canvas');
-  const hero=canvas.parentElement;
-  const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(45,hero.offsetWidth/hero.offsetHeight,0.1,100);
+  var canvas=document.getElementById('hero-canvas');
+  var hero=canvas.parentElement;
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(45,hero.offsetWidth/hero.offsetHeight,0.1,100);
   camera.position.z=5;
-  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
   renderer.setSize(hero.offsetWidth,hero.offsetHeight);
-  const geo=new THREE.IcosahedronGeometry(2.2,64);
-  const uniforms={uTime:{value:0},uC1:{value:new THREE.Color('#D94F7A')},uC2:{value:new THREE.Color('#7C3AED')},uC3:{value:new THREE.Color('#2DD4BF')}};
-  const mat=new THREE.ShaderMaterial({vertexShader:document.getElementById('vShader').textContent,fragmentShader:document.getElementById('fShader').textContent,uniforms,transparent:true,side:THREE.DoubleSide,depthWrite:false});
-  const blob=new THREE.Mesh(geo,mat);blob.position.x=2.5;scene.add(blob);
-  const clock=new THREE.Clock();
+  var geo=new THREE.IcosahedronGeometry(2.2,64);
+  var uniforms={uTime:{value:0},uC1:{value:new THREE.Color('#D94F7A')},uC2:{value:new THREE.Color('#7C3AED')},uC3:{value:new THREE.Color('#2DD4BF')}};
+  var mat=new THREE.ShaderMaterial({vertexShader:document.getElementById('vShader').textContent,fragmentShader:document.getElementById('fShader').textContent,uniforms:uniforms,transparent:true,side:THREE.DoubleSide,depthWrite:false});
+  var blob=new THREE.Mesh(geo,mat);blob.position.x=2.5;scene.add(blob);
+  var clock=new THREE.Clock();
   function animate(){requestAnimationFrame(animate);uniforms.uTime.value=clock.getElapsedTime();blob.rotation.y=uniforms.uTime.value*0.08;blob.rotation.x=uniforms.uTime.value*0.04;renderer.render(scene,camera);}
   animate();
-  window.addEventListener('resize',()=>{renderer.setSize(hero.offsetWidth,hero.offsetHeight);camera.aspect=hero.offsetWidth/hero.offsetHeight;camera.updateProjectionMatrix();});
+  window.addEventListener('resize',function(){renderer.setSize(hero.offsetWidth,hero.offsetHeight);camera.aspect=hero.offsetWidth/hero.offsetHeight;camera.updateProjectionMatrix();});
 })();
 
-// CAROUSEL — global state, inline onclick handlers, no querySelector needed
-var cCur = 0;
-var cTotal = 4;
-function cGo(n) {
-  document.getElementById('slide-' + cCur).classList.remove('active');
-  document.querySelectorAll('#cdots .dot')[cCur].classList.remove('active');
-  cCur = ((n % cTotal) + cTotal) % cTotal;
-  document.getElementById('slide-' + cCur).classList.add('active');
-  document.querySelectorAll('#cdots .dot')[cCur].classList.add('active');
+// CAROUSEL
+var _cur = 0;
+var _n = 4;
+function _show(i) {
+  for (var j = 0; j < _n; j++) {
+    document.getElementById('cs'+j).className = 'c-slide' + (j===i?' on':'');
+    document.getElementById('dot-'+j).className = 'c-dot' + (j===i?' on':'');
+  }
+  _cur = i;
 }
+document.getElementById('btn-prev').addEventListener('click', function(){ _show((_cur-1+_n)%_n); });
+document.getElementById('btn-next').addEventListener('click', function(){ _show((_cur+1)%_n); });
+document.getElementById('dot-0').addEventListener('click', function(){ _show(0); });
+document.getElementById('dot-1').addEventListener('click', function(){ _show(1); });
+document.getElementById('dot-2').addEventListener('click', function(){ _show(2); });
+document.getElementById('dot-3').addEventListener('click', function(){ _show(3); });
 
-// MAIN DIAGRAM NODE TRACE
+// MAIN DIAGRAM TRACE
 function trace(t){
-  ['n-keyona','n-pub','n-gh','n-railway','n-output'].forEach(function(id){
-    var g=document.getElementById(id);
-    if(g){g.querySelector('rect').setAttribute('fill','rgba(255,255,255,0.05)');g.querySelector('rect').setAttribute('stroke','rgba(255,255,255,0.2)');}
-  });
-  ['p1','p2','p3','p4','p5'].forEach(function(id){
-    var el=document.getElementById(id);
-    if(el){el.setAttribute('stroke','rgba(255,255,255,0.15)');el.setAttribute('stroke-width','1.5');el.removeAttribute('stroke-dasharray');}
-  });
-  function hiNode(id){var g=document.getElementById(id);if(g){g.querySelector('rect').setAttribute('fill','#2DD4BF');g.querySelector('rect').setAttribute('stroke','#2DD4BF');}}
-  function hiNodePurple(id){var g=document.getElementById(id);if(g){g.querySelector('rect').setAttribute('fill','#7C3AED');g.querySelector('rect').setAttribute('stroke','#7C3AED');}}
-  function hiPath(id,c){var el=document.getElementById(id);if(el){el.setAttribute('stroke',c||'#2DD4BF');el.setAttribute('stroke-width','3');el.setAttribute('stroke-dasharray','6 3');}}
-  if(t==='client'){hiNode('n-keyona');hiPath('p1');hiPath('p5','#7C3AED');}
-  else if(t==='pub'){hiNode('n-pub');hiPath('p1');hiPath('p2','#7C3AED');}
-  else if(t==='gh'){hiNode('n-gh');hiPath('p2');hiPath('p3','#7C3AED');}
-  else if(t==='railway'){hiNode('n-railway');hiPath('p3');hiPath('p4','#7C3AED');}
-  else if(t==='output'){hiNodePurple('n-output');hiPath('p4','#2DD4BF');hiPath('p5');}
+  ['n-keyona','n-pub','n-gh','n-railway','n-output'].forEach(function(id){var g=document.getElementById(id);if(g){g.querySelector('rect').setAttribute('fill','rgba(255,255,255,0.05)');g.querySelector('rect').setAttribute('stroke','rgba(255,255,255,0.2)');}});
+  ['p1','p2','p3','p4','p5'].forEach(function(id){var el=document.getElementById(id);if(el){el.setAttribute('stroke','rgba(255,255,255,0.15)');el.setAttribute('stroke-width','1.5');el.removeAttribute('stroke-dasharray');}});
+  function hn(id,c){var g=document.getElementById(id);if(g){g.querySelector('rect').setAttribute('fill',c);g.querySelector('rect').setAttribute('stroke',c);}}
+  function hp(id,c){var el=document.getElementById(id);if(el){el.setAttribute('stroke',c||'#2DD4BF');el.setAttribute('stroke-width','3');el.setAttribute('stroke-dasharray','6 3');}}
+  if(t==='client'){hn('n-keyona','#2DD4BF');hp('p1');hp('p5','#7C3AED');}
+  else if(t==='pub'){hn('n-pub','#2DD4BF');hp('p1');hp('p2','#7C3AED');}
+  else if(t==='gh'){hn('n-gh','#2DD4BF');hp('p2');hp('p3','#7C3AED');}
+  else if(t==='railway'){hn('n-railway','#2DD4BF');hp('p3');hp('p4','#7C3AED');}
+  else if(t==='output'){hn('n-output','#7C3AED');hp('p4','#2DD4BF');hp('p5');}
 }
 
-// MARKETING VIZ TRACE
+// MKTG VIZ TRACE
 function mtrace(t){
   document.querySelectorAll('.mnode').forEach(function(n){n.classList.remove('mactive');});
   document.querySelectorAll('.mline').forEach(function(l){l.classList.remove('mhi');});
-  function hi(){Array.from(arguments).forEach(function(id){var el=document.getElementById(id);if(el)el.classList.add('mhi');});}
+  function hi(a){for(var i=0;i<a.length;i++){var el=document.getElementById(a[i]);if(el)el.classList.add('mhi');}}
   function an(id){var el=document.getElementById(id);if(el)el.classList.add('mactive');}
-  if(t==='gmail'){an('mn-gmail');hi('mp1');}else if(t==='filter'){an('mn-filter');hi('mp2');}
-  else if(t==='gas'){an('mn-gas');hi('mp1','mp2','mp3');}else if(t==='edge'){an('mn-edge');hi('mp3','mp4','mp5');}
-  else if(t==='db'){an('mn-db');hi('mp4','mp6');}else if(t==='gemini'){an('mn-gemini');hi('mp5','mp6');}
-  else if(t==='ghpages'){an('mn-gh');hi('mp7','mp8');}else if(t==='client'){an('mn-client');hi('mp8');}
+  if(t==='gmail'){an('mn-gmail');hi(['mp1']);}else if(t==='filter'){an('mn-filter');hi(['mp2']);}
+  else if(t==='gas'){an('mn-gas');hi(['mp1','mp2','mp3']);}else if(t==='edge'){an('mn-edge');hi(['mp3','mp4','mp5']);}
+  else if(t==='db'){an('mn-db');hi(['mp4','mp6']);}else if(t==='gemini'){an('mn-gemini');hi(['mp5','mp6']);}
+  else if(t==='ghpages'){an('mn-gh');hi(['mp7','mp8']);}else if(t==='client'){an('mn-client');hi(['mp8']);}
 }
 </script>
 </body>
