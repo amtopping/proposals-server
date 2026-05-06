@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,opsz,wght@1,6..72,400&family=Outfit:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-:root{--magenta:#C2185B;--teal:#2DD4BF;--purple:#7C3AED;--dark:#0D1F2D;--white:#ffffff;--max:1100px;--pad:2.5rem;}
+:root{--magenta:#D94F7A;--teal:#2DD4BF;--purple:#7C3AED;--dark:#0D1F2D;--white:#ffffff;--max:1100px;--pad:2.5rem;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--white);overflow-x:hidden;}
 .container{max-width:var(--max);margin:0 auto;padding:0 var(--pad);}
@@ -49,6 +49,16 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .ev-bullets li::before{content:'→';position:absolute;left:0;color:var(--teal);opacity:0.7;}
 .ev-story{font-family:'Space Mono',monospace;font-size:10px;line-height:1.9;opacity:0.8;}
 .ev-story strong{font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:0.5rem;}
+
+/* Foundation cards for slide 3 */
+.foundation-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-bottom:1.25rem;}
+@media(max-width:600px){.foundation-grid{grid-template-columns:1fr;}}
+.foundation-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);padding:1rem 1.1rem;}
+.foundation-num{font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:900;opacity:0.12;margin-bottom:0.3rem;}
+.foundation-title{font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.5rem;color:var(--teal);}
+.foundation-body{font-family:'Space Mono',monospace;font-size:9.5px;line-height:1.75;opacity:0.75;margin-bottom:0.6rem;}
+.foundation-why{font-family:'Space Mono',monospace;font-size:9px;line-height:1.7;opacity:0.5;border-left:2px solid rgba(255,255,255,0.15);padding-left:0.6rem;}
+.foundation-footer{font-family:'Space Mono',monospace;font-size:9px;line-height:1.75;opacity:0.55;border-top:1px solid rgba(255,255,255,0.08);padding-top:1rem;}
 
 /* CAROUSEL NAV */
 .carousel-nav{display:flex;align-items:center;gap:1rem;margin-top:1rem;}
@@ -127,11 +137,24 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .compare-text p{font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.2rem;}
 .compare-text span{font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.7;}
 .compare-footer{display:flex;justify-content:space-between;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.12);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.1em;margin-top:0.5rem;}
-.proposal-footer{background:var(--dark);border-top:2px solid rgba(255,255,255,0.08);padding:2rem 0;}
-.footer-inner{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;}
-.footer-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:-0.02em;color:var(--white);margin-bottom:0.25rem;}
-.footer-email{font-family:'Space Mono',monospace;font-size:11px;color:var(--teal);font-weight:700;}
-.footer-note{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;opacity:0.3;text-transform:uppercase;margin-top:0.4rem;}
+
+/* CTA SECTION */
+.cta-section{background:var(--magenta);border-top:2px solid rgba(255,255,255,0.12);padding:4rem 0;}
+.cta-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;}
+.cta-left{}
+.cta-eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;opacity:0.55;margin-bottom:0.75rem;}
+.cta-heading{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(1.6rem,4vw,2.8rem);line-height:1.05;letter-spacing:-0.02em;color:var(--white);margin-bottom:0.75rem;}
+.cta-body{font-family:'Space Mono',monospace;font-size:10.5px;line-height:1.85;opacity:0.75;max-width:480px;}
+.cta-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.75rem;}
+.cta-email{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--teal);text-decoration:none;}
+.cta-email:hover{opacity:0.8;}
+.cta-note{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.35;}
+
+/* FOOTER */
+.proposal-footer{background:var(--dark);border-top:2px solid rgba(255,255,255,0.08);padding:1.5rem 0;}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:1.1rem;letter-spacing:-0.02em;color:var(--white);}
+.footer-note{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;opacity:0.3;text-transform:uppercase;}
 .footer-badge{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;border:1px solid var(--teal);color:var(--teal);padding:5px 12px;}
 </style>
 
@@ -199,7 +222,7 @@ void main(){
 <!-- TOPICS CAROUSEL -->
 <div class="topics-section">
   <div class="container">
-    <div class="section-label">Topics I speak to</div>
+    <div class="section-label">In response to your post</div>
     <div class="carousel-wrap">
       <div class="carousel-track">
 
@@ -286,23 +309,44 @@ void main(){
           </div>
         </div>
 
-        <!-- SLIDE 03 CODING -->
+        <!-- SLIDE 03 CODING — FULL FOUNDATION -->
         <div class="slide">
           <div class="card">
             <div class="card-top">
               <div class="card-num">03 / 04</div>
               <div class="card-title">Best practices for AI-assisted coding</div>
-              <div class="card-body">I ship production-ready work directly from a chat interface, including live deployments. This page is a live example. But more importantly, I teach teams the conceptual foundations they need to direct AI coding tools effectively, not just prompt them.</div>
+              <div class="card-body">You don't need to become a programmer. You need to know enough about how software works to direct AI effectively. Here's what that looks like in practice.</div>
             </div>
             <div class="card-panel">
-              <div class="ev-label">The foundation I give teams</div>
-              <ul class="ev-bullets">
-                <li>Browsers can only interpret three things natively: HTML, CSS, and JavaScript. If you don't know this, you can't effectively direct AI to build anything that actually runs in a browser</li>
-                <li>Python, for example, cannot render directly in a browser. Understanding what runs where is the prerequisite to building anything real with AI</li>
-                <li>Prompting for code is not typing instructions and hoping. It requires knowing enough about the output to evaluate it and redirect when it goes wrong</li>
-                <li>Most teams I work with go from zero to shipping a working internal tool within one session because the foundation clicks fast once it's framed right</li>
-                <li>This page was built entirely inside Claude with no terminal, no IDE, and no separate deployment workflow</li>
-              </ul>
+              <div class="ev-label">The foundation I teach non-coders</div>
+              <div class="foundation-grid">
+
+                <div class="foundation-card">
+                  <div class="foundation-num">01</div>
+                  <div class="foundation-title">A browser speaks three languages</div>
+                  <div class="foundation-body">HTML = structure · CSS = style · JavaScript = behavior. When you ask for a login form, the AI outputs all three. If you don't know what each part does, you can't say "the button works but the colors are wrong" — you'll just accept whatever it gives you.</div>
+                </div>
+
+                <div class="foundation-card">
+                  <div class="foundation-num">02</div>
+                  <div class="foundation-title">Data lives somewhere else</div>
+                  <div class="foundation-body">Most useful tools need to save, load, or share information. That data doesn't live in the webpage — it lives in a backend like Google Sheets, Airtable, or a database. Without this concept, you waste hours trying to make a page remember things it structurally can't.</div>
+                </div>
+
+                <div class="foundation-card">
+                  <div class="foundation-num">03</div>
+                  <div class="foundation-title">Everything has a "state"</div>
+                  <div class="foundation-body">A button can be enabled or disabled. A task can be pending or done. A form can be empty or submitted. When you learn to say "preserve the state when I reload", the AI can give you something that works like an app, not a picture of one.</div>
+                </div>
+
+                <div class="foundation-card">
+                  <div class="foundation-num">04</div>
+                  <div class="foundation-title">AI is a fast intern, not a mind reader</div>
+                  <div class="foundation-body">You give instructions. It produces code. If the code is wrong, you don't start over — you point to what's wrong and redirect. The skill is not writing perfect prompts. It's recognizing a mistake and saying "the button is at the top, move it to the bottom."</div>
+                </div>
+
+              </div>
+              <div class="foundation-footer">Most teams I work with go from "I don't know where to start" to shipping a working internal tool in one session — because once these four concepts click, the AI becomes an extension of their thinking, not a black box. (This page was built entirely inside Claude — no terminal, no IDE, no separate deployment workflow.)</div>
             </div>
           </div>
         </div>
@@ -413,16 +457,30 @@ void main(){
   </div>
 </div>
 
+<!-- CTA -->
+<div class="cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-left">
+        <div class="cta-eyebrow">This page is a demonstration of competence, not a full proposal</div>
+        <div class="cta-heading">Would you like a full speaker proposal?</div>
+        <div class="cta-body">Let's book a call. I'd love to learn more about what your managers are actually navigating, and build a session that speaks directly to where they are. A tailored proposal takes about 48 hours once we've talked.</div>
+      </div>
+      <div class="cta-right">
+        <a href="mailto:keyona@rerev.io" class="cta-email">keyona@rerev.io</a>
+        <div class="cta-note">or find me on LinkedIn</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <div class="proposal-footer">
   <div class="container">
     <div class="footer-inner">
-      <div>
-        <div class="footer-name">Keyona Meeks</div>
-        <div class="footer-email">keyona@rerev.io</div>
-        <div class="footer-note">Built with Zero-Deploy HTML Publisher · ReRev Labs</div>
-      </div>
-      <div><div class="footer-badge">Available May 18 – 29</div></div>
+      <div class="footer-name">Keyona Meeks · ReRev Labs</div>
+      <div class="footer-note">Built with Zero-Deploy HTML Publisher</div>
+      <div class="footer-badge">Available May 18 – 29</div>
     </div>
   </div>
 </div>
@@ -438,7 +496,7 @@ void main(){
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
   renderer.setSize(hero.offsetWidth,hero.offsetHeight);
   const geo=new THREE.IcosahedronGeometry(2.2,64);
-  const uniforms={uTime:{value:0},uC1:{value:new THREE.Color('#C2185B')},uC2:{value:new THREE.Color('#7C3AED')},uC3:{value:new THREE.Color('#2DD4BF')}};
+  const uniforms={uTime:{value:0},uC1:{value:new THREE.Color('#D94F7A')},uC2:{value:new THREE.Color('#7C3AED')},uC3:{value:new THREE.Color('#2DD4BF')}};
   const mat=new THREE.ShaderMaterial({vertexShader:document.getElementById('vShader').textContent,fragmentShader:document.getElementById('fShader').textContent,uniforms,transparent:true,side:THREE.DoubleSide,depthWrite:false});
   const blob=new THREE.Mesh(geo,mat);blob.position.x=2.5;scene.add(blob);
   const clock=new THREE.Clock();
