@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Keyona Meeks — Speaker Pitch for ParsLabs</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@1,400&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@1,400&family=Outfit:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{--magenta:#C2185B;--teal:#1A9E9E;--purple:#7C3AED;--dark:#0D1F2D;--white:#ffffff;--max:1100px;--pad:2.5rem;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -18,7 +18,7 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;opacity:0.55;margin-bottom:0.6rem;}
 .hero{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:clamp(3rem,7vw,5.5rem);line-height:1;color:var(--white);margin-bottom:0.4rem;}
 .sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal);margin-bottom:2rem;}
-.tags{display:flex;flex-wrap:wrap;gap:0;}
+.tags{display:flex;flex-wrap:wrap;}
 .tag{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.25);padding:5px 12px;margin-right:-1px;margin-bottom:-1px;}
 
 /* TOPICS */
@@ -26,14 +26,67 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .section-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;opacity:0.5;margin-bottom:1.5rem;}
 .topics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
 @media(max-width:700px){.topics-grid{grid-template-columns:1fr;}}
-.card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);padding:1.75rem;}
+
+/* CARD */
+.card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);display:flex;flex-direction:column;}
+.card-top{padding:1.75rem;}
 .card-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--teal);margin-bottom:0.6rem;}
 .card-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:900;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:0.8rem;line-height:1.4;}
-.card-body{font-family:'Space Mono',monospace;font-size:10.5px;line-height:1.9;opacity:0.8;margin-bottom:0.85rem;}
-.card-ex{padding-top:0.85rem;border-top:1px solid rgba(255,255,255,0.12);font-family:'Space Mono',monospace;font-size:10px;color:var(--teal);line-height:1.7;}
-.card-ex strong{font-family:'Outfit',sans-serif;display:block;font-size:8px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;opacity:0.6;margin-bottom:0.3rem;}
+.card-body{font-family:'Space Mono',monospace;font-size:10.5px;line-height:1.9;opacity:0.8;}
 
-/* HOW SECTION — full bleed dark bg, contained content */
+/* TOGGLE */
+.toggle-btn{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1.75rem;border-top:1px solid rgba(255,255,255,0.12);cursor:pointer;font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal);background:rgba(26,158,158,0.06);transition:background 0.2s;user-select:none;}
+.toggle-btn:hover{background:rgba(26,158,158,0.14);}
+.toggle-arrow{transition:transform 0.25s;font-size:14px;}
+.toggle-btn.open .toggle-arrow{transform:rotate(90deg);}
+.toggle-panel{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);}
+.toggle-panel.open{max-height:900px;}
+.toggle-inner{padding:1.5rem 1.75rem;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.2);}
+
+/* Evidence panels */
+.ev-label{font-family:'Outfit',sans-serif;font-size:8px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal);opacity:0.7;margin-bottom:1rem;}
+.ev-bullets{list-style:none;padding:0;}
+.ev-bullets li{font-family:'Space Mono',monospace;font-size:10px;line-height:1.8;opacity:0.8;padding-left:1rem;position:relative;margin-bottom:0.35rem;}
+.ev-bullets li::before{content:'→';position:absolute;left:0;color:var(--teal);opacity:0.7;}
+.ev-story{font-family:'Space Mono',monospace;font-size:10px;line-height:1.9;opacity:0.8;}
+.ev-story strong{font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:0.5rem;}
+
+/* Marketing viz embedded */
+.mktg-viz{background:#0a1628;border:1px solid rgba(255,255,255,0.1);overflow:hidden;margin-top:0;}
+
+.mktg-header-bar{display:flex;background:#111d2e;border-bottom:1px solid rgba(255,255,255,0.1);}
+.mktg-hcell{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:8px 14px;border-right:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);display:flex;align-items:center;}
+.mktg-hcell:last-child{border-right:none;}
+
+.mktg-canvas-wrap{display:flex;}
+.mktg-legend{width:160px;flex-shrink:0;padding:1.25rem;border-right:1px solid rgba(255,255,255,0.08);}
+.mktg-legend-title{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;opacity:0.4;margin-bottom:0.75rem;}
+.mktg-legend-item{display:flex;align-items:center;gap:8px;margin-bottom:0.65rem;}
+.mktg-ldot{width:10px;height:10px;border:1px solid rgba(255,255,255,0.2);flex-shrink:0;}
+.mktg-llabel{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;opacity:0.55;}
+.mktg-layer-legend{border-top:1px solid rgba(255,255,255,0.08);padding-top:0.75rem;margin-top:0.75rem;}
+.mktg-layer-line{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;opacity:0.4;line-height:2;}
+
+.mktg-canvas{flex:1;position:relative;height:340px;overflow:hidden;background:#0a1628;}
+.mktg-grid{position:absolute;inset:0;background-size:20px 20px;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);pointer-events:none;}
+
+.mktg-col-label{position:absolute;top:0;height:28px;background:#111d2e;border-bottom:1px solid rgba(255,255,255,0.1);border-right:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;padding:0 10px;z-index:20;pointer-events:none;}
+.mktg-col-label span{font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);}
+
+.mnode{position:absolute;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);padding:8px 10px;cursor:pointer;transition:all 0.15s;z-index:10;}
+.mnode:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--teal);}
+.mnode.mactive{background:var(--teal);border-color:var(--teal);box-shadow:3px 3px 0 var(--purple);}
+.mnode-lbl{font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;opacity:0.45;margin-bottom:3px;}
+.mnode-title{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;line-height:1.2;}
+.mnode-sub{font-family:'IBM Plex Mono',monospace;font-size:7px;text-transform:none;opacity:0.55;margin-top:3px;line-height:1.4;}
+
+.mline{fill:none;stroke:rgba(255,255,255,0.15);stroke-width:1.5;transition:stroke 0.3s,stroke-width 0.3s;}
+.mline.mhi{stroke:var(--teal);stroke-width:2.5;stroke-dasharray:5 3;animation:mdash 8s linear infinite;}
+@keyframes mdash{to{stroke-dashoffset:-100;}}
+.mpkt{fill:var(--teal);}
+.mpkt2{fill:var(--purple);}
+
+/* HOW SECTION */
 .how-section{background:var(--dark);}
 .how-header{border-bottom:1px solid rgba(255,255,255,0.08);}
 .how-header-inner{display:flex;}
@@ -43,10 +96,9 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .how-title{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(2rem,5vw,3.5rem);line-height:1;letter-spacing:-0.03em;color:var(--white);}
 .how-sub{font-family:'Space Mono',monospace;font-size:10px;opacity:0.45;margin-top:0.75rem;line-height:1.9;max-width:540px;}
 
-/* DIAGRAM — contained, fixed height, nodes use % positioning */
 .diagram-outer{border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);}
-.diagram-inner{display:flex;gap:0;}
-.diagram-legend{width:180px;flex-shrink:0;padding:2rem 0 2rem;border-right:1px solid rgba(255,255,255,0.08);margin-right:2rem;}
+.diagram-inner{display:flex;}
+.diagram-legend{width:180px;flex-shrink:0;padding:2rem 0;border-right:1px solid rgba(255,255,255,0.08);margin-right:2rem;}
 .legend-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.35;margin-bottom:1.25rem;}
 .legend-item{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
 .legend-dot{width:12px;height:12px;border:1px solid rgba(255,255,255,0.2);flex-shrink:0;}
@@ -60,11 +112,9 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .node-id{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;opacity:0.4;margin-bottom:0.3rem;}
 .node-label{font-family:'Outfit',sans-serif;font-size:11px;font-weight:900;letter-spacing:0.02em;text-transform:uppercase;line-height:1.3;}
 
-/* STEPS */
 .steps-section{border-bottom:1px solid rgba(255,255,255,0.08);}
 .steps-header{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(1.4rem,3vw,2.2rem);letter-spacing:-0.02em;padding:2rem 0;border-bottom:1px solid rgba(255,255,255,0.08);}
 .steps-grid{display:grid;grid-template-columns:repeat(5,1fr);}
-@media(max-width:700px){.steps-grid{grid-template-columns:1fr 1fr;}}
 .step{padding:1.25rem 1rem;border-right:1px solid rgba(255,255,255,0.08);}
 .step:last-child{border-right:none;}
 .step-num{font-family:'Outfit',sans-serif;font-size:2rem;font-weight:900;opacity:0.12;margin-bottom:0.75rem;}
@@ -73,10 +123,8 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .step.highlight{background:var(--magenta);}
 .step.highlight .step-num{opacity:0.35;}
 
-/* COMPARE */
 .compare-header{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(1.4rem,3vw,2.2rem);letter-spacing:-0.02em;padding:2rem 0;border-bottom:1px solid rgba(255,255,255,0.08);}
-.compare-grid{display:grid;grid-template-columns:1fr 1fr;border-top:none;}
-@media(max-width:600px){.compare-grid{grid-template-columns:1fr;}}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;}
 .compare-col{padding:2rem 0;}
 .compare-col.right{padding-left:2rem;border-left:1px solid rgba(255,255,255,0.08);}
 .compare-col-title{font-family:'Outfit',sans-serif;font-weight:900;font-size:1.6rem;line-height:1;letter-spacing:-0.02em;margin-bottom:1.5rem;}
@@ -85,14 +133,7 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .compare-text p{font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.2rem;}
 .compare-text span{font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.7;}
 .compare-footer{display:flex;justify-content:space-between;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.12);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.1em;margin-top:0.5rem;}
-.how-bottom-pad{padding-bottom:3rem;}
 
-/* MARQUEE */
-.marquee{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(2rem,6vw,4rem);line-height:1;letter-spacing:-0.04em;color:var(--dark);white-space:nowrap;border-top:2px solid var(--dark);border-bottom:2px solid var(--dark);padding:0.85rem 0;background:var(--teal);overflow:hidden;}
-.marquee-inner{display:inline-block;animation:marquee 20s linear infinite;}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-/* FOOTER */
 .proposal-footer{background:var(--dark);border-top:2px solid rgba(255,255,255,0.08);padding:2rem 0;}
 .footer-inner{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;}
 .footer-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:-0.02em;color:var(--white);margin-bottom:0.25rem;}
@@ -127,30 +168,192 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
   <div class="container">
     <div class="section-label">Topics I speak to</div>
     <div class="topics-grid">
+
+      <!-- 01 AUTOMATION -->
       <div class="card">
-        <div class="card-num">01</div>
-        <div class="card-title">High-impact AI automation for business in 2026</div>
-        <div class="card-body">I have built AI-powered automation systems for teams across Africa, the Caribbean, and North America that plug directly into tools they already use. No new platforms, no retraining, no retooling. The lift is minimal. The output change is immediate.</div>
-        <div class="card-ex"><strong>For ParsLabs</strong>Automating client intake, proposal delivery, and follow-up sequences without leaving your existing workspace.</div>
+        <div class="card-top">
+          <div class="card-num">01</div>
+          <div class="card-title">High-impact AI automation for business in 2026</div>
+          <div class="card-body">I have built dozens of automation systems for startups and small businesses across Africa, the Caribbean, and North America. My specialty is acute automation: systems that plug into existing workflows and amplify output without requiring teams to retool.</div>
+        </div>
+        <div class="toggle-btn" onclick="toggleCard(this)">
+          <span>See examples from my work</span>
+          <span class="toggle-arrow">›</span>
+        </div>
+        <div class="toggle-panel">
+          <div class="toggle-inner">
+            <div class="ev-label">Built systems include</div>
+            <ul class="ev-bullets">
+              <li>Post-meeting intelligence engine: transcripts auto-processed, action items extracted, Gmail drafts staged, tasks logged, zero manual steps</li>
+              <li>Proposal publisher: full HTML proposals designed, approved, and deployed live from a single chat interface with no terminal or IDE</li>
+              <li>Client outreach pipeline: sequences drafted, reviewed, and published to a live portal with one-click approve or reject</li>
+              <li>Daily email agent: briefings compiled and sent each morning from a standing instruction set, no manual trigger</li>
+              <li>Utility bill parser: dual AI extraction pipeline with a self-managing queue and GAS web app dashboard</li>
+            </ul>
+          </div>
+        </div>
       </div>
+
+      <!-- 02 MARKETING -->
       <div class="card">
-        <div class="card-num">02</div>
-        <div class="card-title">Real-life AI automations in marketing</div>
-        <div class="card-body">I design human-in-the-loop marketing pipelines where AI drafts and routes content, but the team stays in control of what goes out. The system adapts to the team's comfort level, not the other way around.</div>
-        <div class="card-ex"><strong>For ParsLabs</strong>A pipeline that turns client case studies into LinkedIn posts, email sequences, and outreach copy, staged for your review before anything publishes.</div>
+        <div class="card-top">
+          <div class="card-num">02</div>
+          <div class="card-title">Real-life AI automations in marketing</div>
+          <div class="card-body">I design human-in-the-loop marketing pipelines where AI handles intake, processing, and drafting, but the team stays in control of what goes out. The system adapts to their comfort level, not the other way around.</div>
+        </div>
+        <div class="toggle-btn" onclick="toggleCard(this)">
+          <span>See a system I built</span>
+          <span class="toggle-arrow">›</span>
+        </div>
+        <div class="toggle-panel">
+          <div class="toggle-inner" style="padding:0;">
+            <div style="padding:1rem 1.25rem;font-family:'Space Mono',monospace;font-size:9px;opacity:0.6;line-height:1.8;border-bottom:1px solid rgba(255,255,255,0.08);">The following is a live architecture diagram for a content automation system I built for a client. Newsletters flow in via Gmail, get processed by GAS, analyzed by Gemini, stored in Supabase, and surface as ready-to-publish drafts. The client reviews and approves. Nothing publishes automatically.</div>
+            <!-- EMBEDDED MARKETING VIZ -->
+            <div class="mktg-viz">
+              <div class="mktg-header-bar">
+                <div class="mktg-hcell">@CONTENT-ENGINE.SYS</div>
+                <div class="mktg-hcell" style="flex:1;">SYSTEM TOPOLOGY — CONTENT ENGINE V2.0</div>
+                <div class="mktg-hcell">GAS + SUPABASE + GEMINI</div>
+              </div>
+              <div class="mktg-canvas-wrap">
+                <div class="mktg-legend">
+                  <div class="mktg-legend-title">Legend</div>
+                  <div class="mktg-legend-item"><div class="mktg-ldot" style="background:var(--teal);border-color:var(--teal);"></div><div class="mktg-llabel">Active path</div></div>
+                  <div class="mktg-legend-item"><div class="mktg-ldot" style="background:var(--purple);border-color:var(--purple);"></div><div class="mktg-llabel">AI processing</div></div>
+                  <div class="mktg-legend-item"><div class="mktg-ldot" style="background:rgba(255,255,255,0.06);"></div><div class="mktg-llabel">System node</div></div>
+                  <div class="mktg-layer-legend">
+                    <div class="mktg-legend-title">Layers</div>
+                    <div class="mktg-layer-line">① Intake — Gmail + GAS</div>
+                    <div class="mktg-layer-line">② Process — Supabase</div>
+                    <div class="mktg-layer-line">③ AI — Gemini</div>
+                    <div class="mktg-layer-line">④ Output — GH Pages</div>
+                  </div>
+                </div>
+                <div class="mktg-canvas" id="mktg-canvas">
+                  <div class="mktg-grid"></div>
+                  <!-- Column labels -->
+                  <div class="mktg-col-label" style="left:0;width:25%;"><span>① Intake</span></div>
+                  <div class="mktg-col-label" style="left:25%;width:25%;"><span>② Supabase</span></div>
+                  <div class="mktg-col-label" style="left:50%;width:25%;"><span>③ AI Engine</span></div>
+                  <div class="mktg-col-label" style="left:75%;width:25%;border-right:none;"><span>④ Output</span></div>
+                  <!-- SVG -->
+                  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 800 340" preserveAspectRatio="none">
+                    <path id="mp1" class="mline" d="M 130 110 C 130 160, 200 155, 200 175"/>
+                    <path id="mp2" class="mline" d="M 130 195 L 200 190"/>
+                    <path id="mp3" class="mline" d="M 300 182 C 360 182, 360 130, 400 130"/>
+                    <path id="mp4" class="mline" d="M 430 145 L 430 235"/>
+                    <path id="mp5" class="mline" d="M 500 130 C 540 130, 540 165, 570 165"/>
+                    <path id="mp6" class="mline" d="M 620 190 C 620 245, 500 250, 430 250"/>
+                    <path id="mp7" class="mline" d="M 500 250 C 580 250, 620 220, 660 215"/>
+                    <path id="mp8" class="mline" d="M 665 235 C 665 310, 350 315, 130 305 L 130 260"/>
+                    <circle r="5" class="mpkt"><animateMotion dur="4s" repeatCount="indefinite" path="M 60 110 C 130 110, 200 160, 200 175 C 300 182, 360 130, 570 130"/></circle>
+                    <circle r="4" class="mpkt2" opacity="0.8"><animateMotion dur="5.5s" repeatCount="indefinite" begin="1.5s" path="M 200 182 C 360 182, 430 130, 430 250 C 580 250, 665 220, 665 310 C 350 315, 130 315, 130 260"/></circle>
+                  </svg>
+                  <!-- Nodes -->
+                  <div class="mnode" id="mn-gmail" style="left:14px;top:85px;width:118px;" onclick="mtrace('gmail')">
+                    <div class="mnode-lbl">INTAKE_GMAIL</div>
+                    <div class="mnode-title">Gmail Inbox</div>
+                    <div class="mnode-sub">loom-queue label</div>
+                  </div>
+                  <div class="mnode" id="mn-filter" style="left:14px;top:170px;width:118px;" onclick="mtrace('filter')">
+                    <div class="mnode-lbl">INTAKE_FILTER</div>
+                    <div class="mnode-title">Gmail Filter</div>
+                    <div class="mnode-sub">auto-labels newsletters</div>
+                  </div>
+                  <div class="mnode" id="mn-gas" style="left:175px;top:155px;width:130px;" onclick="mtrace('gas')">
+                    <div class="mnode-lbl">REPLACES MAILGUN</div>
+                    <div class="mnode-title">Google Apps Script</div>
+                    <div class="mnode-sub">fires every 5 min</div>
+                  </div>
+                  <div class="mnode" id="mn-edge" style="left:370px;top:108px;width:135px;" onclick="mtrace('edge')">
+                    <div class="mnode-lbl">12 EDGE FUNCTIONS</div>
+                    <div class="mnode-title">Supabase Edge</div>
+                    <div class="mnode-sub">process-newsletter</div>
+                  </div>
+                  <div class="mnode" id="mn-db" style="left:370px;top:222px;width:130px;" onclick="mtrace('db')">
+                    <div class="mnode-lbl">RLS ENFORCED</div>
+                    <div class="mnode-title">PostgreSQL</div>
+                    <div class="mnode-sub">reference cards stored</div>
+                  </div>
+                  <div class="mnode" id="mn-gemini" style="left:545px;top:143px;width:118px;" onclick="mtrace('gemini')">
+                    <div class="mnode-lbl">AI PROVIDER</div>
+                    <div class="mnode-title">Google Gemini</div>
+                    <div class="mnode-sub">client's own API key</div>
+                  </div>
+                  <div class="mnode" id="mn-gh" style="left:648px;top:198px;width:118px;" onclick="mtrace('ghpages')">
+                    <div class="mnode-lbl">OUTPUT</div>
+                    <div class="mnode-title">GitHub Pages</div>
+                    <div class="mnode-sub">React + Vite · auto-deploy</div>
+                  </div>
+                  <div class="mnode" id="mn-client" style="left:14px;top:240px;width:118px;border-style:dashed;" onclick="mtrace('client')">
+                    <div class="mnode-lbl">END USER</div>
+                    <div class="mnode-title">Client</div>
+                    <div class="mnode-sub">reviews · approves · publishes</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <!-- 03 AI-ASSISTED CODING -->
       <div class="card">
-        <div class="card-num">03</div>
-        <div class="card-title">Best practices for AI-assisted coding</div>
-        <div class="card-body">I ship production-ready work directly from a chat interface, including live deployments. This page is a live example of that workflow. It was designed, approved, and deployed without leaving Claude.</div>
-        <div class="card-ex"><strong>For ParsLabs</strong>The Zero-Deploy HTML Publisher: design in conversation, approve, push to GitHub, Railway auto-deploys. Permanent live link in under a minute.</div>
+        <div class="card-top">
+          <div class="card-num">03</div>
+          <div class="card-title">Best practices for AI-assisted coding</div>
+          <div class="card-body">I ship production-ready work directly from a chat interface, including live deployments. This page is a live example. But more importantly, I teach teams the conceptual foundations they need to direct AI coding tools effectively.</div>
+        </div>
+        <div class="toggle-btn" onclick="toggleCard(this)">
+          <span>What I actually teach</span>
+          <span class="toggle-arrow">›</span>
+        </div>
+        <div class="toggle-panel">
+          <div class="toggle-inner">
+            <div class="ev-label">The foundation I give teams</div>
+            <ul class="ev-bullets">
+              <li>Browsers can only interpret three things natively: HTML (structure), CSS (style), and JavaScript (behavior). If you don't know this, you can't direct AI to build anything that actually runs in a browser</li>
+              <li>Python, for example, cannot render in a browser directly. Understanding what runs where is the prerequisite to building anything real with AI</li>
+              <li>Prompting for code is not typing instructions and hoping. It requires knowing enough about the output to evaluate it and redirect when it goes wrong</li>
+              <li>Most teams I work with go from zero to shipping a working internal tool within one session because the foundation clicks fast</li>
+              <li>This page, for example, was built entirely inside Claude with no terminal, no IDE, and no separate deployment workflow</li>
+            </ul>
+          </div>
+        </div>
       </div>
+
+      <!-- 04 IMPLEMENTATION RISKS -->
       <div class="card">
-        <div class="card-num">04</div>
-        <div class="card-title">AI implementation risks</div>
-        <div class="card-body">As both a practitioner and an investor, I see AI adoption from two angles. Most implementation failures are not technical. They happen when systems are designed for efficiency without accounting for how the team actually works.</div>
-        <div class="card-ex"><strong>For ParsLabs</strong>Adoption failure is the real risk. I speak to this directly from production experience across multiple geographies and team types.</div>
+        <div class="card-top">
+          <div class="card-num">04</div>
+          <div class="card-title">AI implementation risks</div>
+          <div class="card-body">As both a practitioner and an investor, I see AI adoption from two angles. Most failures are not technical. They happen when systems are optimized for efficiency without accounting for how the team actually works or what they actually need to retain.</div>
+        </div>
+        <div class="toggle-btn" onclick="toggleCard(this)">
+          <span>A real client example</span>
+          <span class="toggle-arrow">›</span>
+        </div>
+        <div class="toggle-panel">
+          <div class="toggle-inner">
+            <div class="ev-story">
+              <strong>The problem</strong>
+              A client came to me wanting full AI automation across their knowledge workflow. The initial build could do everything: intake, summarize, categorize, draft, and deliver. From a pure efficiency standpoint, it worked.
+            </div>
+            <div class="ev-story" style="margin-top:1rem;">
+              <strong>What we found</strong>
+              The client had explicitly said their priority was learning retention, encoding the knowledge themselves, not just having it processed for them. Full automation was actively working against their goal. The AI was doing so much that they were not absorbing anything.
+            </div>
+            <div class="ev-story" style="margin-top:1rem;">
+              <strong>The redesign</strong>
+              We rebuilt the system so AI functioned as backup and reference, not as primary processor. The client still interacts with the material first. The system supports that process rather than replacing it. Same infrastructure, completely different design philosophy.
+            </div>
+            <div class="ev-story" style="margin-top:1rem;color:var(--teal);">
+              This is what I mean by building to the team's goals, not just their output. Efficiency is not always the right metric.
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -171,7 +374,6 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
     </div>
   </div>
 
-  <!-- DIAGRAM — full width inside container -->
   <div class="diagram-outer">
     <div class="container">
       <div class="diagram-inner">
@@ -185,7 +387,6 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
         <div class="diagram-canvas" id="canvas">
           <div class="grid-bg"></div>
           <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" id="svg">
-            <!-- paths use % via JS on resize, set initially for ~800px wide canvas -->
             <path id="p1" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" fill="none"/>
             <path id="p2" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" fill="none"/>
             <path id="p3" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" fill="none"/>
@@ -195,37 +396,19 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
             <circle id="pk2" r="5" fill="#7C3AED"/>
             <circle id="pk3" r="4" fill="#1A9E9E" opacity="0.6"/>
           </svg>
-          <div class="node" id="n-keyona" onclick="trace('client')">
-            <div class="node-id">USR_KYN</div>
-            <div class="node-label">Keyona<br>in Claude</div>
-          </div>
-          <div class="node" id="n-pub" style="width:160px;" onclick="trace('pub')">
-            <div class="node-id">AI ORCHESTRATOR</div>
-            <div class="node-label">Zero-Deploy<br>Publisher</div>
-          </div>
-          <div class="node" id="n-gh" onclick="trace('gh')">
-            <div class="node-id">STORAGE</div>
-            <div class="node-label">GitHub<br>API</div>
-          </div>
-          <div class="node" id="n-railway" style="width:160px;" onclick="trace('railway')">
-            <div class="node-id">INFRASTRUCTURE</div>
-            <div class="node-label">Railway<br>Auto-Deploy</div>
-          </div>
-          <div class="node" id="n-output" onclick="trace('output')">
-            <div class="node-id">OUTPUT</div>
-            <div class="node-label">Live URL<br>in Chat</div>
-          </div>
+          <div class="node" id="n-keyona" onclick="trace('client')"><div class="node-id">USR_KYN</div><div class="node-label">Keyona<br>in Claude</div></div>
+          <div class="node" id="n-pub" style="width:160px;" onclick="trace('pub')"><div class="node-id">AI ORCHESTRATOR</div><div class="node-label">Zero-Deploy<br>Publisher</div></div>
+          <div class="node" id="n-gh" onclick="trace('gh')"><div class="node-id">STORAGE</div><div class="node-label">GitHub<br>API</div></div>
+          <div class="node" id="n-railway" style="width:160px;" onclick="trace('railway')"><div class="node-id">INFRASTRUCTURE</div><div class="node-label">Railway<br>Auto-Deploy</div></div>
+          <div class="node" id="n-output" onclick="trace('output')"><div class="node-id">OUTPUT</div><div class="node-label">Live URL<br>in Chat</div></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- STEPS -->
   <div class="steps-section">
-    <div class="container">
-      <div class="steps-header">AUTOMATED LIFECYCLE</div>
-    </div>
-    <div class="container" style="padding-left:0;padding-right:0;max-width:var(--max);margin:0 auto;">
+    <div class="container"><div class="steps-header">AUTOMATED LIFECYCLE</div></div>
+    <div style="max-width:var(--max);margin:0 auto;">
       <div class="steps-grid">
         <div class="step" style="padding-left:var(--pad);"><div class="step-num">01</div><div class="step-title">Prompt</div><div class="step-desc">Keyona describes what to build inside Claude.</div></div>
         <div class="step"><div class="step-num">02</div><div class="step-title">Design</div><div class="step-desc">Publisher generates full HTML using the design system.</div></div>
@@ -236,7 +419,6 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
     </div>
   </div>
 
-  <!-- COMPARE -->
   <div class="container">
     <div class="compare-header">TRADITIONAL VS. ZERO-DEPLOY</div>
     <div class="compare-grid">
@@ -255,13 +437,8 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
         <div class="compare-footer" style="border-color:rgba(255,255,255,0.12);"><span>&lt; 60 seconds</span><span style="color:var(--teal);">STATUS: SHIPPED</span></div>
       </div>
     </div>
-    <div class="how-bottom-pad"></div>
+    <div style="padding-bottom:3rem;"></div>
   </div>
-</div>
-
-<!-- MARQUEE -->
-<div class="marquee">
-  <div class="marquee-inner">ZERO-DEPLOY · AMPLIFY · NOT REPLACE · ZERO-DEPLOY · AMPLIFY · NOT REPLACE · ZERO-DEPLOY · AMPLIFY · NOT REPLACE · ZERO-DEPLOY · AMPLIFY · NOT REPLACE · &nbsp;</div>
 </div>
 
 <!-- FOOTER -->
@@ -279,71 +456,79 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 </div>
 
 <script>
-// Position nodes and draw paths based on canvas size
+// CARD TOGGLES
+function toggleCard(btn){
+  const panel = btn.nextElementSibling;
+  const isOpen = panel.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  panel.classList.toggle('open', !isOpen);
+}
+
+// MAIN DIAGRAM LAYOUT
 function layout(){
   const canvas = document.getElementById('canvas');
-  const W = canvas.offsetWidth;
-  const H = canvas.offsetHeight;
+  if(!canvas) return;
+  const W = canvas.offsetWidth, H = canvas.offsetHeight;
   const nodes = {
-    keyona: {x: W*0.04, y: H*0.1, el: document.getElementById('n-keyona')},
-    pub:    {x: W*0.35, y: H*0.1, el: document.getElementById('n-pub')},
-    gh:     {x: W*0.72, y: H*0.38, el: document.getElementById('n-gh')},
-    railway:{x: W*0.35, y: H*0.65, el: document.getElementById('n-railway')},
-    output: {x: W*0.04, y: H*0.52, el: document.getElementById('n-output')}
+    keyona:{x:W*0.04,y:H*0.1,el:document.getElementById('n-keyona')},
+    pub:   {x:W*0.35,y:H*0.1,el:document.getElementById('n-pub')},
+    gh:    {x:W*0.72,y:H*0.38,el:document.getElementById('n-gh')},
+    railway:{x:W*0.35,y:H*0.65,el:document.getElementById('n-railway')},
+    output:{x:W*0.04,y:H*0.52,el:document.getElementById('n-output')}
   };
-  Object.values(nodes).forEach(n=>{
-    n.el.style.left = n.x+'px';
-    n.el.style.top = n.y+'px';
-  });
-  const nw=140, nh=70, nw2=160;
-  const kR=nodes.keyona.x+nw, kCy=nodes.keyona.y+nh/2;
-  const pL=nodes.pub.x, pR=nodes.pub.x+nw2, pCy=nodes.pub.y+nh/2;
-  const gL=nodes.gh.x, gCy=nodes.gh.y+nh/2;
-  const rL=nodes.railway.x, rR=nodes.railway.x+nw2, rCy=nodes.railway.y+nh/2;
-  const oR=nodes.output.x+nw, oCy=nodes.output.y+nh/2, oT=nodes.output.y;
-
+  Object.values(nodes).forEach(n=>{n.el.style.left=n.x+'px';n.el.style.top=n.y+'px';});
+  const nw=140,nh=70,nw2=160;
+  const kR=nodes.keyona.x+nw,kCy=nodes.keyona.y+nh/2;
+  const pL=nodes.pub.x,pR=nodes.pub.x+nw2,pCy=nodes.pub.y+nh/2;
+  const gL=nodes.gh.x,gCy=nodes.gh.y+nh/2;
+  const rL=nodes.railway.x,rR=nodes.railway.x+nw2,rCy=nodes.railway.y+nh/2;
+  const oR=nodes.output.x+nw,oCy=nodes.output.y+nh/2,oT=nodes.output.y;
   document.getElementById('p1').setAttribute('d',`M ${kR} ${kCy} L ${pL} ${pCy}`);
   document.getElementById('p2').setAttribute('d',`M ${pR} ${pCy} L ${gL} ${gCy}`);
   document.getElementById('p3').setAttribute('d',`M ${gL} ${gCy} C ${gL-60} ${gCy} ${rR+60} ${rCy} ${rR} ${rCy}`);
   document.getElementById('p4').setAttribute('d',`M ${rL} ${rCy} L ${oR} ${oCy}`);
   document.getElementById('p5').setAttribute('d',`M ${nodes.keyona.x+nw/2} ${nodes.keyona.y+nh} L ${nodes.keyona.x+nw/2} ${oT}`);
-
-  // animate packets along paths
-  const paths = ['p1','p2','p3','p4','p5'];
   ['pk1','pk2','pk3'].forEach((id,i)=>{
-    const pk = document.getElementById(id);
-    const existing = pk.querySelector('animateMotion');
-    if(existing) existing.remove();
-    const am = document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
-    const pathEl = document.getElementById(paths[i]);
-    am.setAttribute('dur', i===0?'2.5s':i===1?'3.5s':'4s');
+    const pk=document.getElementById(id);
+    const ex=pk.querySelector('animateMotion');
+    if(ex)ex.remove();
+    const am=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
+    am.setAttribute('dur',i===0?'2.5s':i===1?'3.5s':'4s');
     am.setAttribute('repeatCount','indefinite');
-    am.setAttribute('begin', i===1?'1s':i===2?'0.5s':'0s');
-    const mpath = document.createElementNS('http://www.w3.org/2000/svg','mpath');
-    mpath.setAttributeNS('http://www.w3.org/1999/xlink','href','#'+paths[i]);
-    am.appendChild(mpath);
-    pk.appendChild(am);
+    am.setAttribute('begin',i===1?'1s':i===2?'0.5s':'0s');
+    const mp=document.createElementNS('http://www.w3.org/2000/svg','mpath');
+    mp.setAttributeNS('http://www.w3.org/1999/xlink','href','#p'+(i+1));
+    am.appendChild(mp);pk.appendChild(am);
   });
 }
-
-window.addEventListener('load', layout);
-window.addEventListener('resize', layout);
+window.addEventListener('load',layout);
+window.addEventListener('resize',layout);
 
 function trace(t){
   document.querySelectorAll('.node').forEach(n=>{n.classList.remove('active','active-purple');});
-  ['p1','p2','p3','p4','p5'].forEach(p=>{
-    const el=document.getElementById(p);
-    if(el){el.setAttribute('stroke','rgba(255,255,255,0.12)');el.setAttribute('stroke-width','1.5');el.removeAttribute('stroke-dasharray');}
-  });
-  const hi=(id,color='#1A9E9E')=>{
-    const el=document.getElementById(id);
-    if(el){el.setAttribute('stroke',color);el.setAttribute('stroke-width','3');el.setAttribute('stroke-dasharray','6 3');}
-  };
+  ['p1','p2','p3','p4','p5'].forEach(p=>{const el=document.getElementById(p);if(el){el.setAttribute('stroke','rgba(255,255,255,0.12)');el.setAttribute('stroke-width','1.5');el.removeAttribute('stroke-dasharray');}});
+  const hi=(id,c='#1A9E9E')=>{const el=document.getElementById(id);if(el){el.setAttribute('stroke',c);el.setAttribute('stroke-width','3');el.setAttribute('stroke-dasharray','6 3');}};
   if(t==='client'){document.getElementById('n-keyona').classList.add('active');hi('p1');hi('p5','#7C3AED');}
   else if(t==='pub'){document.getElementById('n-pub').classList.add('active');hi('p1');hi('p2','#7C3AED');}
   else if(t==='gh'){document.getElementById('n-gh').classList.add('active');hi('p2');hi('p3','#7C3AED');}
   else if(t==='railway'){document.getElementById('n-railway').classList.add('active');hi('p3');hi('p4','#7C3AED');}
   else if(t==='output'){document.getElementById('n-output').classList.add('active-purple');hi('p4','#1A9E9E');hi('p5');}
+}
+
+// MARKETING VIZ TRACE
+function mtrace(t){
+  document.querySelectorAll('.mnode').forEach(n=>n.classList.remove('mactive'));
+  document.querySelectorAll('.mline').forEach(l=>l.classList.remove('mhi'));
+  const hi=(...ids)=>ids.forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('mhi');});
+  const an=id=>{const el=document.getElementById(id);if(el)el.classList.add('mactive');};
+  if(t==='gmail'){an('mn-gmail');hi('mp1');}
+  else if(t==='filter'){an('mn-filter');hi('mp2');}
+  else if(t==='gas'){an('mn-gas');hi('mp1','mp2','mp3');}
+  else if(t==='edge'){an('mn-edge');hi('mp3','mp4','mp5');}
+  else if(t==='db'){an('mn-db');hi('mp4','mp6');}
+  else if(t==='gemini'){an('mn-gemini');hi('mp5','mp6');}
+  else if(t==='ghpages'){an('mn-gh');hi('mp7','mp8');}
+  else if(t==='client'){an('mn-client');hi('mp8');}
 }
 </script>
 </body>
