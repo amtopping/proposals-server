@@ -4,23 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Keyona Meeks — Speaker Pitch for ParsLabs</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@1,400&family=Outfit:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:ital,opsz,wght@1,6..72,400&family=Outfit:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 :root{--magenta:#C2185B;--teal:#1A9E9E;--purple:#7C3AED;--dark:#0D1F2D;--white:#ffffff;--max:1100px;--pad:2.5rem;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--white);overflow-x:hidden;}
 .container{max-width:var(--max);margin:0 auto;padding:0 var(--pad);}
 
-/* HEADER */
-.header{border-bottom:2px solid rgba(255,255,255,0.15);padding:3rem 0;position:relative;overflow:hidden;}
-.header-grid{position:absolute;inset:0;background-size:60px 60px;background-image:linear-gradient(to right,rgba(255,255,255,0.06) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,0.06) 1px,transparent 1px);pointer-events:none;}
-.header-inner{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:2rem;flex-wrap:wrap;}
-.header-left{}
-.eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;opacity:0.55;margin-bottom:0.6rem;}
-.hero{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:clamp(3rem,7vw,5.5rem);line-height:1;color:var(--white);margin-bottom:0.4rem;}
-.sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal);margin-top:0.5rem;}
-.header-right{display:flex;align-items:flex-end;padding-bottom:0.25rem;}
-.header-logo{height:48px;width:auto;opacity:0.92;}
+/* HERO */
+.hero-section{position:relative;height:100vh;min-height:500px;max-height:780px;overflow:hidden;background:var(--magenta);border-bottom:2px solid rgba(255,255,255,0.15);}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:0.55;}
+.hero-ui{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;padding:2.5rem var(--pad);}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;max-width:var(--max);margin:0 auto;width:100%;}
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;opacity:0.6;}
+.hero-logo{height:40px;width:auto;opacity:0.9;}
+.hero-bottom{max-width:var(--max);margin:0 auto;width:100%;padding-bottom:0.5rem;}
+.hero-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(3.5rem,10vw,8rem);line-height:0.9;letter-spacing:-0.03em;color:var(--white);margin-bottom:1rem;}
+.hero-sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal);}
 
 /* TOPICS */
 .topics-section{padding:3rem 0;border-bottom:2px solid rgba(255,255,255,0.1);}
@@ -135,27 +136,106 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .compare-footer{display:flex;justify-content:space-between;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.12);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.1em;margin-top:0.5rem;}
 .proposal-footer{background:var(--dark);border-top:2px solid rgba(255,255,255,0.08);padding:2rem 0;}
 .footer-inner{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;}
-.footer-name{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:1.6rem;color:var(--white);margin-bottom:0.25rem;}
+.footer-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:-0.02em;color:var(--white);margin-bottom:0.25rem;}
 .footer-email{font-family:'Space Mono',monospace;font-size:11px;color:var(--teal);font-weight:700;}
 .footer-note{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;opacity:0.3;text-transform:uppercase;margin-top:0.4rem;}
 .footer-badge{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;border:1px solid var(--teal);color:var(--teal);padding:5px 12px;}
 </style>
+
+<!-- SHADERS -->
+<script id="vShader" type="x-shader/x-vertex">
+vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x,289.0);}
+vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
+float snoise(vec3 v){
+  const vec2 C=vec2(1.0/6.0,1.0/3.0);
+  const vec4 D=vec4(0.0,0.5,1.0,2.0);
+  vec3 i=floor(v+dot(v,C.yyy));
+  vec3 x0=v-i+dot(i,C.xxx);
+  vec3 g=step(x0.yzx,x0.xyz);
+  vec3 l=1.0-g;
+  vec3 i1=min(g.xyz,l.zxy);
+  vec3 i2=max(g.xyz,l.zxy);
+  vec3 x1=x0-i1+C.xxx;
+  vec3 x2=x0-i2+2.0*C.xxx;
+  vec3 x3=x0-1.0+3.0*C.xxx;
+  i=mod(i,289.0);
+  vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));
+  float n_=1.0/7.0;
+  vec3 ns=n_*D.wyz-D.xzx;
+  vec4 j=p-49.0*floor(p*ns.z*ns.z);
+  vec4 x_=floor(j*ns.z);
+  vec4 y_=floor(j-7.0*x_);
+  vec4 x=x_*ns.x+ns.yyyy;
+  vec4 y=y_*ns.x+ns.yyyy;
+  vec4 h=1.0-abs(x)-abs(y);
+  vec4 b0=vec4(x.xy,y.xy);
+  vec4 b1=vec4(x.zw,y.zw);
+  vec4 s0=floor(b0)*2.0+1.0;
+  vec4 s1=floor(b1)*2.0+1.0;
+  vec4 sh=-step(h,vec4(0.0));
+  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;
+  vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+  vec3 p0=vec3(a0.xy,h.x);
+  vec3 p1=vec3(a0.zw,h.y);
+  vec3 p2=vec3(a1.xy,h.z);
+  vec3 p3=vec3(a1.zw,h.w);
+  vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+  p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
+  vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);
+  m=m*m;
+  return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+}
+uniform float uTime;
+varying vec3 vNormal;
+varying vec3 vPosition;
+varying float vNoise;
+void main(){
+  vNormal=normal;
+  float n=snoise(vec3(position.x*1.2,position.y*1.2,position.z*1.2+uTime*0.15));
+  vNoise=n;
+  vec3 disp=position+normal*(n*0.5);
+  vPosition=disp;
+  gl_Position=projectionMatrix*modelViewMatrix*vec4(disp,1.0);
+}
+</script>
+<script id="fShader" type="x-shader/x-fragment">
+uniform float uTime;
+uniform vec3 uC1;
+uniform vec3 uC2;
+uniform vec3 uC3;
+varying vec3 vNormal;
+varying vec3 vPosition;
+varying float vNoise;
+float rnd(vec2 st){return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);}
+void main(){
+  vec3 vd=normalize(cameraPosition-vPosition);
+  float dp=dot(vNormal,vd);
+  float edge=smoothstep(0.0,0.6,dp);
+  float m1=smoothstep(-1.0,1.0,vNoise+sin(uTime*0.4));
+  float m2=smoothstep(-1.0,1.0,vPosition.y+cos(uTime*0.25));
+  vec3 col=mix(uC1,uC2,m1);
+  col=mix(col,uC3,m2*0.45);
+  float grain=rnd(vPosition.xy*8.0+uTime)*0.12;
+  col+=grain;
+  float alpha=edge*0.88;
+  if(alpha<0.05)discard;
+  gl_FragColor=vec4(col,alpha);
+}
+</script>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-grid"></div>
-  <div class="container">
-    <div class="header-inner">
-      <div class="header-left">
-        <div class="eyebrow">Speaker pitch for ParsLabs · May 2026 Series</div>
-        <div class="hero">Keyona Meeks</div>
-        <div class="sub">ReRev Labs · AI Implementation · BlackTech Capital</div>
-      </div>
-      <div class="header-right">
-        <img class="header-logo" src="https://res.cloudinary.com/dialhpycd/image/upload/v1770670281/rerev_labs_title_logo_afrgnu.png" alt="ReRev Labs">
-      </div>
+<!-- HERO -->
+<div class="hero-section">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-ui">
+    <div class="hero-top">
+      <div class="hero-eyebrow">Speaker pitch for ParsLabs · May 2026 Series</div>
+      <img class="hero-logo" src="https://res.cloudinary.com/dialhpycd/image/upload/v1770670281/rerev_labs_title_logo_afrgnu.png" alt="ReRev Labs">
+    </div>
+    <div class="hero-bottom">
+      <div class="hero-name">Keyona<br>Meeks</div>
+      <div class="hero-sub">ReRev Labs · AI Implementation · BlackTech Capital</div>
     </div>
   </div>
 </div>
@@ -206,7 +286,7 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
             </div>
             <div class="card-expand">
               <div class="expand-inner" style="padding:0;">
-                <div style="padding:1rem 1.25rem;font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.8;border-bottom:1px solid rgba(255,255,255,0.08);">The following is a live architecture diagram for a content automation system I built for a client. Newsletters flow in via Gmail, get processed by GAS, analyzed by Gemini, stored in Supabase, and surface as ready-to-publish drafts. The client reviews and approves. Nothing publishes automatically.</div>
+                <div style="padding:1rem 1.25rem;font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.8;border-bottom:1px solid rgba(255,255,255,0.08);">The following is a live architecture diagram for a content automation system built for Katherine the Client. The result: a steady stream of publish-ready drafts, sourced from newsletters she already reads, waiting for her approval — nothing goes live without her sign-off.</div>
                 <div class="mktg-viz">
                   <div class="mktg-header-bar">
                     <div class="mktg-hcell">CONTENT ENGINE V2.0</div>
@@ -251,7 +331,7 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
                       <div class="mnode" id="mn-db" style="left:368px;top:210px;width:125px;" onclick="mtrace('db')"><div class="mnode-lbl">RLS ENFORCED</div><div class="mnode-title">PostgreSQL</div><div class="mnode-sub">reference cards stored</div></div>
                       <div class="mnode" id="mn-gemini" style="left:542px;top:135px;width:112px;" onclick="mtrace('gemini')"><div class="mnode-lbl">AI PROVIDER</div><div class="mnode-title">Google Gemini</div><div class="mnode-sub">client's own API key</div></div>
                       <div class="mnode" id="mn-gh" style="left:644px;top:188px;width:112px;" onclick="mtrace('ghpages')"><div class="mnode-lbl">OUTPUT</div><div class="mnode-title">GitHub Pages</div><div class="mnode-sub">React · auto-deploy</div></div>
-                      <div class="mnode" id="mn-client" style="left:12px;top:232px;width:112px;border-style:dashed;" onclick="mtrace('client')"><div class="mnode-lbl">END USER</div><div class="mnode-title">Client</div><div class="mnode-sub">reviews · approves</div></div>
+                      <div class="mnode" id="mn-client" style="left:12px;top:232px;width:112px;border-style:dashed;" onclick="mtrace('client')"><div class="mnode-lbl">END USER</div><div class="mnode-title">Katherine</div><div class="mnode-sub">reviews · approves</div></div>
                     </div>
                   </div>
                 </div>
@@ -412,12 +492,64 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 </div>
 
 <script>
+// HERO SHADER BLOB
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  const hero = canvas.parentElement;
+  function resize(){
+    canvas.width = hero.offsetWidth;
+    canvas.height = hero.offsetHeight;
+    if(renderer){
+      renderer.setSize(hero.offsetWidth, hero.offsetHeight);
+      camera.aspect = hero.offsetWidth / hero.offsetHeight;
+      camera.updateProjectionMatrix();
+    }
+  }
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, hero.offsetWidth/hero.offsetHeight, 0.1, 100);
+  camera.position.z = 5;
+
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  resize();
+
+  const geo = new THREE.IcosahedronGeometry(2.2, 64);
+  const uniforms = {
+    uTime:{value:0},
+    uC1:{value:new THREE.Color('#C2185B')},
+    uC2:{value:new THREE.Color('#7C3AED')},
+    uC3:{value:new THREE.Color('#1A9E9E')}
+  };
+  const mat = new THREE.ShaderMaterial({
+    vertexShader: document.getElementById('vShader').textContent,
+    fragmentShader: document.getElementById('fShader').textContent,
+    uniforms,
+    transparent:true,
+    side:THREE.DoubleSide,
+    depthWrite:false
+  });
+  const blob = new THREE.Mesh(geo, mat);
+  blob.position.x = 2.5;
+  scene.add(blob);
+
+  const clock = new THREE.Clock();
+  function animate(){
+    requestAnimationFrame(animate);
+    uniforms.uTime.value = clock.getElapsedTime();
+    blob.rotation.y = uniforms.uTime.value * 0.08;
+    blob.rotation.x = uniforms.uTime.value * 0.04;
+    renderer.render(scene, camera);
+  }
+  animate();
+  window.addEventListener('resize', resize);
+})();
+
 // CAROUSEL
 const slides=document.querySelectorAll('.slide');
 const dots=document.querySelectorAll('.dot');
 let cur=0;
 function go(n){
-  // close any open expand on current slide
   const curTop=slides[cur].querySelector('.card-top');
   if(curTop&&curTop.classList.contains('expanded')){
     curTop.classList.remove('expanded');
@@ -433,7 +565,6 @@ document.getElementById('prev').addEventListener('click',()=>go(cur-1));
 document.getElementById('next').addEventListener('click',()=>go(cur+1));
 dots.forEach(d=>d.addEventListener('click',()=>go(+d.dataset.i)));
 
-// EXPAND TOGGLE
 function toggleExpand(cardTop){
   const panel=cardTop.nextElementSibling;
   const isOpen=panel.classList.contains('open');
@@ -441,7 +572,7 @@ function toggleExpand(cardTop){
   panel.classList.toggle('open',!isOpen);
 }
 
-// MAIN DIAGRAM LAYOUT
+// MAIN DIAGRAM
 function layout(){
   const canvas=document.getElementById('canvas');
   if(!canvas)return;
@@ -467,8 +598,7 @@ function layout(){
   document.getElementById('p5').setAttribute('d',`M ${nodes.keyona.x+nw/2} ${nodes.keyona.y+nh} L ${nodes.keyona.x+nw/2} ${oT}`);
   ['pk1','pk2','pk3'].forEach((id,i)=>{
     const pk=document.getElementById(id);
-    const ex=pk.querySelector('animateMotion');
-    if(ex)ex.remove();
+    const ex=pk.querySelector('animateMotion');if(ex)ex.remove();
     const am=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
     am.setAttribute('dur',i===0?'2.5s':i===1?'3.5s':'4s');
     am.setAttribute('repeatCount','indefinite');
