@@ -14,73 +14,80 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 /* HEADER */
 .header{border-bottom:2px solid rgba(255,255,255,0.15);padding:3rem 0;position:relative;overflow:hidden;}
 .header-grid{position:absolute;inset:0;background-size:60px 60px;background-image:linear-gradient(to right,rgba(255,255,255,0.06) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,0.06) 1px,transparent 1px);pointer-events:none;}
-.header-inner{position:relative;z-index:2;}
+.header-inner{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:2rem;flex-wrap:wrap;}
+.header-left{}
 .eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;opacity:0.55;margin-bottom:0.6rem;}
 .hero{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:clamp(3rem,7vw,5.5rem);line-height:1;color:var(--white);margin-bottom:0.4rem;}
-.sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal);margin-bottom:2rem;}
-.tags{display:flex;flex-wrap:wrap;}
-.tag{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.25);padding:5px 12px;margin-right:-1px;margin-bottom:-1px;}
+.sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal);margin-top:0.5rem;}
+.header-right{display:flex;align-items:flex-end;padding-bottom:0.25rem;}
+.header-logo{height:48px;width:auto;opacity:0.92;}
 
 /* TOPICS */
 .topics-section{padding:3rem 0;border-bottom:2px solid rgba(255,255,255,0.1);}
 .section-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;opacity:0.5;margin-bottom:1.5rem;}
-.topics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
-@media(max-width:700px){.topics-grid{grid-template-columns:1fr;}}
+
+/* CAROUSEL */
+.carousel-wrap{position:relative;}
+.carousel-track{overflow:hidden;}
+.slide{display:none;}
+.slide.active{display:block;}
 
 /* CARD */
-.card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);display:flex;flex-direction:column;}
-.card-top{padding:1.75rem;}
-.card-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--teal);margin-bottom:0.6rem;}
+.card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);}
+.card-top{padding:1.75rem;cursor:pointer;}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:0.8rem;}
+.card-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--teal);}
+.card-expand-hint{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--teal);opacity:0.6;display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.card-expand-arrow{transition:transform 0.25s;display:inline-block;}
+.card-top.expanded .card-expand-arrow{transform:rotate(90deg);}
 .card-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:900;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:0.8rem;line-height:1.4;}
 .card-body{font-family:'Space Mono',monospace;font-size:10.5px;line-height:1.9;opacity:0.8;}
 
-/* TOGGLE */
-.toggle-btn{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1.75rem;border-top:1px solid rgba(255,255,255,0.12);cursor:pointer;font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal);background:rgba(26,158,158,0.06);transition:background 0.2s;user-select:none;}
-.toggle-btn:hover{background:rgba(26,158,158,0.14);}
-.toggle-arrow{transition:transform 0.25s;font-size:14px;}
-.toggle-btn.open .toggle-arrow{transform:rotate(90deg);}
-.toggle-panel{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);}
-.toggle-panel.open{max-height:900px;}
-.toggle-inner{padding:1.5rem 1.75rem;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.2);}
+/* EXPAND PANEL */
+.card-expand{max-height:0;overflow:hidden;transition:max-height 0.45s cubic-bezier(0.4,0,0.2,1);}
+.card-expand.open{max-height:1200px;}
+.expand-inner{padding:1.5rem 1.75rem;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.2);}
 
-/* Evidence panels */
+/* Evidence */
 .ev-label{font-family:'Outfit',sans-serif;font-size:8px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal);opacity:0.7;margin-bottom:1rem;}
-.ev-bullets{list-style:none;padding:0;}
-.ev-bullets li{font-family:'Space Mono',monospace;font-size:10px;line-height:1.8;opacity:0.8;padding-left:1rem;position:relative;margin-bottom:0.35rem;}
+.ev-bullets{list-style:none;}
+.ev-bullets li{font-family:'Space Mono',monospace;font-size:10px;line-height:1.8;opacity:0.8;padding-left:1.2rem;position:relative;margin-bottom:0.4rem;}
 .ev-bullets li::before{content:'→';position:absolute;left:0;color:var(--teal);opacity:0.7;}
 .ev-story{font-family:'Space Mono',monospace;font-size:10px;line-height:1.9;opacity:0.8;}
 .ev-story strong{font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:0.5rem;}
 
-/* Marketing viz embedded */
-.mktg-viz{background:#0a1628;border:1px solid rgba(255,255,255,0.1);overflow:hidden;margin-top:0;}
+/* CAROUSEL NAV */
+.carousel-nav{display:flex;align-items:center;gap:1rem;margin-top:1rem;}
+.cbtn{font-family:'Space Mono',monospace;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.2);color:var(--white);font-size:10px;padding:6px 14px;cursor:pointer;letter-spacing:0.08em;}
+.cbtn:hover{background:rgba(255,255,255,0.14);}
+.dots{display:flex;gap:6px;align-items:center;}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;}
+.dot.active{background:var(--teal);}
 
-.mktg-header-bar{display:flex;background:#111d2e;border-bottom:1px solid rgba(255,255,255,0.1);}
-.mktg-hcell{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:8px 14px;border-right:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);display:flex;align-items:center;}
+/* MARKETING VIZ */
+.mktg-viz{background:#0a1628;overflow:hidden;}
+.mktg-header-bar{display:flex;background:#111d2e;border-bottom:1px solid rgba(255,255,255,0.08);}
+.mktg-hcell{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:8px 14px;border-right:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);display:flex;align-items:center;}
 .mktg-hcell:last-child{border-right:none;}
-
 .mktg-canvas-wrap{display:flex;}
-.mktg-legend{width:160px;flex-shrink:0;padding:1.25rem;border-right:1px solid rgba(255,255,255,0.08);}
-.mktg-legend-title{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;opacity:0.4;margin-bottom:0.75rem;}
-.mktg-legend-item{display:flex;align-items:center;gap:8px;margin-bottom:0.65rem;}
-.mktg-ldot{width:10px;height:10px;border:1px solid rgba(255,255,255,0.2);flex-shrink:0;}
-.mktg-llabel{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;opacity:0.55;}
-.mktg-layer-legend{border-top:1px solid rgba(255,255,255,0.08);padding-top:0.75rem;margin-top:0.75rem;}
-.mktg-layer-line{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;opacity:0.4;line-height:2;}
-
-.mktg-canvas{flex:1;position:relative;height:340px;overflow:hidden;background:#0a1628;}
-.mktg-grid{position:absolute;inset:0;background-size:20px 20px;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);pointer-events:none;}
-
-.mktg-col-label{position:absolute;top:0;height:28px;background:#111d2e;border-bottom:1px solid rgba(255,255,255,0.1);border-right:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;padding:0 10px;z-index:20;pointer-events:none;}
-.mktg-col-label span{font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);}
-
-.mnode{position:absolute;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);padding:8px 10px;cursor:pointer;transition:all 0.15s;z-index:10;}
-.mnode:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--teal);}
+.mktg-legend{width:150px;flex-shrink:0;padding:1rem;border-right:1px solid rgba(255,255,255,0.08);}
+.mktg-legend-title{font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;opacity:0.35;margin-bottom:0.65rem;}
+.mktg-legend-item{display:flex;align-items:center;gap:7px;margin-bottom:0.55rem;}
+.mktg-ldot{width:9px;height:9px;border:1px solid rgba(255,255,255,0.2);flex-shrink:0;}
+.mktg-llabel{font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;opacity:0.5;}
+.mktg-layer-legend{border-top:1px solid rgba(255,255,255,0.08);padding-top:0.65rem;margin-top:0.65rem;}
+.mktg-layer-line{font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:700;opacity:0.35;line-height:2;}
+.mktg-canvas{flex:1;position:relative;height:320px;overflow:hidden;background:#0a1628;}
+.mktg-grid{position:absolute;inset:0;background-size:20px 20px;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);pointer-events:none;}
+.mktg-col-label{position:absolute;top:0;height:26px;background:#111d2e;border-bottom:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;padding:0 10px;z-index:20;pointer-events:none;}
+.mktg-col-label span{font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:rgba(255,255,255,0.4);}
+.mnode{position:absolute;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.05);padding:7px 9px;cursor:pointer;transition:all 0.15s;z-index:10;}
+.mnode:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--teal);}
 .mnode.mactive{background:var(--teal);border-color:var(--teal);box-shadow:3px 3px 0 var(--purple);}
-.mnode-lbl{font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;opacity:0.45;margin-bottom:3px;}
+.mnode-lbl{font-family:'IBM Plex Mono',monospace;font-size:6px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;opacity:0.4;margin-bottom:3px;}
 .mnode-title{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;line-height:1.2;}
-.mnode-sub{font-family:'IBM Plex Mono',monospace;font-size:7px;text-transform:none;opacity:0.55;margin-top:3px;line-height:1.4;}
-
-.mline{fill:none;stroke:rgba(255,255,255,0.15);stroke-width:1.5;transition:stroke 0.3s,stroke-width 0.3s;}
+.mnode-sub{font-family:'IBM Plex Mono',monospace;font-size:7px;text-transform:none;opacity:0.5;margin-top:2px;line-height:1.4;}
+.mline{fill:none;stroke:rgba(255,255,255,0.12);stroke-width:1.5;transition:stroke 0.3s,stroke-width 0.3s;}
 .mline.mhi{stroke:var(--teal);stroke-width:2.5;stroke-dasharray:5 3;animation:mdash 8s linear infinite;}
 @keyframes mdash{to{stroke-dashoffset:-100;}}
 .mpkt{fill:var(--teal);}
@@ -88,15 +95,10 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 
 /* HOW SECTION */
 .how-section{background:var(--dark);}
-.how-header{border-bottom:1px solid rgba(255,255,255,0.08);}
-.how-header-inner{display:flex;}
-.how-hbox{font-family:'Space Mono',monospace;padding:0.75rem 0;margin-right:2.5rem;font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;display:flex;align-items:center;border-right:1px solid rgba(255,255,255,0.08);padding-right:2.5rem;}
-.how-hbox:last-child{border-right:none;opacity:0.35;}
-.how-title-row{padding:3rem 0 2rem;}
+.how-title-row{padding:3rem 0 2rem;border-bottom:1px solid rgba(255,255,255,0.08);}
 .how-title{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(2rem,5vw,3.5rem);line-height:1;letter-spacing:-0.03em;color:var(--white);}
 .how-sub{font-family:'Space Mono',monospace;font-size:10px;opacity:0.45;margin-top:0.75rem;line-height:1.9;max-width:540px;}
-
-.diagram-outer{border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);}
+.diagram-outer{border-bottom:1px solid rgba(255,255,255,0.08);}
 .diagram-inner{display:flex;}
 .diagram-legend{width:180px;flex-shrink:0;padding:2rem 0;border-right:1px solid rgba(255,255,255,0.08);margin-right:2rem;}
 .legend-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.35;margin-bottom:1.25rem;}
@@ -111,7 +113,6 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .node.active-purple{background:var(--purple);border-color:var(--purple);box-shadow:4px 4px 0 var(--teal);}
 .node-id{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;opacity:0.4;margin-bottom:0.3rem;}
 .node-label{font-family:'Outfit',sans-serif;font-size:11px;font-weight:900;letter-spacing:0.02em;text-transform:uppercase;line-height:1.3;}
-
 .steps-section{border-bottom:1px solid rgba(255,255,255,0.08);}
 .steps-header{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(1.4rem,3vw,2.2rem);letter-spacing:-0.02em;padding:2rem 0;border-bottom:1px solid rgba(255,255,255,0.08);}
 .steps-grid{display:grid;grid-template-columns:repeat(5,1fr);}
@@ -122,7 +123,6 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .step-desc{font-family:'Space Mono',monospace;font-size:9px;opacity:0.5;line-height:1.7;}
 .step.highlight{background:var(--magenta);}
 .step.highlight .step-num{opacity:0.35;}
-
 .compare-header{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(1.4rem,3vw,2.2rem);letter-spacing:-0.02em;padding:2rem 0;border-bottom:1px solid rgba(255,255,255,0.08);}
 .compare-grid{display:grid;grid-template-columns:1fr 1fr;}
 .compare-col{padding:2rem 0;}
@@ -133,10 +133,9 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 .compare-text p{font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.2rem;}
 .compare-text span{font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.7;}
 .compare-footer{display:flex;justify-content:space-between;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.12);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.1em;margin-top:0.5rem;}
-
 .proposal-footer{background:var(--dark);border-top:2px solid rgba(255,255,255,0.08);padding:2rem 0;}
 .footer-inner{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;}
-.footer-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:-0.02em;color:var(--white);margin-bottom:0.25rem;}
+.footer-name{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:1.6rem;color:var(--white);margin-bottom:0.25rem;}
 .footer-email{font-family:'Space Mono',monospace;font-size:11px;color:var(--teal);font-weight:700;}
 .footer-note{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;opacity:0.3;text-transform:uppercase;margin-top:0.4rem;}
 .footer-badge{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;border:1px solid var(--teal);color:var(--teal);padding:5px 12px;}
@@ -149,211 +148,178 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
   <div class="header-grid"></div>
   <div class="container">
     <div class="header-inner">
-      <div class="eyebrow">Speaker pitch for ParsLabs · May 2026 Series</div>
-      <div class="hero">Keyona Meeks</div>
-      <div class="sub">ReRev Labs · AI Implementation · BlackTech Capital</div>
-      <div class="tags">
-        <div class="tag">Africa</div>
-        <div class="tag">Caribbean</div>
-        <div class="tag">North America</div>
-        <div class="tag">Human-in-the-loop</div>
-        <div class="tag">Investor + Operator</div>
+      <div class="header-left">
+        <div class="eyebrow">Speaker pitch for ParsLabs · May 2026 Series</div>
+        <div class="hero">Keyona Meeks</div>
+        <div class="sub">ReRev Labs · AI Implementation · BlackTech Capital</div>
+      </div>
+      <div class="header-right">
+        <img class="header-logo" src="https://res.cloudinary.com/dialhpycd/image/upload/v1770670281/rerev_labs_title_logo_afrgnu.png" alt="ReRev Labs">
       </div>
     </div>
   </div>
 </div>
 
-<!-- TOPICS GRID -->
+<!-- TOPICS CAROUSEL -->
 <div class="topics-section">
   <div class="container">
     <div class="section-label">Topics I speak to</div>
-    <div class="topics-grid">
+    <div class="carousel-wrap">
+      <div class="carousel-track">
 
-      <!-- 01 AUTOMATION -->
-      <div class="card">
-        <div class="card-top">
-          <div class="card-num">01</div>
-          <div class="card-title">High-impact AI automation for business in 2026</div>
-          <div class="card-body">I have built dozens of automation systems for startups and small businesses across Africa, the Caribbean, and North America. My specialty is acute automation: systems that plug into existing workflows and amplify output without requiring teams to retool.</div>
-        </div>
-        <div class="toggle-btn" onclick="toggleCard(this)">
-          <span>See examples from my work</span>
-          <span class="toggle-arrow">›</span>
-        </div>
-        <div class="toggle-panel">
-          <div class="toggle-inner">
-            <div class="ev-label">Built systems include</div>
-            <ul class="ev-bullets">
-              <li>Post-meeting intelligence engine: transcripts auto-processed, action items extracted, Gmail drafts staged, tasks logged, zero manual steps</li>
-              <li>Proposal publisher: full HTML proposals designed, approved, and deployed live from a single chat interface with no terminal or IDE</li>
-              <li>Client outreach pipeline: sequences drafted, reviewed, and published to a live portal with one-click approve or reject</li>
-              <li>Daily email agent: briefings compiled and sent each morning from a standing instruction set, no manual trigger</li>
-              <li>Utility bill parser: dual AI extraction pipeline with a self-managing queue and GAS web app dashboard</li>
-            </ul>
+        <!-- SLIDE 01 AUTOMATION -->
+        <div class="slide active">
+          <div class="card">
+            <div class="card-top" onclick="toggleExpand(this)">
+              <div class="card-header">
+                <div class="card-num">01 / 04</div>
+                <div class="card-expand-hint">See examples <span class="card-expand-arrow">›</span></div>
+              </div>
+              <div class="card-title">High-impact AI automation for business in 2026</div>
+              <div class="card-body">I have built dozens of automation systems for startups and small businesses across Africa, the Caribbean, and North America. My specialty is acute automation: systems that plug into existing workflows and amplify output without requiring teams to retool.</div>
+            </div>
+            <div class="card-expand">
+              <div class="expand-inner">
+                <div class="ev-label">Built systems include</div>
+                <ul class="ev-bullets">
+                  <li>Post-meeting intelligence engine: transcripts auto-processed, action items extracted, Gmail drafts staged, tasks logged, zero manual steps</li>
+                  <li>Proposal publisher: full HTML proposals designed, approved, and deployed live from a single chat interface with no terminal or IDE</li>
+                  <li>Client outreach pipeline: sequences drafted, reviewed, and published to a live portal with one-click approve or reject</li>
+                  <li>Daily email agent: briefings compiled and sent each morning from a standing instruction set, no manual trigger needed</li>
+                  <li>Utility bill parser: dual AI extraction pipeline with a self-managing queue and a web app dashboard</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- 02 MARKETING -->
-      <div class="card">
-        <div class="card-top">
-          <div class="card-num">02</div>
-          <div class="card-title">Real-life AI automations in marketing</div>
-          <div class="card-body">I design human-in-the-loop marketing pipelines where AI handles intake, processing, and drafting, but the team stays in control of what goes out. The system adapts to their comfort level, not the other way around.</div>
-        </div>
-        <div class="toggle-btn" onclick="toggleCard(this)">
-          <span>See a system I built</span>
-          <span class="toggle-arrow">›</span>
-        </div>
-        <div class="toggle-panel">
-          <div class="toggle-inner" style="padding:0;">
-            <div style="padding:1rem 1.25rem;font-family:'Space Mono',monospace;font-size:9px;opacity:0.6;line-height:1.8;border-bottom:1px solid rgba(255,255,255,0.08);">The following is a live architecture diagram for a content automation system I built for a client. Newsletters flow in via Gmail, get processed by GAS, analyzed by Gemini, stored in Supabase, and surface as ready-to-publish drafts. The client reviews and approves. Nothing publishes automatically.</div>
-            <!-- EMBEDDED MARKETING VIZ -->
-            <div class="mktg-viz">
-              <div class="mktg-header-bar">
-                <div class="mktg-hcell">@CONTENT-ENGINE.SYS</div>
-                <div class="mktg-hcell" style="flex:1;">SYSTEM TOPOLOGY — CONTENT ENGINE V2.0</div>
-                <div class="mktg-hcell">GAS + SUPABASE + GEMINI</div>
+        <!-- SLIDE 02 MARKETING -->
+        <div class="slide">
+          <div class="card">
+            <div class="card-top" onclick="toggleExpand(this)">
+              <div class="card-header">
+                <div class="card-num">02 / 04</div>
+                <div class="card-expand-hint">See a system I built <span class="card-expand-arrow">›</span></div>
               </div>
-              <div class="mktg-canvas-wrap">
-                <div class="mktg-legend">
-                  <div class="mktg-legend-title">Legend</div>
-                  <div class="mktg-legend-item"><div class="mktg-ldot" style="background:var(--teal);border-color:var(--teal);"></div><div class="mktg-llabel">Active path</div></div>
-                  <div class="mktg-legend-item"><div class="mktg-ldot" style="background:var(--purple);border-color:var(--purple);"></div><div class="mktg-llabel">AI processing</div></div>
-                  <div class="mktg-legend-item"><div class="mktg-ldot" style="background:rgba(255,255,255,0.06);"></div><div class="mktg-llabel">System node</div></div>
-                  <div class="mktg-layer-legend">
-                    <div class="mktg-legend-title">Layers</div>
-                    <div class="mktg-layer-line">① Intake — Gmail + GAS</div>
-                    <div class="mktg-layer-line">② Process — Supabase</div>
-                    <div class="mktg-layer-line">③ AI — Gemini</div>
-                    <div class="mktg-layer-line">④ Output — GH Pages</div>
+              <div class="card-title">Real-life AI automations in marketing</div>
+              <div class="card-body">I design human-in-the-loop marketing pipelines where AI handles intake, processing, and drafting, but the team stays in control of what goes out. The system adapts to their comfort level, not the other way around.</div>
+            </div>
+            <div class="card-expand">
+              <div class="expand-inner" style="padding:0;">
+                <div style="padding:1rem 1.25rem;font-family:'Space Mono',monospace;font-size:9px;opacity:0.55;line-height:1.8;border-bottom:1px solid rgba(255,255,255,0.08);">The following is a live architecture diagram for a content automation system I built for a client. Newsletters flow in via Gmail, get processed by GAS, analyzed by Gemini, stored in Supabase, and surface as ready-to-publish drafts. The client reviews and approves. Nothing publishes automatically.</div>
+                <div class="mktg-viz">
+                  <div class="mktg-header-bar">
+                    <div class="mktg-hcell">CONTENT ENGINE V2.0</div>
+                    <div class="mktg-hcell" style="flex:1;">GAS + SUPABASE + GEMINI · Click any node to trace its path</div>
                   </div>
-                </div>
-                <div class="mktg-canvas" id="mktg-canvas">
-                  <div class="mktg-grid"></div>
-                  <!-- Column labels -->
-                  <div class="mktg-col-label" style="left:0;width:25%;"><span>① Intake</span></div>
-                  <div class="mktg-col-label" style="left:25%;width:25%;"><span>② Supabase</span></div>
-                  <div class="mktg-col-label" style="left:50%;width:25%;"><span>③ AI Engine</span></div>
-                  <div class="mktg-col-label" style="left:75%;width:25%;border-right:none;"><span>④ Output</span></div>
-                  <!-- SVG -->
-                  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 800 340" preserveAspectRatio="none">
-                    <path id="mp1" class="mline" d="M 130 110 C 130 160, 200 155, 200 175"/>
-                    <path id="mp2" class="mline" d="M 130 195 L 200 190"/>
-                    <path id="mp3" class="mline" d="M 300 182 C 360 182, 360 130, 400 130"/>
-                    <path id="mp4" class="mline" d="M 430 145 L 430 235"/>
-                    <path id="mp5" class="mline" d="M 500 130 C 540 130, 540 165, 570 165"/>
-                    <path id="mp6" class="mline" d="M 620 190 C 620 245, 500 250, 430 250"/>
-                    <path id="mp7" class="mline" d="M 500 250 C 580 250, 620 220, 660 215"/>
-                    <path id="mp8" class="mline" d="M 665 235 C 665 310, 350 315, 130 305 L 130 260"/>
-                    <circle r="5" class="mpkt"><animateMotion dur="4s" repeatCount="indefinite" path="M 60 110 C 130 110, 200 160, 200 175 C 300 182, 360 130, 570 130"/></circle>
-                    <circle r="4" class="mpkt2" opacity="0.8"><animateMotion dur="5.5s" repeatCount="indefinite" begin="1.5s" path="M 200 182 C 360 182, 430 130, 430 250 C 580 250, 665 220, 665 310 C 350 315, 130 315, 130 260"/></circle>
-                  </svg>
-                  <!-- Nodes -->
-                  <div class="mnode" id="mn-gmail" style="left:14px;top:85px;width:118px;" onclick="mtrace('gmail')">
-                    <div class="mnode-lbl">INTAKE_GMAIL</div>
-                    <div class="mnode-title">Gmail Inbox</div>
-                    <div class="mnode-sub">loom-queue label</div>
-                  </div>
-                  <div class="mnode" id="mn-filter" style="left:14px;top:170px;width:118px;" onclick="mtrace('filter')">
-                    <div class="mnode-lbl">INTAKE_FILTER</div>
-                    <div class="mnode-title">Gmail Filter</div>
-                    <div class="mnode-sub">auto-labels newsletters</div>
-                  </div>
-                  <div class="mnode" id="mn-gas" style="left:175px;top:155px;width:130px;" onclick="mtrace('gas')">
-                    <div class="mnode-lbl">REPLACES MAILGUN</div>
-                    <div class="mnode-title">Google Apps Script</div>
-                    <div class="mnode-sub">fires every 5 min</div>
-                  </div>
-                  <div class="mnode" id="mn-edge" style="left:370px;top:108px;width:135px;" onclick="mtrace('edge')">
-                    <div class="mnode-lbl">12 EDGE FUNCTIONS</div>
-                    <div class="mnode-title">Supabase Edge</div>
-                    <div class="mnode-sub">process-newsletter</div>
-                  </div>
-                  <div class="mnode" id="mn-db" style="left:370px;top:222px;width:130px;" onclick="mtrace('db')">
-                    <div class="mnode-lbl">RLS ENFORCED</div>
-                    <div class="mnode-title">PostgreSQL</div>
-                    <div class="mnode-sub">reference cards stored</div>
-                  </div>
-                  <div class="mnode" id="mn-gemini" style="left:545px;top:143px;width:118px;" onclick="mtrace('gemini')">
-                    <div class="mnode-lbl">AI PROVIDER</div>
-                    <div class="mnode-title">Google Gemini</div>
-                    <div class="mnode-sub">client's own API key</div>
-                  </div>
-                  <div class="mnode" id="mn-gh" style="left:648px;top:198px;width:118px;" onclick="mtrace('ghpages')">
-                    <div class="mnode-lbl">OUTPUT</div>
-                    <div class="mnode-title">GitHub Pages</div>
-                    <div class="mnode-sub">React + Vite · auto-deploy</div>
-                  </div>
-                  <div class="mnode" id="mn-client" style="left:14px;top:240px;width:118px;border-style:dashed;" onclick="mtrace('client')">
-                    <div class="mnode-lbl">END USER</div>
-                    <div class="mnode-title">Client</div>
-                    <div class="mnode-sub">reviews · approves · publishes</div>
+                  <div class="mktg-canvas-wrap">
+                    <div class="mktg-legend">
+                      <div class="mktg-legend-title">Legend</div>
+                      <div class="mktg-legend-item"><div class="mktg-ldot" style="background:var(--teal);border-color:var(--teal);"></div><div class="mktg-llabel">Active path</div></div>
+                      <div class="mktg-legend-item"><div class="mktg-ldot" style="background:var(--purple);border-color:var(--purple);"></div><div class="mktg-llabel">AI processing</div></div>
+                      <div class="mktg-legend-item"><div class="mktg-ldot" style="background:rgba(255,255,255,0.05);"></div><div class="mktg-llabel">System node</div></div>
+                      <div class="mktg-layer-legend">
+                        <div class="mktg-legend-title">Layers</div>
+                        <div class="mktg-layer-line">① Intake — Gmail + GAS</div>
+                        <div class="mktg-layer-line">② Process — Supabase</div>
+                        <div class="mktg-layer-line">③ AI — Gemini</div>
+                        <div class="mktg-layer-line">④ Output — GH Pages</div>
+                      </div>
+                    </div>
+                    <div class="mktg-canvas" id="mktg-canvas">
+                      <div class="mktg-grid"></div>
+                      <div class="mktg-col-label" style="left:0;width:25%;"><span>① Intake</span></div>
+                      <div class="mktg-col-label" style="left:25%;width:25%;"><span>② Supabase</span></div>
+                      <div class="mktg-col-label" style="left:50%;width:25%;"><span>③ AI Engine</span></div>
+                      <div class="mktg-col-label" style="left:75%;width:25%;border-right:none;"><span>④ Output</span></div>
+                      <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 800 320" preserveAspectRatio="none">
+                        <path id="mp1" class="mline" d="M 130 105 C 130 150, 200 145, 200 168"/>
+                        <path id="mp2" class="mline" d="M 130 188 L 200 183"/>
+                        <path id="mp3" class="mline" d="M 300 175 C 360 175, 360 122, 400 122"/>
+                        <path id="mp4" class="mline" d="M 430 138 L 430 218"/>
+                        <path id="mp5" class="mline" d="M 500 122 C 540 122, 540 155, 570 155"/>
+                        <path id="mp6" class="mline" d="M 620 180 C 620 238, 500 242, 430 242"/>
+                        <path id="mp7" class="mline" d="M 500 242 C 580 242, 620 210, 660 205"/>
+                        <path id="mp8" class="mline" d="M 665 222 C 665 298, 350 305, 130 295 L 130 252"/>
+                        <circle r="5" class="mpkt"><animateMotion dur="4s" repeatCount="indefinite" path="M 60 105 C 130 105, 200 150, 200 168 C 300 175, 360 122, 570 122"/></circle>
+                        <circle r="4" class="mpkt2" opacity="0.8"><animateMotion dur="5.5s" repeatCount="indefinite" begin="1.5s" path="M 200 175 C 360 175, 430 122, 430 242 C 580 242, 665 210, 665 298 C 350 305, 130 305, 130 252"/></circle>
+                      </svg>
+                      <div class="mnode" id="mn-gmail" style="left:12px;top:82px;width:112px;" onclick="mtrace('gmail')"><div class="mnode-lbl">INTAKE</div><div class="mnode-title">Gmail Inbox</div><div class="mnode-sub">loom-queue label</div></div>
+                      <div class="mnode" id="mn-filter" style="left:12px;top:163px;width:112px;" onclick="mtrace('filter')"><div class="mnode-lbl">FILTER</div><div class="mnode-title">Gmail Filter</div><div class="mnode-sub">auto-labels newsletters</div></div>
+                      <div class="mnode" id="mn-gas" style="left:172px;top:150px;width:125px;" onclick="mtrace('gas')"><div class="mnode-lbl">REPLACES MAILGUN</div><div class="mnode-title">Apps Script</div><div class="mnode-sub">fires every 5 min</div></div>
+                      <div class="mnode" id="mn-edge" style="left:368px;top:100px;width:128px;" onclick="mtrace('edge')"><div class="mnode-lbl">12 EDGE FUNCTIONS</div><div class="mnode-title">Supabase Edge</div><div class="mnode-sub">process-newsletter</div></div>
+                      <div class="mnode" id="mn-db" style="left:368px;top:210px;width:125px;" onclick="mtrace('db')"><div class="mnode-lbl">RLS ENFORCED</div><div class="mnode-title">PostgreSQL</div><div class="mnode-sub">reference cards stored</div></div>
+                      <div class="mnode" id="mn-gemini" style="left:542px;top:135px;width:112px;" onclick="mtrace('gemini')"><div class="mnode-lbl">AI PROVIDER</div><div class="mnode-title">Google Gemini</div><div class="mnode-sub">client's own API key</div></div>
+                      <div class="mnode" id="mn-gh" style="left:644px;top:188px;width:112px;" onclick="mtrace('ghpages')"><div class="mnode-lbl">OUTPUT</div><div class="mnode-title">GitHub Pages</div><div class="mnode-sub">React · auto-deploy</div></div>
+                      <div class="mnode" id="mn-client" style="left:12px;top:232px;width:112px;border-style:dashed;" onclick="mtrace('client')"><div class="mnode-lbl">END USER</div><div class="mnode-title">Client</div><div class="mnode-sub">reviews · approves</div></div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- 03 AI-ASSISTED CODING -->
-      <div class="card">
-        <div class="card-top">
-          <div class="card-num">03</div>
-          <div class="card-title">Best practices for AI-assisted coding</div>
-          <div class="card-body">I ship production-ready work directly from a chat interface, including live deployments. This page is a live example. But more importantly, I teach teams the conceptual foundations they need to direct AI coding tools effectively.</div>
-        </div>
-        <div class="toggle-btn" onclick="toggleCard(this)">
-          <span>What I actually teach</span>
-          <span class="toggle-arrow">›</span>
-        </div>
-        <div class="toggle-panel">
-          <div class="toggle-inner">
-            <div class="ev-label">The foundation I give teams</div>
-            <ul class="ev-bullets">
-              <li>Browsers can only interpret three things natively: HTML (structure), CSS (style), and JavaScript (behavior). If you don't know this, you can't direct AI to build anything that actually runs in a browser</li>
-              <li>Python, for example, cannot render in a browser directly. Understanding what runs where is the prerequisite to building anything real with AI</li>
-              <li>Prompting for code is not typing instructions and hoping. It requires knowing enough about the output to evaluate it and redirect when it goes wrong</li>
-              <li>Most teams I work with go from zero to shipping a working internal tool within one session because the foundation clicks fast</li>
-              <li>This page, for example, was built entirely inside Claude with no terminal, no IDE, and no separate deployment workflow</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- 04 IMPLEMENTATION RISKS -->
-      <div class="card">
-        <div class="card-top">
-          <div class="card-num">04</div>
-          <div class="card-title">AI implementation risks</div>
-          <div class="card-body">As both a practitioner and an investor, I see AI adoption from two angles. Most failures are not technical. They happen when systems are optimized for efficiency without accounting for how the team actually works or what they actually need to retain.</div>
-        </div>
-        <div class="toggle-btn" onclick="toggleCard(this)">
-          <span>A real client example</span>
-          <span class="toggle-arrow">›</span>
-        </div>
-        <div class="toggle-panel">
-          <div class="toggle-inner">
-            <div class="ev-story">
-              <strong>The problem</strong>
-              A client came to me wanting full AI automation across their knowledge workflow. The initial build could do everything: intake, summarize, categorize, draft, and deliver. From a pure efficiency standpoint, it worked.
+        <!-- SLIDE 03 CODING -->
+        <div class="slide">
+          <div class="card">
+            <div class="card-top" onclick="toggleExpand(this)">
+              <div class="card-header">
+                <div class="card-num">03 / 04</div>
+                <div class="card-expand-hint">What I actually teach <span class="card-expand-arrow">›</span></div>
+              </div>
+              <div class="card-title">Best practices for AI-assisted coding</div>
+              <div class="card-body">I ship production-ready work directly from a chat interface, including live deployments. This page is a live example. But more importantly, I teach teams the conceptual foundations they need to direct AI coding tools effectively, not just prompt them.</div>
             </div>
-            <div class="ev-story" style="margin-top:1rem;">
-              <strong>What we found</strong>
-              The client had explicitly said their priority was learning retention, encoding the knowledge themselves, not just having it processed for them. Full automation was actively working against their goal. The AI was doing so much that they were not absorbing anything.
-            </div>
-            <div class="ev-story" style="margin-top:1rem;">
-              <strong>The redesign</strong>
-              We rebuilt the system so AI functioned as backup and reference, not as primary processor. The client still interacts with the material first. The system supports that process rather than replacing it. Same infrastructure, completely different design philosophy.
-            </div>
-            <div class="ev-story" style="margin-top:1rem;color:var(--teal);">
-              This is what I mean by building to the team's goals, not just their output. Efficiency is not always the right metric.
+            <div class="card-expand">
+              <div class="expand-inner">
+                <div class="ev-label">The foundation I give teams</div>
+                <ul class="ev-bullets">
+                  <li>Browsers can only interpret three things natively: HTML, CSS, and JavaScript. If you don't know this, you can't effectively direct AI to build anything that actually runs in a browser</li>
+                  <li>Python, for example, cannot render directly in a browser. Understanding what runs where is the prerequisite to building anything real with AI</li>
+                  <li>Prompting for code is not typing instructions and hoping. It requires knowing enough about the output to evaluate it and redirect when it goes wrong</li>
+                  <li>Most teams I work with go from zero to shipping a working internal tool within one session because the foundation clicks fast once it's framed right</li>
+                  <li>This page was built entirely inside Claude with no terminal, no IDE, and no separate deployment workflow</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- SLIDE 04 RISKS -->
+        <div class="slide">
+          <div class="card">
+            <div class="card-top" onclick="toggleExpand(this)">
+              <div class="card-header">
+                <div class="card-num">04 / 04</div>
+                <div class="card-expand-hint">A real client example <span class="card-expand-arrow">›</span></div>
+              </div>
+              <div class="card-title">AI implementation risks</div>
+              <div class="card-body">As both a practitioner and an investor, I see AI adoption from two angles. Most failures are not technical. They happen when systems are optimized for efficiency without accounting for how the team actually works or what they actually need to retain.</div>
+            </div>
+            <div class="card-expand">
+              <div class="expand-inner">
+                <div class="ev-story"><strong>The problem</strong>A client came to me wanting full AI automation across their knowledge workflow. The initial build could do everything: intake, summarize, categorize, draft, and deliver. From a pure efficiency standpoint, it worked.</div>
+                <div class="ev-story" style="margin-top:1rem;"><strong>What we found</strong>The client had explicitly said their priority was learning retention, encoding knowledge themselves, not just having it processed for them. Full automation was actively working against their goal. The AI was doing so much that they were not absorbing anything.</div>
+                <div class="ev-story" style="margin-top:1rem;"><strong>The redesign</strong>We rebuilt the system so AI functioned as backup and reference, not as primary processor. The client still interacts with material first. The system supports that process rather than replacing it. Same infrastructure, completely different design philosophy.</div>
+                <div class="ev-story" style="margin-top:1rem;color:var(--teal);">This is what I mean by building to the team's goals, not just their output. Efficiency is not always the right metric.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
+      <div class="carousel-nav">
+        <button class="cbtn" id="prev">← Prev</button>
+        <div class="dots">
+          <div class="dot active" data-i="0"></div>
+          <div class="dot" data-i="1"></div>
+          <div class="dot" data-i="2"></div>
+          <div class="dot" data-i="3"></div>
+        </div>
+        <button class="cbtn" id="next">Next →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -361,19 +327,11 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 <!-- HOW I BUILT THIS -->
 <div class="how-section">
   <div class="container">
-    <div class="how-header">
-      <div class="how-header-inner">
-        <div class="how-hbox">@ZERO-DEPLOY.LIVE</div>
-        <div class="how-hbox">SYSTEM ORCHESTRATION</div>
-        <div class="how-hbox">TECH-STACK V1.0 · EST. 2026</div>
-      </div>
-    </div>
     <div class="how-title-row">
-      <div class="how-title">HOW I BUILT THIS</div>
+      <div class="how-title">How I Built This</div>
       <div class="how-sub">A live orchestration system that transforms a conversation into a deployed HTML page with zero manual infrastructure. Click any node to trace the path.</div>
     </div>
   </div>
-
   <div class="diagram-outer">
     <div class="container">
       <div class="diagram-inner">
@@ -405,9 +363,8 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
       </div>
     </div>
   </div>
-
   <div class="steps-section">
-    <div class="container"><div class="steps-header">AUTOMATED LIFECYCLE</div></div>
+    <div class="container"><div class="steps-header">Automated Lifecycle</div></div>
     <div style="max-width:var(--max);margin:0 auto;">
       <div class="steps-grid">
         <div class="step" style="padding-left:var(--pad);"><div class="step-num">01</div><div class="step-title">Prompt</div><div class="step-desc">Keyona describes what to build inside Claude.</div></div>
@@ -418,23 +375,22 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
       </div>
     </div>
   </div>
-
   <div class="container">
-    <div class="compare-header">TRADITIONAL VS. ZERO-DEPLOY</div>
+    <div class="compare-header">Traditional vs. Zero-Deploy</div>
     <div class="compare-grid">
       <div class="compare-col">
-        <div class="compare-col-title">THE<br>MANUAL<br>WAY</div>
+        <div class="compare-col-title">The<br>Manual<br>Way</div>
         <div class="compare-item"><div class="compare-num">01</div><div class="compare-text"><p>Download HTML locally</p><span>Save files, manage directory structure manually.</span></div></div>
         <div class="compare-item"><div class="compare-num">02</div><div class="compare-text"><p>Open GitHub</p><span>Initialize repo, set permissions, configure deploy.</span></div></div>
         <div class="compare-item"><div class="compare-num">03</div><div class="compare-text"><p>Terminal commands</p><span>git init, git add, git commit, git push origin main.</span></div></div>
-        <div class="compare-footer"><span>~15 min</span><span style="color:var(--purple);">STATUS: FRICTION</span></div>
+        <div class="compare-footer"><span>~15 min</span><span style="color:var(--purple);">Status: Friction</span></div>
       </div>
       <div class="compare-col right">
-        <div class="compare-col-title" style="color:var(--teal);">ZERO<br>DEPLOY<br>PUBLISHER</div>
+        <div class="compare-col-title" style="color:var(--teal);">Zero<br>Deploy<br>Publisher</div>
         <div class="compare-item"><div class="compare-num">01</div><div class="compare-text"><p>"Deploy this."</p><span>One prompt inside Claude.</span></div></div>
         <div class="compare-item"><div class="compare-num">02</div><div class="compare-text"><p>Pipeline runs</p><span>Auth, commit, and deploy handled internally.</span></div></div>
         <div class="compare-item"><div class="compare-num">03</div><div class="compare-text"><p>Live link</p><span>Permanent URL returned directly in chat.</span></div></div>
-        <div class="compare-footer" style="border-color:rgba(255,255,255,0.12);"><span>&lt; 60 seconds</span><span style="color:var(--teal);">STATUS: SHIPPED</span></div>
+        <div class="compare-footer" style="border-color:rgba(255,255,255,0.12);"><span>&lt; 60 seconds</span><span style="color:var(--teal);">Status: Shipped</span></div>
       </div>
     </div>
     <div style="padding-bottom:3rem;"></div>
@@ -456,23 +412,44 @@ body{font-family:'Space Mono',monospace;background:var(--magenta);color:var(--wh
 </div>
 
 <script>
-// CARD TOGGLES
-function toggleCard(btn){
-  const panel = btn.nextElementSibling;
-  const isOpen = panel.classList.contains('open');
-  btn.classList.toggle('open', !isOpen);
-  panel.classList.toggle('open', !isOpen);
+// CAROUSEL
+const slides=document.querySelectorAll('.slide');
+const dots=document.querySelectorAll('.dot');
+let cur=0;
+function go(n){
+  // close any open expand on current slide
+  const curTop=slides[cur].querySelector('.card-top');
+  if(curTop&&curTop.classList.contains('expanded')){
+    curTop.classList.remove('expanded');
+    curTop.nextElementSibling.classList.remove('open');
+  }
+  slides[cur].classList.remove('active');
+  dots[cur].classList.remove('active');
+  cur=(n+slides.length)%slides.length;
+  slides[cur].classList.add('active');
+  dots[cur].classList.add('active');
+}
+document.getElementById('prev').addEventListener('click',()=>go(cur-1));
+document.getElementById('next').addEventListener('click',()=>go(cur+1));
+dots.forEach(d=>d.addEventListener('click',()=>go(+d.dataset.i)));
+
+// EXPAND TOGGLE
+function toggleExpand(cardTop){
+  const panel=cardTop.nextElementSibling;
+  const isOpen=panel.classList.contains('open');
+  cardTop.classList.toggle('expanded',!isOpen);
+  panel.classList.toggle('open',!isOpen);
 }
 
 // MAIN DIAGRAM LAYOUT
 function layout(){
-  const canvas = document.getElementById('canvas');
-  if(!canvas) return;
-  const W = canvas.offsetWidth, H = canvas.offsetHeight;
-  const nodes = {
+  const canvas=document.getElementById('canvas');
+  if(!canvas)return;
+  const W=canvas.offsetWidth,H=canvas.offsetHeight;
+  const nodes={
     keyona:{x:W*0.04,y:H*0.1,el:document.getElementById('n-keyona')},
-    pub:   {x:W*0.35,y:H*0.1,el:document.getElementById('n-pub')},
-    gh:    {x:W*0.72,y:H*0.38,el:document.getElementById('n-gh')},
+    pub:{x:W*0.35,y:H*0.1,el:document.getElementById('n-pub')},
+    gh:{x:W*0.72,y:H*0.38,el:document.getElementById('n-gh')},
     railway:{x:W*0.35,y:H*0.65,el:document.getElementById('n-railway')},
     output:{x:W*0.04,y:H*0.52,el:document.getElementById('n-output')}
   };
@@ -515,7 +492,6 @@ function trace(t){
   else if(t==='output'){document.getElementById('n-output').classList.add('active-purple');hi('p4','#1A9E9E');hi('p5');}
 }
 
-// MARKETING VIZ TRACE
 function mtrace(t){
   document.querySelectorAll('.mnode').forEach(n=>n.classList.remove('mactive'));
   document.querySelectorAll('.mline').forEach(l=>l.classList.remove('mhi'));
