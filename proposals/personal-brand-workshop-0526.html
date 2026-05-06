@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Your Personal Brand Site — Workshop</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F0F7F7;
+    --primary: #0D1F2D;
+    --body-text: #3D5166;
+    --cyan: #1A9E9E;
+    --purple: #7C3AED;
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-body); background: var(--bg); color: var(--primary); overflow-x: hidden; }
+
+  .slide { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 80px 10vw; border-bottom: 2px solid rgba(13,31,45,0.1); }
+  .slide-label { font-family: var(--font-heading); font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cyan); margin-bottom: 24px; }
+
+  h1 { font-family: var(--font-heading); font-size: clamp(40px, 6vw, 80px); font-weight: 800; line-height: 1.05; margin-bottom: 24px; }
+  h2 { font-family: var(--font-heading); font-size: clamp(26px, 3vw, 44px); font-weight: 700; margin-bottom: 32px; }
+  h3 { font-family: var(--font-heading); font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+  p { font-size: 17px; color: var(--body-text); line-height: 1.7; margin-bottom: 16px; }
+
+  .qr-slide { align-items: center; text-align: center; gap: 0; }
+  .qr-wrap { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+  .qr-img { width: 220px; height: 220px; border-radius: 16px; border: 3px solid rgba(13,31,45,0.1); background: white; padding: 12px; }
+  .qr-sub { font-size: 15px; color: var(--body-text); margin-bottom: 0; }
+
+  .pain-list { list-style: none; display: flex; flex-direction: column; gap: 14px; max-width: 680px; margin-top: 8px; }
+  .pain-list li { display: flex; align-items: flex-start; gap: 14px; font-size: 18px; color: var(--body-text); line-height: 1.5; }
+  .pain-list li::before { content: '→'; color: var(--cyan); font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+
+  .flow { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 16px; }
+  .flow-step { background: white; border: 2px solid rgba(13,31,45,0.1); border-radius: 12px; padding: 16px 24px; font-family: var(--font-heading); font-size: 15px; font-weight: 600; color: var(--primary); }
+  .flow-arrow { color: var(--cyan); font-size: 20px; font-weight: 700; }
+
+  .parts-row { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 16px; }
+  .part-card { flex: 1; min-width: 200px; background: white; border-radius: 14px; padding: 28px; border: 2px solid rgba(13,31,45,0.08); }
+  .part-num { font-family: var(--font-heading); font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cyan); margin-bottom: 10px; }
+  .part-card h3 { font-size: 18px; }
+  .part-card p { font-size: 14px; margin-bottom: 0; }
+
+  .step-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; margin-top: 16px; }
+  .instruction-list { display: flex; flex-direction: column; gap: 16px; }
+  .instruction-item { display: flex; gap: 16px; align-items: flex-start; }
+  .instruction-num { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: white; font-family: var(--font-heading); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .instruction-item div { font-size: 16px; color: var(--body-text); line-height: 1.6; padding-top: 4px; }
+  .instruction-item strong { color: var(--primary); }
+
+  .screenshot-placeholder { background: white; border: 2px dashed rgba(13,31,45,0.15); border-radius: 16px; padding: 24px; min-height: 280px; display: flex; flex-direction: column; gap: 12px; }
+  .screenshot-label { font-family: var(--font-heading); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cyan); margin-bottom: 8px; }
+  .mock-row { background: rgba(13,31,45,0.04); border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .mock-label { font-size: 12px; color: var(--body-text); font-family: var(--font-heading); }
+  .mock-value { font-size: 12px; color: var(--primary); font-weight: 600; font-family: var(--font-heading); }
+  .mock-btn { background: var(--cyan); color: white; font-family: var(--font-heading); font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 6px; border: none; }
+  .mock-badge { background: rgba(26,158,158,0.1); color: var(--cyan); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; font-family: var(--font-heading); }
+
+  .pause-callout { margin-top: 24px; padding: 16px 20px; background: rgba(124,58,237,0.07); border: 1px solid rgba(124,58,237,0.2); border-radius: 12px; display: flex; align-items: flex-start; gap: 12px; }
+  .pause-icon { font-size: 18px; flex-shrink: 0; }
+  .pause-callout p { font-size: 14px; color: var(--body-text); line-height: 1.5; margin-bottom: 0; }
+  .pause-callout strong { color: var(--purple); }
+
+  .toggle-block { border: 1px solid rgba(13,31,45,0.12); border-radius: 12px; margin-top: 16px; overflow: hidden; }
+  .toggle-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; cursor: pointer; background: white; }
+  .toggle-header:hover { background: rgba(13,31,45,0.02); }
+  .toggle-label { display: flex; align-items: center; gap: 10px; }
+  .toggle-label span:first-child { font-family: var(--font-heading); font-size: 14px; font-weight: 600; color: var(--primary); }
+  .tag { font-family: var(--font-heading); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: rgba(26,158,158,0.1); color: var(--cyan); letter-spacing: 0.05em; }
+  .toggle-arrow { font-size: 11px; color: var(--cyan); transition: transform 0.2s; }
+  .toggle-block.open .toggle-arrow { transform: rotate(180deg); }
+  .toggle-body { display: none; background: #0D1F2D; }
+  .toggle-block.open .toggle-body { display: block; }
+  .toggle-copy-bar { display: flex; align-items: center; justify-content: space-between; padding: 8px 18px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .toggle-copy-bar span { font-family: var(--font-heading); font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 0.05em; }
+  .copy-btn { font-family: var(--font-heading); font-size: 11px; font-weight: 600; color: var(--cyan); background: rgba(26,158,158,0.15); border: 1px solid rgba(26,158,158,0.3); border-radius: 6px; padding: 4px 12px; cursor: pointer; }
+  .copy-btn:hover { background: rgba(26,158,158,0.25); }
+  .copy-btn.copied { color: #4ade80; border-color: #4ade80; background: rgba(74,222,128,0.1); }
+  .toggle-code { padding: 18px; font-family: monospace; font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.85); white-space: pre-wrap; word-break: break-word; }
+  .placeholder { color: #f59e0b; font-weight: 700; }
+
+  .tool-note { margin-top: 20px; padding: 14px 18px; background: rgba(26,158,158,0.06); border: 1px solid rgba(26,158,158,0.2); border-radius: 10px; font-size: 14px; color: var(--body-text); line-height: 1.5; }
+  .tool-note strong { color: var(--cyan); }
+
+  .nav { position: fixed; right: 24px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 100; }
+  .nav a { width: 8px; height: 8px; border-radius: 50%; background: rgba(13,31,45,0.2); display: block; transition: all 0.2s; }
+  .nav a:hover, .nav a.active { background: var(--cyan); transform: scale(1.4); }
+
+  @media (max-width: 768px) {
+    .slide { padding: 60px 6vw; }
+    .step-layout { grid-template-columns: 1fr; }
+    .parts-row { flex-direction: column; }
+    .flow { flex-direction: column; align-items: flex-start; }
+    .nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#s0"></a><a href="#s1"></a><a href="#s2"></a><a href="#s3"></a>
+  <a href="#s4"></a><a href="#s5"></a><a href="#s6"></a><a href="#s7"></a>
+  <a href="#s8"></a><a href="#s9"></a><a href="#s10"></a><a href="#s11"></a>
+  <a href="#s12"></a><a href="#s13"></a><a href="#s14"></a><a href="#s15"></a>
+  <a href="#s16"></a>
+</nav>
+
+<section class="slide qr-slide" id="s0">
+  <div class="qr-wrap">
+    <div class="slide-label">Follow Along</div>
+    <h2 style="text-align:center;">Scan to follow along on your device</h2>
+    <img class="qr-img" src="https://res.cloudinary.com/dialhpycd/image/upload/v1778082062/qrcode_docs.google.com_ftfons.png" alt="QR code to follow along">
+    <p class="qr-sub">Open this presentation on your phone or laptop so you can copy prompts and templates as we go.</p>
+  </div>
+</section>
+
+<section class="slide" id="s1">
+  <div class="slide-label">Personal Brand Workshop</div>
+  <h1>Build Your Personal Brand Site Today</h1>
+  <p style="font-size: 20px; max-width: 560px;">From blank page to live website in 90 minutes. No tech background needed. Built to get you on stages.</p>
+</section>
+
+<section class="slide" id="s2">
+  <div class="slide-label">Why This Matters</div>
+  <h2>Your website is costing you speaking opportunities right now.</h2>
+  <ul class="pain-list">
+    <li>Event organizers Google you before they email you. What they find decides whether you get the ask.</li>
+    <li>You're pitching for stages but your website doesn't match the credibility you've already built.</li>
+    <li>There's no single place that shows your story, your topics, and why you're the right voice for the room.</li>
+    <li>Speakers with worse ideas than yours are getting booked because their web presence says "I'm ready."</li>
+    <li>You've been saying "I need to fix my website" for months. Today we fix it.</li>
+  </ul>
+</section>
+
+<section class="slide" id="s3">
+  <div class="slide-label">What You're Building</div>
+  <h2>A speaking-positioned personal brand site.</h2>
+  <p style="max-width: 620px;">By the end of this session you will have a live website with your bio, your why, your signature speaking topics, your unique edge, social proof, and a clear way for organizers to book you.</p>
+  <div style="margin-top: 32px; display: flex; flex-direction: column; gap: 12px; max-width: 560px;">
+    <div class="mock-row"><span class="mock-label">Your name + title</span><span class="mock-badge">✓ Live</span></div>
+    <div class="mock-row"><span class="mock-label">Your why + unique story</span><span class="mock-badge">✓ Live</span></div>
+    <div class="mock-row"><span class="mock-label">Your 3 signature topics</span><span class="mock-badge">✓ Live</span></div>
+    <div class="mock-row"><span class="mock-label">Social proof / past experience</span><span class="mock-badge">✓ Live</span></div>
+    <div class="mock-row"><span class="mock-label">Book me CTA</span><span class="mock-badge">✓ Live</span></div>
+  </div>
+</section>
+
+<section class="slide" id="s4">
+  <div class="slide-label">How It Works</div>
+  <h2>Four tools. One live site.</h2>
+  <div class="flow">
+    <div class="flow-step">Lovable<br><span style="font-size:12px; font-weight:400; color:var(--body-text);">builds your site</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">GitHub<br><span style="font-size:12px; font-weight:400; color:var(--body-text);">stores your files</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Netlify<br><span style="font-size:12px; font-weight:400; color:var(--body-text);">deploys your site</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Your Domain<br><span style="font-size:12px; font-weight:400; color:var(--body-text);">(or free Netlify URL)</span></div>
+  </div>
+  <p style="margin-top: 32px; max-width: 580px;">Once your site is live on Netlify, it lives there permanently. Even if your Lovable credits run out, your site stays up. The only thing you'd need Lovable for again is making edits.</p>
+</section>
+
+<section class="slide" id="s5">
+  <div class="slide-label">Session Overview</div>
+  <h2>Three parts. 90 minutes. You leave with a live site.</h2>
+  <div class="parts-row">
+    <div class="part-card">
+      <div class="part-num">Part 1</div>
+      <h3>Gather Your Brand Info</h3>
+      <p>Lock in your story, your why, your topics, and your edge before we touch a single tool.</p>
+    </div>
+    <div class="part-card">
+      <div class="part-num">Part 2</div>
+      <h3>Build the Site</h3>
+      <p>Use Lovable with your brand brief and an aesthetic reference to build your site fast.</p>
+    </div>
+    <div class="part-card">
+      <div class="part-num">Part 3</div>
+      <h3>Get It Live</h3>
+      <p>Connect Lovable to GitHub, GitHub to Netlify, and get a real URL you can share today.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s6">
+  <div class="slide-label">Part 1 — Step 01</div>
+  <h2>Know Your Why</h2>
+  <div class="step-layout">
+    <div>
+      <div class="instruction-list">
+        <div class="instruction-item"><div class="instruction-num">1</div><div>Ask yourself: <strong>What transformation do you create for your audience?</strong> Not your title. The outcome you produce.</div></div>
+        <div class="instruction-item"><div class="instruction-num">2</div><div>Write one sentence that completes this: <strong>"I help [who] do [what] so they can [outcome]."</strong></div></div>
+        <div class="instruction-item"><div class="instruction-num">3</div><div>Now ask: <strong>What life experience or unique path gave you the credibility to say that?</strong> That's your edge.</div></div>
+      </div>
+      <div class="pause-callout" style="margin-top: 24px;">
+        <div class="pause-icon">⏸</div>
+        <p><strong>Pause here.</strong> Write your one-sentence why and your unique edge before moving to the next step. You'll need both for your brand brief.</p>
+      </div>
+    </div>
+    <div class="screenshot-placeholder">
+      <div class="screenshot-label">Your answers should look like this</div>
+      <div class="mock-row"><span class="mock-label">Why</span><span class="mock-value" style="font-size:11px; max-width:200px; text-align:right;">I help early-career professionals navigate corporate culture so they can advance without losing themselves.</span></div>
+      <div class="mock-row" style="margin-top:8px;"><span class="mock-label">Edge</span><span class="mock-value" style="font-size:11px; max-width:200px; text-align:right;">First-gen professional who became a VP at 29 with no network and no playbook.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s7">
+  <div class="slide-label">Part 1 — Step 02</div>
+  <h2>Fill Your Brand Brief</h2>
+  <div class="step-layout">
+    <div>
+      <div class="instruction-list">
+        <div class="instruction-item"><div class="instruction-num">1</div><div>Open a blank notes app, Google Doc, or the text area of your choice.</div></div>
+        <div class="instruction-item"><div class="instruction-num">2</div><div>Copy the brand brief template below and fill in every field.</div></div>
+        <div class="instruction-item"><div class="instruction-num">3</div><div><strong>Short on time?</strong> Use the lorem ipsum version in the next toggle — you can swap in your real info later.</div></div>
+        <div class="instruction-item"><div class="instruction-num">4</div><div>Keep this open — you'll paste it directly into Lovable in Part 2.</div></div>
+      </div>
+      <div class="pause-callout">
+        <div class="pause-icon">⏸</div>
+        <p><strong>Pause here.</strong> Fill in every field before moving on. The more specific you are, the better Lovable builds your site.</p>
+      </div>
+      <div class="toggle-block" id="t-brand-brief">
+        <div class="toggle-header" onclick="toggleBlock('t-brand-brief')">
+          <div class="toggle-label"><span>Brand Brief Template</span><span class="tag">7 values to fill in</span></div>
+          <span class="toggle-arrow">▼</span>
+        </div>
+        <div class="toggle-body">
+          <div class="toggle-copy-bar"><span>copy and fill in every field</span><button class="copy-btn" onclick="copyToggle('t-brand-brief', this)">Copy</button></div>
+          <div class="toggle-code" id="t-brand-brief-code">NAME: <span class="placeholder">[Your full name]</span>
+
+TITLE / ROLE: <span class="placeholder">[What you do — e.g. Leadership Coach, Founder, DEI Strategist]</span>
+
+MY WHY: <span class="placeholder">[I help (who) do (what) so they can (outcome)]</span>
+
+MY UNIQUE EDGE: <span class="placeholder">[The experience, story, or perspective that makes you the right person to say this]</span>
+
+SIGNATURE SPEAKING TOPICS:
+1. <span class="placeholder">[Topic 1 — give it a name and one sentence description]</span>
+2. <span class="placeholder">[Topic 2 — give it a name and one sentence description]</span>
+3. <span class="placeholder">[Topic 3 — give it a name and one sentence description]</span>
+
+SOCIAL PROOF / PAST EXPERIENCE: <span class="placeholder">[Past stages, organizations, companies, clients, credentials]</span>
+
+BOOKING CTA: <span class="placeholder">[e.g. "Email me to book" / "Fill out my speaker request form" / "DM me on LinkedIn"]</span></div>
+        </div>
+      </div>
+      <div class="toggle-block" id="t-lorem">
+        <div class="toggle-header" onclick="toggleBlock('t-lorem')">
+          <div class="toggle-label"><span>Lorem Ipsum Version</span><span class="tag">for speed — swap your real info later</span></div>
+          <span class="toggle-arrow">▼</span>
+        </div>
+        <div class="toggle-body">
+          <div class="toggle-copy-bar"><span>paste as-is into Lovable to move fast today</span><button class="copy-btn" onclick="copyToggle('t-lorem', this)">Copy</button></div>
+          <div class="toggle-code" id="t-lorem-code">NAME: Alex Morgan
+
+TITLE / ROLE: Leadership Speaker & Executive Coach
+
+MY WHY: I help ambitious professionals cut through noise and lead with clarity so they can build careers that match their actual potential — not just the path someone handed them.
+
+MY UNIQUE EDGE: I spent 12 years in corporate environments before walking away from a six-figure role to build a speaking practice from scratch. I know what it feels like to be the smartest person in the room and still feel invisible — and I know exactly how to change that.
+
+SIGNATURE SPEAKING TOPICS:
+1. The Clarity Advantage — How leaders who communicate with precision outperform those who just work harder
+2. Invisible No More — A framework for building professional visibility without playing politics
+3. The Pivot Playbook — What high performers need to know before making a career leap
+
+SOCIAL PROOF / PAST EXPERIENCE: Keynoted at regional HR conferences, facilitated leadership retreats for mid-size companies, featured in industry newsletters, coached 200+ professionals through career transitions over 5 years.
+
+BOOKING CTA: Email alex@alexmorgan.com to check availability or book a discovery call.</div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshot-placeholder">
+      <div class="screenshot-label">Completed brand brief example</div>
+      <div class="mock-row"><span class="mock-label">Name</span><span class="mock-value">Alex Morgan</span></div>
+      <div class="mock-row"><span class="mock-label">Title</span><span class="mock-value">Leadership Speaker</span></div>
+      <div class="mock-row"><span class="mock-label">Topic 1</span><span class="mock-value" style="font-size:11px;">The Clarity Advantage</span></div>
+      <div class="mock-row"><span class="mock-label">Topic 2</span><span class="mock-value" style="font-size:11px;">Invisible No More</span></div>
+      <div class="mock-row"><span class="mock-label">Topic 3</span><span class="mock-value" style="font-size:11px;">The Pivot Playbook</span></div>
+      <div class="mock-row"><span class="mock-label">CTA</span><span class="mock-value" style="font-size:11px;">Email to book</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s8">
+  <div class="slide-label">Part 2 — Step 03</div>
+  <h2>Sign Into Lovable</h2>
+  <div class="step-layout">
+    <div>
+      <div class="instruction-list">
+        <div class="instruction-item"><div class="instruction-num">1</div><div>Go to <strong>lovable.dev</strong> in your browser.</div></div>
+        <div class="instruction-item"><div class="instruction-num">2</div><div>Click <strong>Sign Up</strong> and create a free account using your email or Google login.</div></div>
+        <div class="instruction-item"><div class="instruction-num">3</div><div>When prompted for a promo or access code, enter the code from today's organizer.</div></div>
+        <div class="instruction-item"><div class="instruction-num">4</div><div>Click <strong>New Project</strong> to start a blank project. Give it your name as the project title.</div></div>
+      </div>
+    </div>
+    <div class="screenshot-placeholder">
+      <div class="screenshot-label">Lovable → New Project</div>
+      <div class="mock-row"><span class="mock-label">Site</span><span class="mock-value">lovable.dev</span></div>
+      <div class="mock-row"><span class="mock-label">Action</span><span class="mock-badge">New Project</span></div>
+      <div class="mock-row"><span class="mock-label">Project name</span><span class="mock-value" style="color: #f59e0b;">[Your Name] Personal Site</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s9">
+  <div class="slide-label">Part 2 — Step 04</div>
+  <h2>Find Your Aesthetic</h2>
+  <div class="step-layout">
+    <div>
+      <div class="instruction-list">
+        <div class="instruction-item"><div class="instruction-num">1</div><div>Go to <strong>variantly.com</strong> in a new tab. This is where we're capturing aesthetic inspiration.</div></div>
+        <div class="instruction-item"><div class="instruction-num">2</div><div>Browse the speaker and personal brand site examples. Find a layout or vibe that feels like you.</div></div>
+        <div class="instruction-item"><div class="instruction-num">3</div><div>Take a <strong>screenshot</strong> of the design you like and save it to your desktop.</div></div>
+        <div class="instruction-item"><div class="instruction-num">4</div><div>If nothing fits perfectly, describe the vibe in a few words: clean and minimal, bold and colorful, warm and editorial, etc.</div></div>
+      </div>
+      <div class="tool-note"><strong>Why Variantly?</strong> It gives you real examples of what's possible so you're not describing a vibe from scratch. A screenshot is worth a thousand words when prompting a design tool.</div>
+      <div class="pause-callout">
+        <div class="pause-icon">⏸</div>
+        <p><strong>Pause here.</strong> Have your screenshot saved or your vibe description written before moving on.</p>
+      </div>
+    </div>
+    <div class="screenshot-placeholder">
+      <div class="screenshot-label">Example vibe options</div>
+      <div class="mock-row"><span class="mock-label">Option A</span><span class="mock-value" style="font-size:11px;">Clean, white, minimal typography</span></div>
+      <div class="mock-row"><span class="mock-label">Option B</span><span class="mock-value" style="font-size:11px;">Bold colors, big headlines, energetic</span></div>
+      <div class="mock-row"><span class="mock-label">Option C</span><span class="mock-value" style="font-size:11px;">Warm neutrals, editorial, professional</span></div>
+      <div class="mock-row"><span class="mock-label">Option D</span><span class="mock-value" style="font-size:11px;">Dark background, modern, sleek</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s10">
+  <div class="slide-label">Part 2 — Step 05</div>
+  <h2>Prompt Lovable</h2>
+  <div class="step-layout">
+    <div>
+      <div class="instruction-list">
+        <div class="instruction-item"><div class="instruction-num">1</div><div>In your Lovable project, click the <strong>prompt box</strong> at the bottom of the screen.</div></div>
+        <div class="instruction-item"><div class="instruction-num">2</div><div>Upload your aesthetic screenshot by clicking the <strong>image icon</strong>, or skip if you're describing a vibe.</div></div>
+        <div class="instruction-item"><div class="instruction-num">3</div><div>Copy the prompt template below, paste your completed brand brief where indicated, and hit send.</div></div>
+      </div>
+      <div class="pause-callout">
+        <div class="pause-icon">⏸</div>
+        <p><strong>Pause here.</strong> Make sure your brand brief is ready to paste before you send the prompt.</p>
+      </div>
+      <div class="toggle-block" id="t-lovable-prompt">
+        <div class="toggle-header" onclick="toggleBlock('t-lovable-prompt')">
+          <div class="toggle-label"><span>Lovable Prompt Template</span><span class="tag">paste into Lovable</span></div>
+          <span class="toggle-arrow">▼</span>
+        </div>
+        <div class="toggle-body">
+          <div class="toggle-copy-bar"><span>paste your brand brief where indicated</span><button class="copy-btn" onclick="copyToggle('t-lovable-prompt', this)">Copy</button></div>
+          <div class="toggle-code" id="t-lovable-prompt-code">Build me a personal brand website for a professional speaker.
+
+<span class="placeholder">[If uploading a screenshot: Match the visual style of the screenshot I've attached.]</span>
+<span class="placeholder">[If describing a vibe: The aesthetic should be: (your vibe description here).]</span>
+
+Here is my brand information — use all of it to write the copy for the site:
+
+<span class="placeholder">[PASTE YOUR COMPLETED BRAND BRIEF HERE]</span>
+
+The site should include:
+- A hero section with my name, title, and one-line why
+- An "About Me" section with my story and unique edge
+- A "Speaking Topics" section with all 3 topics
+- A "Why Book Me" or social proof section
+- A clear call to action for booking me to speak
+
+Keep the layout clean, professional, and easy to read on mobile.</div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshot-placeholder">
+      <div class="screenshot-label">Lovable → Prompt Box</div>
+      <div class="mock-row"><span class="mock-label">Image upload</span><span class="mock-badge">Attached</span></div>
+      <div class="mock-row"><span class="mock-label">Prompt</span><span class="mock-value" style="font-size:11px;">Build me a personal brand...</span></div>
+      <div class="mock-row"><span class="mock-label">Status</span><span class="mock-badge">Generating...</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s11">
+  <div class="slide-label">Part 2 — Step 06</div>
+  <h2>Review and Iterate</h2>
+  <div class="step-layout">
+    <div>
+      <div class="instruction-list">
+        <div class="instruction-item"><div class="instruction-num">1</div><div>When Lovable finishes generating, <strong>preview the site</strong> using the preview button in the top right.</div></div>
+        <div class="instruction-item"><div class="instruction-num">2</div><div>Check: Is your name and title correct? Is your why showing up clearly? Do you have all 3 topics?</div></div>
+        <div class="instruction-item"><div class="instruction-num">3</div><div>If something is off, go back to the prompt box and describe the change specifically. Example: <strong>"Change the hero headline to say exactly: [your text]"</strong></div></div>
+        <div class="instruction-item"><div class="instruction-num">4</div><div>Aim for <strong>2 to 3 rounds of edits maximum</strong>. Get it to 80% good. You can always improve it later.</div></div>
+      </div>
+    </div>
+    <div class="screenshot-placeholder">
+      <div class="screenshot-label">Things to check in your preview</div>
+      <div class="mock-row"><span class="mock-label">Hero headline</span><span class="mock-badge">✓ Check</span></div>
+      <div class="mock-row"><span class="mock-label">Your why visible</span><span class="mock-badge">✓ Check</span></div>
+      <div class="mock-row"><span class="mock-label">3 topics showing</span><span class="mock-badge">✓ Check</span></div>
+      <div class="mock-row"><span class="mock-label">CTA / contact info</span><span class="mock-badge">✓ Check</span></div>
+      <div class="mock-row"><span class="mock-label">Looks good on mobile</span><span class="mock-badge">✓ Check</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s12">
+  <div class="slide-label">Part 3 — Step 07</div>
+  <h2>Connect Lovable to GitHub</h2>
+  <div class="step-layout">
+    <div>
+      <div class="instruction-list">
+        <div class="instruction-item"><div class="instruction-num">1</div><div>If you don't have a GitHub account, go to <strong>github.com</strong> and create a free one now. Use the same email as your Lovable account.</div></div>
+        <div class="instruction-item"><div class="instruction-num">2</div><div>Back in Lovable, click the <strong>GitHub button</strong> in the top right (looks like a branch icon or says "Connect to GitHub").</div></div>
+        <div class="instruction-item"><div class="instruction-num">3</div><div>Authorize Lovable to access your GitHub account when prompted.</div></div>
+        <div class="instruction-item"><div class="instruction-num">4</div><div>Lovable will create a new repository. <strong>Leave the default name</strong> and click confirm.</div></div>
+      </div>
+      <div class="pause-callout">
+        <div class="pause-icon">⏸</div>
+        <p><strong>Pause here.</strong> Wait until you see your repo appear at github.com before moving on. Takes about 30 seconds.</p>
+      </div>
+    </div>
+    <div class="screenshot-placeholder">
+      <div class="screenshot-label">GitHub → Your New Repo</div>
+      <div class="mock-row"><span class="mock-label">Site</span><span class="mock-value">github.com/yourusername</span></div>
+      <div class="mock-row"><span class="mock-label">Repo name</span><span class="mock-value" style="color: #f59e0b;">[your-project-name]</span></div>
+      <div class="mock-row"><span class="mock-label">Status</span><span class="mock-badge">Connected</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s13">
+  <div class="slide-label">Part 3 — Step 08</div>
+  <h2>Connect GitHub to Netlify</h2>
+  <div class="step-layout">
+    <div>
+      <div class="instruction-list">
+        <div class="instruction-item"><div class="instruction-num">1</div><div>Go to <strong>netlify.com</strong> and create a free account. Use your same email.</div></div>
+        <div class="instruction-item"><div class="instruction-num">2</div><div>From your Netlify dashboard, click <strong>"Add new site"</strong> then <strong>"Import an existing project."</strong></div></div>
+        <div class="instruction-item"><div class="instruction-num">3</div><div>Choose <strong>GitHub</strong> as your source. Authorize Netlify to access your GitHub.</div></div>
+        <div class="instruction-item"><div class="instruction-num">4</div><div>Select the repo Lovable created. Leave all build settings as default and click <strong>"Deploy site."</strong></div></div>
+      </div>
+    </div>
+    <div class="screenshot-placeholder">
+      <div class="screenshot-label">Netlify → Import Project</div>
+      <div class="mock-row"><span class="mock-label">Source</span><span class="mock-badge">GitHub</span></div>
+      <div class="mock-row"><span class="mock-label">Repo selected</span><span class="mock-value" style="color: #f59e0b;">[your-project-name]</span></div>
+      <div class="mock-row"><span class="mock-label">Build command</span><span class="mock-value">npm run build</span></div>
+      <div class="mock-row"><span class="mock-label">Action</span><span class="mock-btn">Deploy site</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s14">
+  <div class="slide-label">Part 3 — Step 09</div>
+  <h2>Your Site Is Live</h2>
+  <div class="step-layout">
+    <div>
+      <div class="instruction-list">
+        <div class="instruction-item"><div class="instruction-num">1</div><div>Netlify will give you a URL that looks like <strong>random-name-123.netlify.app</strong> — that's your live site. Click it.</div></div>
+        <div class="instruction-item"><div class="instruction-num">2</div><div><strong>No domain?</strong> This Netlify URL is your site. Share it, add it to your LinkedIn bio, and put it in your email signature today.</div></div>
+        <div class="instruction-item"><div class="instruction-num">3</div><div><strong>Have a domain?</strong> In Netlify go to <strong>Site settings → Domain management → Add custom domain</strong>. Enter your domain and follow the DNS instructions.</div></div>
+        <div class="instruction-item"><div class="instruction-num">4</div><div>Copy your live URL. You're done.</div></div>
+      </div>
+    </div>
+    <div class="screenshot-placeholder">
+      <div class="screenshot-label">Netlify → Site Overview</div>
+      <div class="mock-row"><span class="mock-label">Your URL</span><span class="mock-value" style="color: var(--cyan); font-size:12px;">yourname-abc.netlify.app</span></div>
+      <div class="mock-row"><span class="mock-label">Deploy status</span><span class="mock-badge">Published</span></div>
+      <div class="mock-row"><span class="mock-label">Last deploy</span><span class="mock-value">Just now</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s15">
+  <div class="slide-label">You Did It</div>
+  <h2>Your personal brand site is live.</h2>
+  <p style="font-size: 20px; max-width: 560px; margin-bottom: 32px;">You walked in without a website. You're leaving with a speaking-positioned personal brand site on the internet right now.</p>
+  <ul class="pain-list">
+    <li>Share your Netlify link in the chat or out loud.</li>
+    <li>Add it to your LinkedIn bio today.</li>
+    <li>Put it in your email signature this week.</li>
+    <li>The next time someone asks if you speak — you have somewhere to send them.</li>
+  </ul>
+</section>
+
+<section class="slide qr-slide" id="s16">
+  <div class="qr-wrap">
+    <div class="slide-label">Before You Go</div>
+    <h2 style="text-align:center;">Sign in to get the full step-by-step playbook</h2>
+    <img class="qr-img" src="https://res.cloudinary.com/dialhpycd/image/upload/v1778082062/qrcode_docs.google.com_ftfons.png" alt="Sign in QR code">
+    <p class="qr-sub">Scan with your phone camera. I'm writing up everything we did today and sending it out within a few hours.</p>
+  </div>
+</section>
+
+<script>
+  function toggleBlock(id) { document.getElementById(id).classList.toggle('open'); }
+  function copyToggle(id, btn) {
+    const text = document.getElementById(id + '-code').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!'; btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const index = Array.from(slides).findIndex(s => s.id === entry.target.id);
+        dots.forEach((d, i) => d.classList.toggle('active', i === index));
+      }
+    });
+  }, { threshold: 0.5 });
+  slides.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
