@@ -3,6 +3,9 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// Serve assets (images, etc.) from /assets folder
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
 // Serve static files from /proposals folder — extensions: ['html'] allows extensionless URLs
 app.use('/proposals', express.static(path.join(__dirname, 'proposals'), { extensions: ['html'] }));
 
