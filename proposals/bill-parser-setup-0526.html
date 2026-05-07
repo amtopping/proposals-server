@@ -12,7 +12,6 @@
     --border: #1E2A35;
     --cyan: #00D4C8;
     --cyan-dim: rgba(0,212,200,0.08);
-    --cyan-mid: rgba(0,212,200,0.15);
     --amber: #F5A623;
     --amber-dim: rgba(245,166,35,0.08);
     --green: #2DD4A0;
@@ -23,381 +22,72 @@
     --head: 'Syne', sans-serif;
     --body: 'DM Sans', sans-serif;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--body);
-    font-weight: 300;
-    min-height: 100vh;
-    padding: 60px 24px 80px;
-  }
-
-  .container {
-    max-width: 780px;
-    margin: 0 auto;
-  }
-
-  .header {
-    margin-bottom: 56px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 40px;
-  }
-
-  .label {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    color: var(--cyan);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .label::before {
-    content: '';
-    display: inline-block;
-    width: 20px;
-    height: 1px;
-    background: var(--cyan);
-  }
-
-  h1 {
-    font-family: var(--head);
-    font-size: clamp(32px, 5vw, 52px);
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    margin-bottom: 16px;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: var(--body); font-weight: 300; min-height: 100vh; padding: 60px 24px 80px; }
+  .container { max-width: 780px; margin: 0 auto; }
+  .header { margin-bottom: 56px; border-bottom: 1px solid var(--border); padding-bottom: 40px; }
+  .label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; color: var(--cyan); text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .label::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--cyan); }
+  h1 { font-family: var(--head); font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; }
   h1 span { color: var(--cyan); }
-
-  .subtitle {
-    color: var(--muted);
-    font-size: 16px;
-    line-height: 1.6;
-    max-width: 540px;
-  }
-
-  .steps-nav {
-    display: flex;
-    gap: 0;
-    margin-bottom: 48px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  .step-nav-item {
-    flex: 1;
-    padding: 16px 12px;
-    text-align: center;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-    border-right: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
+  .subtitle { color: var(--muted); font-size: 16px; line-height: 1.6; max-width: 540px; }
+  .steps-nav { display: flex; margin-bottom: 48px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .step-nav-item { flex: 1; padding: 16px 12px; text-align: center; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--muted); border-right: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
   .step-nav-item:last-child { border-right: none; }
   .step-nav-item.active { color: var(--cyan); background: var(--cyan-dim); }
-
-  .step-nav-item .num {
-    display: block;
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 2px;
-    color: inherit;
-  }
-
-  .section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 24px;
-    overflow: hidden;
-    display: none;
-  }
-
+  .step-nav-item .num { display: block; font-size: 18px; font-weight: 500; margin-bottom: 2px; color: inherit; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 24px; overflow: hidden; display: none; }
   .section.active { display: block; }
-
-  .section-header {
-    padding: 24px 28px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .step-badge {
-    background: var(--cyan-dim);
-    border: 1px solid var(--cyan);
-    color: var(--cyan);
-    font-family: var(--mono);
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 4px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin-top: 3px;
-  }
-
-  .section-title {
-    font-family: var(--head);
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
-  .section-desc {
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
+  .section-header { padding: 24px 28px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 16px; }
+  .step-badge { background: var(--cyan-dim); border: 1px solid var(--cyan); color: var(--cyan); font-family: var(--mono); font-size: 11px; padding: 4px 10px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-top: 3px; }
+  .section-title { font-family: var(--head); font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .section-desc { color: var(--muted); font-size: 14px; line-height: 1.5; }
   .section-body { padding: 28px; }
-
-  .prop-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .prop {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
+  .prop-list { display: flex; flex-direction: column; gap: 20px; }
+  .prop { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
   .prop.required { border-color: rgba(0,212,200,0.25); }
   .prop.carry-over { border-color: rgba(245,166,35,0.2); }
   .prop.auto { border-color: rgba(45,212,160,0.2); }
-
-  .prop-head {
-    padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
+  .prop-head { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .prop.required .prop-head { background: var(--cyan-dim); }
   .prop.carry-over .prop-head { background: var(--amber-dim); }
   .prop.auto .prop-head { background: var(--green-dim); }
-
-  .prop-key {
-    font-family: var(--mono);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-  }
-
-  .prop-tag {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    padding: 3px 8px;
-    border-radius: 3px;
-    text-transform: uppercase;
-    flex-shrink: 0;
-  }
-
+  .prop-key { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--text); }
+  .prop-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 3px; text-transform: uppercase; flex-shrink: 0; }
   .tag-required { background: rgba(0,212,200,0.12); color: var(--cyan); }
   .tag-carry { background: rgba(245,166,35,0.12); color: var(--amber); }
   .tag-auto { background: rgba(45,212,160,0.12); color: var(--green); }
-
-  .prop-body {
-    padding: 16px 18px;
-    border-top: 1px solid var(--border);
-  }
-
-  .prop-desc {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.6;
-    margin-bottom: 12px;
-  }
-
-  .how-to {
-    background: #0D1A24;
-    border-left: 3px solid var(--cyan);
-    padding: 12px 16px;
-    border-radius: 0 6px 6px 0;
-    font-size: 13px;
-    line-height: 1.6;
-    color: #9BB5C8;
-  }
-
+  .prop-body { padding: 16px 18px; border-top: 1px solid var(--border); }
+  .prop-desc { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+  .how-to { background: #0D1A24; border-left: 3px solid var(--cyan); padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.6; color: #9BB5C8; }
   .how-to.amber { border-left-color: var(--amber); }
   .how-to.green { border-left-color: var(--green); }
   .how-to strong { color: var(--text); font-weight: 500; }
-
-  code {
-    font-family: var(--mono);
-    background: rgba(255,255,255,0.06);
-    padding: 1px 6px;
-    border-radius: 3px;
-    font-size: 12px;
-    color: var(--cyan);
-  }
-
-  .instruction {
-    background: #0D1A24;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    font-size: 14px;
-    line-height: 1.7;
-    color: #9BB5C8;
-  }
-
-  .instruction ol, .instruction ul { padding-left: 20px; margin-top: 8px; }
+  code { font-family: var(--mono); background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 3px; font-size: 12px; color: var(--cyan); }
+  .instruction { background: #0D1A24; border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; font-size: 14px; line-height: 1.7; color: #9BB5C8; }
+  .instruction ol { padding-left: 20px; margin-top: 8px; }
   .instruction li { margin-bottom: 8px; }
   .instruction strong { color: var(--text); font-weight: 500; }
-
-  .nav-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border);
-  }
-
-  .btn {
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    padding: 12px 24px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-  }
-
-  .btn-back {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-  }
-
+  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .btn { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; padding: 12px 24px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
+  .btn-back { background: transparent; border: 1px solid var(--border); color: var(--muted); }
   .btn-back:hover { border-color: var(--muted); color: var(--text); }
-
-  .btn-next {
-    background: var(--cyan);
-    color: #0B0F14;
-    font-weight: 500;
-  }
-
+  .btn-next { background: var(--cyan); color: #0B0F14; font-weight: 500; }
   .btn-next:hover { background: #00BFBA; }
-
-  .legend {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: var(--muted);
-    font-family: var(--mono);
-  }
-
-  .legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-  }
-
-  .checklist {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .check-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 16px 18px;
-    background: #0D1A24;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: border-color 0.2s;
-  }
-
+  .legend { display: flex; gap: 20px; margin-bottom: 32px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); font-family: var(--mono); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .checklist { display: flex; flex-direction: column; gap: 12px; }
+  .check-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; background: #0D1A24; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: border-color 0.2s; }
   .check-item:hover { border-color: rgba(0,212,200,0.3); }
   .check-item.checked { border-color: var(--green); background: var(--green-dim); }
-
-  .check-box {
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--border);
-    border-radius: 4px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1px;
-    transition: all 0.2s;
-  }
-
-  .check-item.checked .check-box {
-    background: var(--green);
-    border-color: var(--green);
-    color: #0B0F14;
-  }
-
-  .check-item.checked .check-box::after {
-    content: '✓';
-    font-size: 12px;
-    font-weight: bold;
-  }
-
-  .check-text {
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--muted);
-  }
-
+  .check-box { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.2s; }
+  .check-item.checked .check-box { background: var(--green); border-color: var(--green); color: #0B0F14; }
+  .check-item.checked .check-box::after { content: '✓'; font-size: 12px; font-weight: bold; }
+  .check-text { font-size: 14px; line-height: 1.5; color: var(--muted); }
   .check-item.checked .check-text { color: var(--text); }
-
-  .check-key {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--cyan);
-    display: block;
-    margin-bottom: 2px;
-  }
-
-  .complete-banner {
-    display: none;
-    margin-top: 24px;
-    padding: 20px 24px;
-    background: var(--green-dim);
-    border: 1px solid var(--green);
-    border-radius: 8px;
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--green);
-    text-align: center;
-    letter-spacing: 0.05em;
-  }
+  .check-key { font-family: var(--mono); font-size: 12px; color: var(--cyan); display: block; margin-bottom: 2px; }
+  .complete-banner { display: none; margin-top: 24px; padding: 20px 24px; background: var(--green-dim); border: 1px solid var(--green); border-radius: 8px; font-family: var(--mono); font-size: 13px; color: var(--green); text-align: center; letter-spacing: 0.05em; }
 </style>
 </head>
 <body>
@@ -417,12 +107,13 @@
 
   <div class="steps-nav">
     <div class="step-nav-item active" onclick="goTo(0)"><span class="num">01</span>Get Access</div>
-    <div class="step-nav-item" onclick="goTo(1)"><span class="num">02</span>API Keys</div>
+    <div class="step-nav-item" onclick="goTo(1)"><span class="num">02</span>API Key</div>
     <div class="step-nav-item" onclick="goTo(2)"><span class="num">03</span>IDs</div>
     <div class="step-nav-item" onclick="goTo(3)"><span class="num">04</span>Carry Over</div>
     <div class="step-nav-item" onclick="goTo(4)"><span class="num">05</span>Launch</div>
   </div>
 
+  <!-- STEP 1 -->
   <div class="section active" id="step-0">
     <div class="section-header">
       <div class="step-badge">STEP 01</div>
@@ -445,60 +136,46 @@
       </div>
       <div class="prop-list">
         <div class="prop auto">
-          <div class="prop-head">
-            <span class="prop-key">QUEUE_STATUS</span>
-            <span class="prop-tag tag-auto">Auto</span>
-          </div>
+          <div class="prop-head"><span class="prop-key">QUEUE_STATUS</span><span class="prop-tag tag-auto">Auto</span></div>
           <div class="prop-body">
             <p class="prop-desc">Tracks whether the bill processing queue is currently running.</p>
-            <div class="how-to green">Do not add this. It will be created automatically the first time you run the system.</div>
+            <div class="how-to green">Do not add this. Created automatically the first time you run the system.</div>
           </div>
         </div>
         <div class="prop auto">
-          <div class="prop-head">
-            <span class="prop-key">ME_QUEUE_STATUS</span>
-            <span class="prop-tag tag-auto">Auto</span>
-          </div>
+          <div class="prop-head"><span class="prop-key">ME_QUEUE_STATUS</span><span class="prop-tag tag-auto">Auto</span></div>
           <div class="prop-body">
             <p class="prop-desc">Secondary queue status flag for continuation trigger management.</p>
-            <div class="how-to green">Do not add this. It will be created automatically the first time you run the system.</div>
+            <div class="how-to green">Do not add this. Created automatically the first time you run the system.</div>
           </div>
         </div>
         <div class="prop auto">
-          <div class="prop-head">
-            <span class="prop-key">PROCESSED_FILE_IDS</span>
-            <span class="prop-tag tag-auto">Auto</span>
-          </div>
+          <div class="prop-head"><span class="prop-key">PROCESSED_FILE_IDS</span><span class="prop-tag tag-auto">Auto</span></div>
           <div class="prop-body">
             <p class="prop-desc">Stores a JSON array of already-processed Drive file IDs to prevent duplicate parsing.</p>
             <div class="how-to green">Do not add this. Populates automatically as bills are processed.</div>
           </div>
         </div>
       </div>
-      <div class="nav-row">
-        <span></span>
-        <button class="btn btn-next" onclick="goTo(1)">Next: API Keys →</button>
-      </div>
+      <div class="nav-row"><span></span><button class="btn btn-next" onclick="goTo(1)">Next: API Key →</button></div>
     </div>
   </div>
 
+  <!-- STEP 2 -->
   <div class="section" id="step-1">
     <div class="section-header">
       <div class="step-badge">STEP 02</div>
       <div>
-        <div class="section-title">API Keys</div>
-        <div class="section-desc">Two AI API keys are required. These are the credentials that power bill parsing.</div>
+        <div class="section-title">Anthropic API Key</div>
+        <div class="section-desc">One API key powers both extraction passes. Both use the Anthropic Claude API.</div>
       </div>
     </div>
     <div class="section-body">
       <div class="prop-list">
         <div class="prop required">
-          <div class="prop-head">
-            <span class="prop-key">CLAUDE_API_KEY</span>
-            <span class="prop-tag tag-required">Required</span>
-          </div>
+          <div class="prop-head"><span class="prop-key">CLAUDE_API_KEY</span><span class="prop-tag tag-required">Required</span></div>
           <div class="prop-body">
-            <p class="prop-desc">The Anthropic API key used by the primary bill extraction pipeline. This is the main AI engine.</p>
+            <p class="prop-desc">The Anthropic API key that powers both extraction passes — primary parsing and secondary validation. This is the only AI key the system needs.</p>
             <div class="how-to">
               <strong>Where to get it:</strong><br>
               1. Go to <strong>console.anthropic.com</strong><br>
@@ -511,44 +188,20 @@
           </div>
         </div>
         <div class="prop required">
-          <div class="prop-head">
-            <span class="prop-key">GEMINI_API_KEY</span>
-            <span class="prop-tag tag-required">Required</span>
-          </div>
+          <div class="prop-head"><span class="prop-key">ALERT_EMAIL_PRIMARY</span><span class="prop-tag tag-required">Required</span></div>
           <div class="prop-body">
-            <p class="prop-desc">The Google Gemini API key used as the secondary extraction pass for validation and fallback parsing.</p>
+            <p class="prop-desc">The email address that receives daily processing summaries and error alerts.</p>
             <div class="how-to">
-              <strong>Where to get it:</strong><br>
-              1. Go to <strong>aistudio.google.com</strong><br>
-              2. Sign in with your Google account<br>
-              3. Click <strong>Get API Key</strong> in the top left<br>
-              4. Click <strong>Create API Key</strong><br>
-              5. Select your Google Cloud project (or create one — free tier is sufficient)<br>
-              6. Copy the key (starts with <code>AIza...</code>)<br>
-              7. Paste it as the value for <code>GEMINI_API_KEY</code>
-            </div>
-          </div>
-        </div>
-        <div class="prop required">
-          <div class="prop-head">
-            <span class="prop-key">ALERT_EMAIL_PRIMARY</span>
-            <span class="prop-tag tag-required">Required</span>
-          </div>
-          <div class="prop-body">
-            <p class="prop-desc">The primary email address that receives daily processing summaries and error alerts.</p>
-            <div class="how-to">
-              <strong>Set this to:</strong> Your main email address — the one you check regularly. This is where you will get a daily digest whenever bills are processed, and any error notifications if the queue hits issues.
+              <strong>Set this to:</strong> Your main email address. This is where you will get a daily digest whenever bills are processed, and error notifications if the queue hits issues.
             </div>
           </div>
         </div>
       </div>
-      <div class="nav-row">
-        <button class="btn btn-back" onclick="goTo(0)">← Back</button>
-        <button class="btn btn-next" onclick="goTo(2)">Next: IDs →</button>
-      </div>
+      <div class="nav-row"><button class="btn btn-back" onclick="goTo(0)">← Back</button><button class="btn btn-next" onclick="goTo(2)">Next: IDs →</button></div>
     </div>
   </div>
 
+  <!-- STEP 3 -->
   <div class="section" id="step-2">
     <div class="section-header">
       <div class="step-badge">STEP 03</div>
@@ -560,10 +213,7 @@
     <div class="section-body">
       <div class="prop-list">
         <div class="prop required">
-          <div class="prop-head">
-            <span class="prop-key">SHEET_ID</span>
-            <span class="prop-tag tag-required">Required</span>
-          </div>
+          <div class="prop-head"><span class="prop-key">SHEET_ID</span><span class="prop-tag tag-required">Required</span></div>
           <div class="prop-body">
             <p class="prop-desc">The Google Sheet where parsed bill data will be written and the dashboard reads from.</p>
             <div class="how-to">
@@ -572,100 +222,76 @@
               2. Look at the URL in your browser — it will look like:<br>
               <code>docs.google.com/spreadsheets/d/<strong>1kG5aQf_hd-...</strong>/edit</code><br>
               3. The long string between <code>/d/</code> and <code>/edit</code> is your Sheet ID<br>
-              4. Copy that and paste it as the value for <code>SHEET_ID</code><br><br>
+              4. Paste it as the value for <code>SHEET_ID</code><br><br>
               <strong>Note:</strong> This may also auto-populate when you run Setup Sheets for the first time.
             </div>
           </div>
         </div>
         <div class="prop required">
-          <div class="prop-head">
-            <span class="prop-key">DRIVE_FOLDER_ID</span>
-            <span class="prop-tag tag-required">Required</span>
-          </div>
+          <div class="prop-head"><span class="prop-key">DRIVE_FOLDER_ID</span><span class="prop-tag tag-required">Required</span></div>
           <div class="prop-body">
-            <p class="prop-desc">The Google Drive folder where utility bill PDFs will be dropped for processing. The system watches this folder.</p>
+            <p class="prop-desc">The Google Drive folder where utility bill PDFs will be dropped for processing.</p>
             <div class="how-to">
               <strong>How to set it up:</strong><br>
               1. Go to <strong>drive.google.com</strong><br>
               2. Create a new folder (e.g. "GPM Utility Bills")<br>
-              3. Open that folder<br>
-              4. Look at the URL — it will look like:<br>
+              3. Open that folder and look at the URL:<br>
               <code>drive.google.com/drive/folders/<strong>1s3PIbHoz2IP...</strong></code><br>
-              5. The long string at the end is your Folder ID<br>
-              6. Paste it as the value for <code>DRIVE_FOLDER_ID</code><br><br>
-              This is the folder where you or your team will drop PDFs. Once a file lands here and you trigger processing, it gets parsed automatically.
+              4. The long string at the end is your Folder ID<br>
+              5. Paste it as the value for <code>DRIVE_FOLDER_ID</code>
             </div>
           </div>
         </div>
       </div>
-      <div class="nav-row">
-        <button class="btn btn-back" onclick="goTo(1)">← Back</button>
-        <button class="btn btn-next" onclick="goTo(3)">Next: Carry Over →</button>
-      </div>
+      <div class="nav-row"><button class="btn btn-back" onclick="goTo(1)">← Back</button><button class="btn btn-next" onclick="goTo(3)">Next: Carry Over →</button></div>
     </div>
   </div>
 
+  <!-- STEP 4 -->
   <div class="section" id="step-3">
     <div class="section-header">
       <div class="step-badge">STEP 04</div>
       <div>
         <div class="section-title">Carry Over Values</div>
-        <div class="section-desc">These values will be provided to you by Keyona in a separate setup document. Copy them in exactly as given.</div>
+        <div class="section-desc">These values will be provided to you by Keyona. Copy them in exactly as given — do not look these up yourself.</div>
       </div>
     </div>
     <div class="section-body">
-      <div class="instruction">
-        <strong>Important:</strong> Do not type these in manually or look them up yourself. Keyona will send you a separate doc with the exact strings to paste for each of these. They contain pre-configured provider data and GitHub access credentials specific to this project.
-      </div>
       <div class="prop-list">
         <div class="prop carry-over">
-          <div class="prop-head">
-            <span class="prop-key">FINGERPRINTS_JSON</span>
-            <span class="prop-tag tag-carry">Carry Over</span>
-          </div>
+          <div class="prop-head"><span class="prop-key">FINGERPRINTS_JSON</span><span class="prop-tag tag-carry">Carry Over</span></div>
           <div class="prop-body">
-            <p class="prop-desc">A JSON object containing known bill layout signatures for each utility provider. This is what enables fast, accurate parsing of bills you have seen before.</p>
+            <p class="prop-desc">Known bill layout signatures for each utility provider. Enables fast, accurate parsing of bills you have seen before.</p>
             <div class="how-to amber">Paste the value exactly as provided by Keyona. Do not modify it.</div>
           </div>
         </div>
         <div class="prop carry-over">
-          <div class="prop-head">
-            <span class="prop-key">PROVIDERS_JSON</span>
-            <span class="prop-tag tag-carry">Carry Over</span>
-          </div>
+          <div class="prop-head"><span class="prop-key">PROVIDERS_JSON</span><span class="prop-tag tag-carry">Carry Over</span></div>
           <div class="prop-body">
-            <p class="prop-desc">A JSON object listing all known utility providers (electricity, gas, water) and their account structures. Allows the system to categorize bills by type automatically.</p>
+            <p class="prop-desc">All known utility providers (electricity, gas, water) and their account structures. Allows the system to categorize bills by type automatically.</p>
             <div class="how-to amber">Paste the value exactly as provided by Keyona. Do not modify it.</div>
           </div>
         </div>
         <div class="prop carry-over">
-          <div class="prop-head">
-            <span class="prop-key">GITHUB_REPO</span>
-            <span class="prop-tag tag-carry">Carry Over</span>
-          </div>
+          <div class="prop-head"><span class="prop-key">GITHUB_REPO</span><span class="prop-tag tag-carry">Carry Over</span></div>
           <div class="prop-body">
-            <p class="prop-desc">The GitHub repository path used by the system for version-controlled config and template storage.</p>
+            <p class="prop-desc">The GitHub repository path for version-controlled config and template storage.</p>
             <div class="how-to amber">Value: <code>keyona-rerev/TESTER_Resource-Bill-Parser-Github</code> — paste this exactly.</div>
           </div>
         </div>
         <div class="prop carry-over">
-          <div class="prop-head">
-            <span class="prop-key">GITHUB_TOKEN</span>
-            <span class="prop-tag tag-carry">Carry Over</span>
-          </div>
+          <div class="prop-head"><span class="prop-key">GITHUB_TOKEN</span><span class="prop-tag tag-carry">Carry Over</span></div>
           <div class="prop-body">
             <p class="prop-desc">A personal access token authorizing the script to read from the GitHub repository.</p>
-            <div class="how-to amber">Paste the value exactly as provided by Keyona. This is a security token — do not share it or commit it anywhere.</div>
+            <div class="how-to amber">Paste the value exactly as provided by Keyona. Do not share this token anywhere.</div>
           </div>
         </div>
       </div>
-      <div class="nav-row">
-        <button class="btn btn-back" onclick="goTo(2)">← Back</button>
-        <button class="btn btn-next" onclick="goTo(4)">Next: Launch →</button>
-      </div>
+      <div class="nav-row"><button class="btn btn-back" onclick="goTo(2)">← Back</button><button class="btn btn-next" onclick="goTo(4)">Next: Launch →</button></div>
     </div>
   </div>
 
+  <!-- STEP 5 -->
   <div class="section" id="step-4">
     <div class="section-header">
       <div class="step-badge">STEP 05</div>
@@ -678,71 +304,38 @@
       <div class="checklist">
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
-          <div class="check-text">
-            <span class="check-key">CLAUDE_API_KEY</span>
-            Anthropic API key added to Script Properties
-          </div>
+          <div class="check-text"><span class="check-key">CLAUDE_API_KEY</span>Anthropic API key added to Script Properties</div>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
-          <div class="check-text">
-            <span class="check-key">GEMINI_API_KEY</span>
-            Google Gemini API key added to Script Properties
-          </div>
+          <div class="check-text"><span class="check-key">ALERT_EMAIL_PRIMARY</span>Your email address entered for daily alerts</div>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
-          <div class="check-text">
-            <span class="check-key">ALERT_EMAIL_PRIMARY</span>
-            Your email address entered for daily alerts
-          </div>
+          <div class="check-text"><span class="check-key">SHEET_ID</span>Sheet ID copied from your Google Sheet URL</div>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
-          <div class="check-text">
-            <span class="check-key">SHEET_ID</span>
-            Sheet ID copied from your Google Sheet URL
-          </div>
+          <div class="check-text"><span class="check-key">DRIVE_FOLDER_ID</span>Drive Folder ID for bill PDF intake</div>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
-          <div class="check-text">
-            <span class="check-key">DRIVE_FOLDER_ID</span>
-            Drive Folder ID for bill PDF intake
-          </div>
+          <div class="check-text"><span class="check-key">FINGERPRINTS_JSON + PROVIDERS_JSON</span>Carry-over values pasted in exactly as provided</div>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
-          <div class="check-text">
-            <span class="check-key">FINGERPRINTS_JSON + PROVIDERS_JSON</span>
-            Carry-over values pasted in exactly as provided
-          </div>
+          <div class="check-text"><span class="check-key">GITHUB_REPO + GITHUB_TOKEN</span>GitHub credentials entered</div>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
-          <div class="check-text">
-            <span class="check-key">GITHUB_REPO + GITHUB_TOKEN</span>
-            GitHub credentials entered
-          </div>
+          <div class="check-text"><span class="check-key">Setup Sheets</span>In your Google Sheet, open the Bill Parser menu and run <strong>Setup Sheets</strong>. This creates all required tabs.</div>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
-          <div class="check-text">
-            <span class="check-key">Setup Sheets</span>
-            In your Google Sheet, open the Bill Parser menu and run <strong>Setup Sheets</strong>. This creates all required tabs.
-          </div>
-        </div>
-        <div class="check-item" onclick="toggleCheck(this)">
-          <div class="check-box"></div>
-          <div class="check-text">
-            <span class="check-key">Web App Deployed</span>
-            In Apps Script, click Deploy, confirm the web app is live, and copy your <code>/exec</code> URL.
-          </div>
+          <div class="check-text"><span class="check-key">Web App Deployed</span>In Apps Script, click Deploy, confirm the web app is live, and copy your <code>/exec</code> URL.</div>
         </div>
       </div>
-      <div class="complete-banner" id="complete-banner">
-        ALL STEPS COMPLETE — YOUR BILL PARSER IS READY
-      </div>
+      <div class="complete-banner" id="complete-banner">ALL STEPS COMPLETE — YOUR BILL PARSER IS READY</div>
       <div class="nav-row">
         <button class="btn btn-back" onclick="goTo(3)">← Back</button>
         <span style="font-family:var(--mono);font-size:12px;color:var(--muted);">Questions? Contact keyona@rerev.io</span>
@@ -751,30 +344,17 @@
   </div>
 
 </div>
-
 <script>
-  let currentStep = 0;
-
   function goTo(step) {
-    document.querySelectorAll('.section').forEach((s, i) => {
-      s.classList.toggle('active', i === step);
-    });
-    document.querySelectorAll('.step-nav-item').forEach((s, i) => {
-      s.classList.toggle('active', i === step);
-    });
-    currentStep = step;
+    document.querySelectorAll('.section').forEach((s,i) => s.classList.toggle('active', i===step));
+    document.querySelectorAll('.step-nav-item').forEach((s,i) => s.classList.toggle('active', i===step));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
   function toggleCheck(el) {
     el.classList.toggle('checked');
     const all = document.querySelectorAll('.check-item');
     const done = document.querySelectorAll('.check-item.checked');
-    if (done.length === all.length) {
-      document.getElementById('complete-banner').style.display = 'block';
-    } else {
-      document.getElementById('complete-banner').style.display = 'none';
-    }
+    document.getElementById('complete-banner').style.display = done.length === all.length ? 'block' : 'none';
   }
 </script>
 </body>
