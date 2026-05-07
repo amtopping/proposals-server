@@ -6,7 +6,7 @@
 <title>Bill Parser — Setup Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Courier+Prime:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Courier+Prime:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #F0F7F7; --primary: #0D1F2D; --body: #3D5166; --cyan: #1A9E9E;
@@ -14,8 +14,10 @@
     --cream: #FAFCFC; --amber: #C47F2A; --amber-dim: rgba(196,127,42,0.07);
     --amber-border: rgba(196,127,42,0.2); --green: #0F7B5C;
     --green-dim: rgba(15,123,92,0.07); --green-border: rgba(15,123,92,0.2);
+    --purple: #7C3AED; --gradient: linear-gradient(90deg, #1A9E9E, #7C3AED);
     --muted: rgba(61,81,102,0.5); --border: rgba(26,158,158,0.12);
-    --serif: 'Cormorant Garamond', serif; --mono: 'Courier Prime', monospace; --sans: 'DM Sans', sans-serif;
+    --serif: 'Cormorant Garamond', serif; --mono: 'Courier Prime', monospace;
+    --sans: 'DM Sans', sans-serif; --fh: 'Outfit', sans-serif; --fb: 'Inter', sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--primary); font-family: var(--sans); font-size: 15px; line-height: 1.65; min-height: 100vh; }
@@ -36,65 +38,111 @@
   .step-nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 5px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
   .step-nav-item:hover { background: rgba(255,255,255,0.04); }
   .step-nav-item.active { background: rgba(26,158,158,0.1); border-color: rgba(26,158,158,0.22); }
-  .step-num { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.18); width: 18px; flex-shrink: 0; }
-  .step-nav-item.active .step-num { color: var(--cyan); }
-  .step-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.28); flex: 1; }
-  .step-nav-item.active .step-label { color: white; }
-  .step-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.1); flex-shrink: 0; }
-  .step-nav-item.active .step-dot { background: var(--cyan); }
-  .step-nav-item.done .step-dot { background: var(--green); }
+  .snav-num { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.18); width: 18px; flex-shrink: 0; }
+  .step-nav-item.active .snav-num { color: var(--cyan); }
+  .snav-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.28); flex: 1; }
+  .step-nav-item.active .snav-label { color: white; }
+  .snav-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.1); flex-shrink: 0; }
+  .step-nav-item.active .snav-dot { background: var(--cyan); }
+  .step-nav-item.done .snav-dot { background: var(--green); }
   .sidebar-footer { margin-top: auto; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); }
   .sidebar-footer-label { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em; color: rgba(255,255,255,0.18); margin-bottom: 5px; }
   .sidebar-footer-email { font-family: var(--serif); font-style: italic; font-size: 14px; color: rgba(255,255,255,0.45); }
-
-  /* MAIN — wider, bigger font */
-  .main { padding: 52px 32px 80px 52px; max-width: 960px; overflow-y: auto; }
-
+  .main { padding: 52px 32px 80px 52px; overflow-y: auto; }
   .step-section { display: none; }
   .step-section.active { display: block; animation: fadeUp 0.3s ease forwards; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  .step-header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 36px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+  .step-header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 36px; padding-bottom: 28px; border-bottom: 1px solid var(--border); max-width: 900px; }
   .step-folio { width: 64px; height: 64px; border-radius: 50%; border: 1px dashed var(--cyan-border); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
   .step-folio-num { font-family: var(--mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); line-height: 1; }
   .step-folio-val { font-family: var(--serif); font-size: 20px; font-style: italic; color: var(--cyan); line-height: 1; margin-top: 2px; }
   .gradient-line { height: 2px; background: linear-gradient(90deg, #1A9E9E, #7C3AED); border-radius: 1px; width: 40px; margin-bottom: 12px; }
   .step-title-block h2 { font-family: var(--serif); font-size: 34px; font-weight: 400; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 8px; }
   .step-title-block p { color: var(--body); font-size: 14px; max-width: 560px; line-height: 1.65; }
-
-  .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+  .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; max-width: 900px; }
   .overview-card { background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
   .overview-card-num { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--cyan); margin-bottom: 8px; }
   .overview-card-title { font-family: var(--serif); font-size: 19px; font-weight: 600; margin-bottom: 6px; color: var(--primary); }
   .overview-card-desc { font-size: 13px; color: var(--body); line-height: 1.65; }
-
-  /* VIZ EMBED */
-  .viz-embed { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 28px; }
-  .viz-embed-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); padding: 10px 16px; background: var(--cream); border-bottom: 1px solid var(--border); }
-  .viz-embed iframe { display: block; width: 100%; height: 680px; border: none; }
-
+  .viz-section-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--cyan); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .viz-section-label::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--cyan); }
+  .viz-topology { display: flex; border: 1px solid var(--border); border-radius: 8px 8px 0 0; overflow: hidden; background: var(--bg); }
+  .viz-legend { width: 170px; flex-shrink: 0; border-right: 1px solid var(--border); padding: 24px 18px; background: white; }
+  .viz-legend-title { font-family: var(--fh); font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cyan); margin-bottom: 14px; }
+  .viz-legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; font-family: var(--fb); font-size: 11px; color: var(--body); }
+  .viz-legend-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+  .viz-legend-dot.system { background: white; border: 2px solid var(--primary); }
+  .viz-legend-dot.ai { background: var(--cyan); }
+  .viz-legend-dot.output { background: var(--bg); border: 2px solid var(--primary); }
+  .viz-legend-dot.user { background: white; border: 2px dashed rgba(13,31,45,0.4); }
+  .viz-layer-labels { margin-top: 24px; border-top: 1px solid var(--border); padding-top: 18px; }
+  .viz-layer-label { font-family: var(--fh); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--body); opacity: 0.45; margin-bottom: 9px; }
+  .viz-click-hint { margin-top: 24px; font-size: 11px; color: var(--body); opacity: 0.38; line-height: 1.6; font-style: italic; font-family: var(--fb); }
+  .viz-canvas-wrap { flex: 1; overflow: visible; min-width: 0; }
+  .viz-canvas { position: relative; width: 100%; min-width: 760px; height: 460px; background-image: linear-gradient(rgba(13,31,45,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(13,31,45,0.04) 1px, transparent 1px); background-size: 28px 28px; }
+  .viz-col-divider { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(13,31,45,0.07); }
+  .viz-col-label { position: absolute; top: 12px; font-family: var(--fh); font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--body); opacity: 0.25; transform: translateX(-50%); }
+  .vnode { position: absolute; background: white; border: 1.5px solid rgba(13,31,45,0.13); border-radius: 8px; box-shadow: 0 2px 8px rgba(13,31,45,0.05); padding: 9px 13px; cursor: pointer; transition: all 0.2s; user-select: none; z-index: 10; }
+  .vnode:hover { box-shadow: 0 4px 14px rgba(13,31,45,0.11); transform: translateY(-1px); border-color: var(--cyan); }
+  .vnode.ai { background: var(--cyan); border-color: var(--cyan); }
+  .vnode.user { border-style: dashed; border-color: rgba(13,31,45,0.22); }
+  .vnode.active-path { background: var(--primary) !important; border-color: var(--primary) !important; box-shadow: 0 4px 18px rgba(13,31,45,0.2) !important; transform: translateY(-2px) !important; }
+  .vnode.active-path .vn-label, .vnode.active-path .vn-sub { color: rgba(255,255,255,0.5) !important; opacity: 1 !important; }
+  .vnode.active-path .vn-title { color: white !important; }
+  .vn-label { font-family: var(--fh); font-size: 8px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); margin-bottom: 2px; }
+  .vnode.ai .vn-label { color: rgba(255,255,255,0.55); }
+  .vnode.user .vn-label { color: var(--body); opacity: 0.5; }
+  .vn-title { font-family: var(--fh); font-size: 11px; font-weight: 700; color: var(--primary); line-height: 1.2; }
+  .vnode.ai .vn-title { color: white; }
+  .vn-sub { font-family: var(--fb); font-size: 9px; color: var(--body); margin-top: 3px; line-height: 1.4; opacity: 0.6; }
+  .vnode.ai .vn-sub { color: rgba(255,255,255,0.7); opacity: 1; }
+  .viz-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+  .vline { fill: none; stroke: rgba(13,31,45,0.13); stroke-width: 1.5; transition: stroke 0.2s, stroke-width 0.2s; }
+  .vline.active-line { stroke: var(--cyan); stroke-width: 2.5; stroke-dasharray: 8 4; animation: dashFlow 0.5s linear infinite; }
+  @keyframes dashFlow { to { stroke-dashoffset: -12; } }
+  .vpkt { fill: var(--cyan); opacity: 0.6; }
+  .vpkt-p { fill: var(--purple); opacity: 0.45; }
+  .viz-lifecycle { border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; margin-bottom: 32px; background: white; }
+  .viz-lc-header { background: var(--primary); padding: 12px 32px; display: flex; align-items: center; gap: 12px; }
+  .viz-lc-grad { width: 22px; height: 2px; background: var(--gradient); border-radius: 1px; }
+  .viz-lc-title { font-family: var(--fh); font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: white; }
+  .viz-lc-count { font-family: var(--fb); font-size: 10px; color: rgba(255,255,255,0.25); }
+  .vrow { border-bottom: 1px solid var(--border); cursor: pointer; }
+  .vrow:last-child { border-bottom: none; }
+  .vtrig { display: flex; align-items: center; gap: 18px; padding: 12px 32px; transition: background 0.15s; }
+  .vrow:hover .vtrig { background: rgba(26,158,158,0.03); }
+  .vrow.open .vtrig { background: rgba(26,158,158,0.05); }
+  .vnum { font-family: var(--fh); font-size: 24px; font-weight: 800; color: var(--primary); opacity: 0.07; width: 40px; flex-shrink: 0; letter-spacing: -0.03em; }
+  .vtitle { font-family: var(--fh); font-size: 12px; font-weight: 700; color: var(--primary); flex: 1; }
+  .vtag { font-family: var(--fh); font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cyan); background: rgba(26,158,158,0.07); border: 1px solid rgba(26,158,158,0.16); padding: 2px 9px; border-radius: 3px; flex-shrink: 0; }
+  .varrow { font-size: 15px; color: var(--cyan); opacity: 0.3; transition: transform 0.2s, opacity 0.2s; }
+  .vrow.open .varrow { transform: rotate(90deg); opacity: 0.65; }
+  .vbody { display: none; padding: 0 32px 0 90px; }
+  .vrow.open .vbody { display: block; }
+  .vcontent { font-family: var(--fb); font-size: 12px; line-height: 1.75; color: var(--body); padding: 10px 0 18px; border-top: 1px solid var(--border); max-width: 600px; }
+  .vrow.final { background: var(--primary); }
+  .vrow.final:hover .vtrig { background: rgba(255,255,255,0.03); }
+  .vrow.final.open .vtrig { background: rgba(255,255,255,0.05); }
+  .vrow.final .vnum { color: white; opacity: 0.1; }
+  .vrow.final .vtitle { color: white; }
+  .vrow.final .vtag { color: var(--cyan); border-color: rgba(26,158,158,0.28); background: rgba(26,158,158,0.1); }
+  .vrow.final .varrow { color: var(--cyan); }
+  .vrow.final .vcontent { border-top-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+  .content-wrap { max-width: 900px; }
   .img-block { background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 28px; }
   .img-block-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 12px; }
   .img-block img { max-width: 100%; border-radius: 6px; border: 1px solid var(--border); display: block; }
-
   .info-block { background: var(--cream); border: 1px solid var(--border); border-left: 3px solid var(--cyan); border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 20px; font-size: 14px; color: var(--body); line-height: 1.7; }
   .info-block strong { color: var(--primary); }
-
   .no-action-banner { background: var(--green-dim); border: 1px solid var(--green-border); border-radius: 6px; padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start; margin-bottom: 28px; }
   .no-action-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
   .no-action-text { font-family: var(--serif); font-size: 17px; font-style: italic; color: var(--green); margin-bottom: 3px; }
   .no-action-sub { font-size: 13px; color: var(--body); line-height: 1.6; }
-
   .prop-list { display: flex; flex-direction: column; gap: 1px; margin-bottom: 32px; }
   .prop { background: var(--cream); border: 1px solid var(--border); overflow: hidden; transition: box-shadow 0.2s; }
-  .prop:first-child { border-radius: 8px 8px 0 0; }
-  .prop:last-child { border-radius: 0 0 8px 8px; }
-  .prop:only-child { border-radius: 8px; }
-  .prop:not(:first-child) { border-top: none; }
+  .prop:first-child { border-radius: 8px 8px 0 0; } .prop:last-child { border-radius: 0 0 8px 8px; } .prop:only-child { border-radius: 8px; } .prop:not(:first-child) { border-top: none; }
   .prop:hover { z-index: 1; position: relative; box-shadow: 0 4px 12px -4px rgba(13,31,45,0.1); }
-  .prop.required { border-left: 3px solid var(--cyan); }
-  .prop.optional { border-left: 3px solid rgba(61,81,102,0.2); }
-  .prop.carry-over { border-left: 3px solid var(--amber); }
-  .prop.auto-prop { border-left: 3px solid var(--green); }
+  .prop.required { border-left: 3px solid var(--cyan); } .prop.optional { border-left: 3px solid rgba(61,81,102,0.2); } .prop.carry-over { border-left: 3px solid var(--amber); } .prop.auto-prop { border-left: 3px solid var(--green); }
   .prop-head { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .prop-key { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--primary); letter-spacing: 0.02em; }
   .prop-tag { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; padding: 3px 8px; border-radius: 2px; flex-shrink: 0; }
@@ -105,29 +153,22 @@
   .prop-body { padding: 0 18px 18px; border-top: 1px solid var(--border); }
   .prop-desc { font-size: 13px; color: var(--body); line-height: 1.65; margin: 13px 0 11px; }
   .how-to { background: var(--bg); border-left: 2px solid var(--cyan); padding: 11px 15px; border-radius: 0 4px 4px 0; font-size: 12px; line-height: 1.8; color: var(--body); font-family: var(--mono); }
-  .how-to.amber { border-left-color: var(--amber); }
-  .how-to.green { border-left-color: var(--green); }
-  .how-to.muted { border-left-color: rgba(61,81,102,0.25); }
+  .how-to.amber { border-left-color: var(--amber); } .how-to.green { border-left-color: var(--green); } .how-to.muted { border-left-color: rgba(61,81,102,0.25); }
   .how-to strong { color: var(--primary); font-weight: 700; }
   code { font-family: var(--mono); background: rgba(26,158,158,0.07); border: 1px solid var(--cyan-border); padding: 1px 5px; border-radius: 3px; font-size: 12px; color: var(--cyan); }
-
   .menu-item-card { background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 10px; display: flex; gap: 16px; align-items: flex-start; }
   .menu-item-name { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--primary); background: var(--cyan-dim); border: 1px solid var(--cyan-border); padding: 4px 10px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
   .menu-item-desc { font-size: 14px; color: var(--body); line-height: 1.6; }
   .menu-item-desc strong { color: var(--primary); }
   .menu-group-label { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin: 24px 0 10px; }
-
   .setup-step { background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 10px; display: flex; gap: 16px; align-items: flex-start; }
   .setup-step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: white; font-family: var(--mono); font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
   .setup-step-body { flex: 1; }
   .setup-step-title { font-family: var(--serif); font-size: 17px; font-weight: 600; margin-bottom: 5px; color: var(--primary); }
   .setup-step-desc { font-size: 13px; color: var(--body); line-height: 1.65; }
-
   .checklist { display: flex; flex-direction: column; gap: 2px; margin-bottom: 28px; }
   .check-item { display: flex; align-items: flex-start; gap: 14px; padding: 15px 18px; background: var(--cream); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
-  .check-item:first-child { border-radius: 8px 8px 0 0; }
-  .check-item:last-child { border-radius: 0 0 8px 8px; }
-  .check-item:not(:first-child) { border-top: none; }
+  .check-item:first-child { border-radius: 8px 8px 0 0; } .check-item:last-child { border-radius: 0 0 8px 8px; } .check-item:not(:first-child) { border-top: none; }
   .check-item:hover { background: white; z-index: 1; position: relative; }
   .check-item.checked { background: var(--green-dim); border-color: var(--green-border); z-index: 1; position: relative; }
   .check-box { width: 19px; height: 19px; border: 1px solid var(--border); border-radius: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px; transition: all 0.2s; background: white; }
@@ -136,16 +177,13 @@
   .check-text { font-size: 14px; color: var(--body); line-height: 1.5; }
   .check-item.checked .check-text { color: var(--primary); }
   .check-key { font-family: var(--mono); font-size: 11px; color: var(--cyan); display: block; margin-bottom: 2px; font-weight: 700; }
-
   .complete-banner { display: none; padding: 18px 22px; background: var(--green-dim); border: 1px solid var(--green-border); border-radius: 6px; font-family: var(--serif); font-style: italic; font-size: 19px; color: var(--green); text-align: center; margin-bottom: 20px; }
-
-  .nav-row { display: flex; justify-content: space-between; align-items: center; padding-top: 28px; border-top: 1px dashed var(--cyan-border); margin-top: 8px; }
+  .nav-row { display: flex; justify-content: space-between; align-items: center; padding-top: 28px; border-top: 1px dashed var(--cyan-border); margin-top: 8px; max-width: 900px; }
   .btn { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; padding: 10px 22px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s; }
   .btn-back { background: transparent; border: 1px solid var(--border); color: var(--muted); }
   .btn-back:hover { border-color: var(--cyan-border); color: var(--body); }
   .btn-next { background: var(--primary); color: white; }
   .btn-next:hover { background: #1A3347; }
-
   .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
   .legend-item { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
   .legend-dot { width: 7px; height: 7px; border-radius: 50%; }
@@ -154,25 +192,21 @@
 <body>
 <div class="grain-overlay"></div>
 <div class="layout">
-
   <aside class="sidebar">
     <div class="sidebar-watermark">Parse</div>
     <div class="sidebar-brand">
       <h1>Bill Parser <em>Setup Guide</em></h1>
-      <div class="sidebar-pills">
-        <span class="pill pill-cyan">GPM Property Mgmt</span>
-        <span class="pill pill-white">v1.0</span>
-      </div>
+      <div class="sidebar-pills"><span class="pill pill-cyan">GPM Property Mgmt</span><span class="pill pill-white">v1.0</span></div>
     </div>
     <div class="washi"></div>
     <p class="sidebar-desc">Follow these steps to configure and launch your Bill Parser instance. About 15 minutes.</p>
     <nav class="step-nav">
-      <div class="step-nav-item active" onclick="goTo(0)"><span class="step-num">01</span><span class="step-label">Overview</span><span class="step-dot"></span></div>
-      <div class="step-nav-item" onclick="goTo(1)"><span class="step-num">02</span><span class="step-label">Your Properties</span><span class="step-dot"></span></div>
-      <div class="step-nav-item" onclick="goTo(2)"><span class="step-num">03</span><span class="step-label">Carry Over</span><span class="step-dot"></span></div>
-      <div class="step-nav-item" onclick="goTo(3)"><span class="step-num">04</span><span class="step-label">Auto Props</span><span class="step-dot"></span></div>
-      <div class="step-nav-item" onclick="goTo(4)"><span class="step-num">05</span><span class="step-label">Menu Setup</span><span class="step-dot"></span></div>
-      <div class="step-nav-item" onclick="goTo(5)"><span class="step-num">06</span><span class="step-label">Launch</span><span class="step-dot"></span></div>
+      <div class="step-nav-item active" onclick="goTo(0)"><span class="snav-num">01</span><span class="snav-label">Overview</span><span class="snav-dot"></span></div>
+      <div class="step-nav-item" onclick="goTo(1)"><span class="snav-num">02</span><span class="snav-label">Your Properties</span><span class="snav-dot"></span></div>
+      <div class="step-nav-item" onclick="goTo(2)"><span class="snav-num">03</span><span class="snav-label">Carry Over</span><span class="snav-dot"></span></div>
+      <div class="step-nav-item" onclick="goTo(3)"><span class="snav-num">04</span><span class="snav-label">Auto Props</span><span class="snav-dot"></span></div>
+      <div class="step-nav-item" onclick="goTo(4)"><span class="snav-num">05</span><span class="snav-label">Menu Setup</span><span class="snav-dot"></span></div>
+      <div class="step-nav-item" onclick="goTo(5)"><span class="snav-num">06</span><span class="snav-label">Launch</span><span class="snav-dot"></span></div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-footer-label">Questions</div>
@@ -195,215 +229,204 @@
       <div class="overview-grid">
         <div class="overview-card"><div class="overview-card-num">What it does</div><div class="overview-card-title">Automated Bill Parsing</div><div class="overview-card-desc">You drop utility bill PDFs into a Google Drive folder. The system reads them, extracts the key data (usage, cost, dates), and writes each one to the right tab in your Google Sheet automatically.</div></div>
         <div class="overview-card"><div class="overview-card-num">How it runs</div><div class="overview-card-title">Runs Every 15 Minutes</div><div class="overview-card-desc">A time-driven trigger checks your Drive folder every 15 minutes. Any new files get picked up and processed without you doing anything. You receive a daily email summary of what was processed.</div></div>
-        <div class="overview-card"><div class="overview-card-num">Where results go</div><div class="overview-card-title">Three Output Tabs</div><div class="overview-card-desc">Parsed bills are written to one of three tabs based on bill type: Electricity, NaturalGas, or Water. The dashboard gives you a live view of processing status.</div></div>
-        <div class="overview-card"><div class="overview-card-num">When something needs review</div><div class="overview-card-title">Review Queue</div><div class="overview-card-desc">If the system can't confidently parse a bill, it goes to the Review Queue tab for manual review. You'll get an email alert when this happens.</div></div>
+        <div class="overview-card"><div class="overview-card-num">Where results go</div><div class="overview-card-title">Three Output Tabs</div><div class="overview-card-desc">Parsed bills are written to one of three tabs: Electricity, NaturalGas, or Water. The dashboard gives you a live view of processing status.</div></div>
+        <div class="overview-card"><div class="overview-card-num">When something needs review</div><div class="overview-card-title">Review Queue</div><div class="overview-card-desc">If the system can't confidently parse a bill it goes to the Review Queue tab for manual review. You'll get an email alert when this happens.</div></div>
       </div>
 
-      <div class="viz-embed">
-        <div class="viz-embed-label">System Architecture — Click any node to trace its path</div>
-        <iframe src="/proposals/gpm-bill-parser-viz" title="Bill Parser System Visualization" loading="lazy"></iframe>
+      <div class="viz-section-label">System Architecture</div>
+
+      <div class="viz-topology">
+        <div class="viz-legend">
+          <div class="viz-legend-title">Legend</div>
+          <div class="viz-legend-item"><div class="viz-legend-dot system"></div>System component</div>
+          <div class="viz-legend-item"><div class="viz-legend-dot ai"></div>AI processing</div>
+          <div class="viz-legend-item"><div class="viz-legend-dot output"></div>Output / storage</div>
+          <div class="viz-legend-item"><div class="viz-legend-dot user"></div>End user</div>
+          <div class="viz-layer-labels">
+            <div class="viz-layer-label">① Intake</div>
+            <div class="viz-layer-label">② Processing</div>
+            <div class="viz-layer-label">③ AI Engine</div>
+            <div class="viz-layer-label">④ Output</div>
+          </div>
+          <div class="viz-click-hint">Click any node to trace its path.</div>
+        </div>
+        <div class="viz-canvas-wrap">
+          <div class="viz-canvas" id="vizCanvas">
+            <div class="viz-col-divider" style="left:22%;"></div>
+            <div class="viz-col-divider" style="left:48%;"></div>
+            <div class="viz-col-divider" style="left:72%;"></div>
+            <div class="viz-col-label" style="left:11%;">① Intake</div>
+            <div class="viz-col-label" style="left:35%;">② Processing</div>
+            <div class="viz-col-label" style="left:60%;">③ AI Engine</div>
+            <div class="viz-col-label" style="left:86%;">④ Output</div>
+            <svg class="viz-svg" viewBox="0 0 900 460" preserveAspectRatio="xMidYMid meet">
+              <path id="vp-drive-gas" class="vline" d="M 155 148 C 198 148, 212 178, 236 178"/>
+              <path id="vp-gas-queue" class="vline" d="M 352 178 C 392 178, 402 200, 432 200"/>
+              <path id="vp-queue-p1" class="vline" d="M 544 185 C 578 185, 586 152, 612 152"/>
+              <path id="vp-queue-p2" class="vline" d="M 544 215 C 578 215, 586 255, 612 255"/>
+              <path id="vp-p1-verify" class="vline" d="M 748 152 C 785 152, 796 198, 796 230 C 796 295, 778 330, 762 342"/>
+              <path id="vp-p2-verify" class="vline" d="M 748 255 C 775 255, 780 295, 762 335"/>
+              <path id="vp-verify-sheet" class="vline" d="M 720 362 C 695 388, 658 402, 620 402 C 592 402, 560 396, 534 390"/>
+              <path id="vp-verify-review" class="vline" d="M 686 362 C 658 368, 624 372, 590 372 C 556 372, 514 370, 482 366"/>
+              <path id="vp-sheet-brian" class="vline" d="M 494 402 C 455 402, 398 394, 350 382 C 302 370, 242 354, 200 336 C 170 322, 152 310, 148 300"/>
+              <path id="vp-gas-alert" class="vline" d="M 305 210 C 303 258, 282 286, 260 308 C 240 324, 202 334, 176 340"/>
+              <circle r="5" class="vpkt"><animateMotion dur="3.8s" repeatCount="indefinite" begin="0s" path="M 155 148 C 198 148, 212 178, 236 178 C 392 178, 402 200, 432 200 C 544 200, 578 185, 612 152"/></circle>
+              <circle r="5" class="vpkt"><animateMotion dur="3.8s" repeatCount="indefinite" begin="1.5s" path="M 155 148 C 198 148, 212 178, 236 178 C 392 178, 402 200, 432 200 C 544 200, 578 185, 612 152"/></circle>
+              <circle r="5" class="vpkt-p"><animateMotion dur="4.4s" repeatCount="indefinite" begin="0.7s" path="M 612 152 C 748 152, 785 152, 796 198 C 796 295, 762 342, 720 362 C 658 402, 592 402, 534 390"/></circle>
+              <circle r="5" class="vpkt-p"><animateMotion dur="4.4s" repeatCount="indefinite" begin="2.2s" path="M 612 255 C 748 255, 775 255, 775 295 C 775 320, 762 335, 720 362 C 658 402, 592 402, 534 390"/></circle>
+            </svg>
+            <div id="vn-drive" class="vnode" style="left:3%;top:116px;width:135px;" onclick="vizTrace('drive')"><div class="vn-label">Intake</div><div class="vn-title">Google Drive Folder</div><div class="vn-sub">PDFs dropped here · watched every 15 min</div></div>
+            <div id="vn-gas" class="vnode" style="left:24%;top:152px;width:130px;" onclick="vizTrace('gas')"><div class="vn-label">Orchestrator</div><div class="vn-title">Apps Script Trigger</div><div class="vn-sub">fires every 15 min · classifies + queues</div></div>
+            <div id="vn-queue" class="vnode" style="left:46%;top:174px;width:126px;" onclick="vizTrace('queue')"><div class="vn-label">Queue</div><div class="vn-title">Queue Manager</div><div class="vn-sub">batches files · chains triggers</div></div>
+            <div id="vn-p1" class="vnode ai" style="left:65%;top:118px;width:138px;" onclick="vizTrace('pass1')"><div class="vn-label">AI · Pass 1</div><div class="vn-title">Claude API</div><div class="vn-sub">primary extraction · usage, cost, dates</div></div>
+            <div id="vn-p2" class="vnode ai" style="left:65%;top:222px;width:138px;" onclick="vizTrace('pass2')"><div class="vn-label">AI · Pass 2</div><div class="vn-title">Claude API</div><div class="vn-sub">independent validation · cross-checks pass 1</div></div>
+            <div id="vn-verify" class="vnode" style="left:76%;top:318px;width:126px;" onclick="vizTrace('verify')"><div class="vn-label">Conflict Check</div><div class="vn-title">Verifier</div><div class="vn-sub">compares passes · routes to sheet or review</div></div>
+            <div id="vn-sheet" class="vnode" style="left:52%;top:368px;width:146px;" onclick="vizTrace('sheet')"><div class="vn-label">Output</div><div class="vn-title">Google Sheet</div><div class="vn-sub">Electricity / NaturalGas / Water tabs</div></div>
+            <div id="vn-review" class="vnode" style="left:36%;top:344px;width:134px;" onclick="vizTrace('review')"><div class="vn-label">Fallback</div><div class="vn-title">Review Queue</div><div class="vn-sub">conflict or error · manual review</div></div>
+            <div id="vn-brian" class="vnode user" style="left:3%;top:278px;width:135px;" onclick="vizTrace('brian')"><div class="vn-label">End Users</div><div class="vn-title">Bryan &amp; Adrian</div><div class="vn-sub">daily digest · dashboard · review queue</div></div>
+          </div>
+        </div>
       </div>
 
-      <div class="img-block">
-        <div class="img-block-label">Script Properties — What a correctly configured project looks like</div>
-        <img src="/assets/images/bill-parser-script-properties.png" alt="Script Properties correctly configured" />
+      <div class="viz-lifecycle">
+        <div class="viz-lc-header"><div class="viz-lc-grad"></div><div class="viz-lc-title">System Lifecycle</div><div class="viz-lc-count">8 steps · click to expand</div></div>
+        <div class="vrow" onclick="vlc(this)"><div class="vtrig"><div class="vnum">01</div><div class="vtitle">PDF Drop</div><span class="vtag">Intake</span><div class="varrow">›</div></div><div class="vbody"><div class="vcontent">Bryan or Adrian uploads utility bill PDFs to the designated Google Drive folder. No naming convention required — the system reads file content, not filenames. Files can be dropped at any time and will be picked up on the next trigger cycle.</div></div></div>
+        <div class="vrow" onclick="vlc(this)"><div class="vtrig"><div class="vnum">02</div><div class="vtitle">Trigger Fires</div><span class="vtag">Apps Script</span><div class="varrow">›</div></div><div class="vbody"><div class="vcontent">Every 15 minutes, a time-driven Google Apps Script trigger scans the Drive folder for new PDFs. It compares incoming files against a processed file cache and ignores duplicates. New files are classified and loaded into the queue.</div></div></div>
+        <div class="vrow" onclick="vlc(this)"><div class="vtrig"><div class="vnum">03</div><div class="vtitle">Queue &amp; Classify</div><span class="vtag">Apps Script</span><div class="varrow">›</div></div><div class="vbody"><div class="vcontent">Standard bills go into the main queue, multi-entity bills go into a separate queue. The Queue Manager batches files one at a time to stay within Google's execution limits, using continuation triggers to chain runs automatically for large batches.</div></div></div>
+        <div class="vrow open" onclick="vlc(this)"><div class="vtrig"><div class="vnum">04</div><div class="vtitle">Pass 1 — Extract</div><span class="vtag">AI Engine</span><div class="varrow">›</div></div><div class="vbody"><div class="vcontent">The PDF is sent to the Claude API for primary extraction. Claude reads the bill and extracts bill type, account number, property address, billing period dates, usage amount, total cost, demand charges, and whether the bill is an estimate. Large files over 800KB get an automatic delay between passes.</div></div></div>
+        <div class="vrow" onclick="vlc(this)"><div class="vtrig"><div class="vnum">05</div><div class="vtitle">Pass 2 — Validate</div><span class="vtag">AI Engine</span><div class="varrow">›</div></div><div class="vbody"><div class="vcontent">A second independent Claude API call re-reads the same bill without seeing Pass 1's output. Two passes catch OCR ambiguities, formatting edge cases, and occasional misreads — especially on usage figures and billing period dates where a one-digit error would compound over time.</div></div></div>
+        <div class="vrow" onclick="vlc(this)"><div class="vtrig"><div class="vnum">06</div><div class="vtitle">Conflict Check</div><span class="vtag">Verifier</span><div class="varrow">›</div></div><div class="vbody"><div class="vcontent">The Verifier compares every field between Pass 1 and Pass 2. If both agree, data goes to the Google Sheet. If any field conflicts, the bill goes to the Review Queue and Bryan receives an email showing exactly which fields disagreed. Nothing ambiguous goes into the sheet automatically.</div></div></div>
+        <div class="vrow" onclick="vlc(this)"><div class="vtrig"><div class="vnum">07</div><div class="vtitle">Sheet Write</div><span class="vtag">Output</span><div class="varrow">›</div></div><div class="vbody"><div class="vcontent">Verified data is written to the correct tab — Electricity, NaturalGas, or Water — based on the bill type extracted by the AI. Each row includes the full extracted fields, a Duplicate flag, a verification formula, and a link back to the original PDF in Drive.</div></div></div>
+        <div class="vrow final" onclick="vlc(this)"><div class="vtrig"><div class="vnum">08</div><div class="vtitle">Daily Summary</div><span class="vtag">Delivery</span><div class="varrow">›</div></div><div class="vbody"><div class="vcontent">At 6pm every day, Bryan and Adrian receive an email digest showing how many bills were processed, how many are pending in the Review Queue, and the current collection status for each account. The dashboard is available anytime at the web app URL. No manual data entry required.</div></div></div>
       </div>
-      <div class="info-block">
-        <strong>Setup takes about 15 minutes.</strong> You'll move through four configuration steps: entering your own script properties, pasting in two carry-over values from Keyona, reviewing the auto-managed properties (no action needed), and then running the setup steps from the Bill Parser menu in your Google Sheet.
+
+      <div class="content-wrap">
+        <div class="info-block"><strong>Setup takes about 15 minutes.</strong> You'll move through four configuration steps: entering your own script properties, pasting in two carry-over values from Keyona, reviewing the auto-managed properties (no action needed), and then running the setup steps from the Bill Parser menu in your Google Sheet.</div>
+        <div class="nav-row"><span></span><button class="btn btn-next" onclick="goTo(1)">Next: Your Properties →</button></div>
       </div>
-      <div class="nav-row"><span></span><button class="btn btn-next" onclick="goTo(1)">Next: Your Properties →</button></div>
     </div>
 
     <!-- STEP 2: YOUR PROPERTIES -->
     <div class="step-section" id="step-1">
       <div class="step-header">
         <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">02</span></div>
-        <div class="step-title-block">
-          <div class="gradient-line"></div>
-          <h2>Your Script Properties</h2>
-          <p>These are the values only you can provide. Open Script Properties in Apps Script and add each one below.</p>
-        </div>
+        <div class="step-title-block"><div class="gradient-line"></div><h2>Your Script Properties</h2><p>These are the values only you can provide. Open Script Properties in Apps Script and add each one below.</p></div>
       </div>
-      <div class="info-block"><strong>How to open Script Properties:</strong> In your Google Sheet, click Extensions → Apps Script. In the editor, click the gear icon (Project Settings) in the left sidebar. Scroll down to Script Properties and click Edit script properties.</div>
-      <div class="prop-list">
-        <div class="prop required">
-          <div class="prop-head"><span class="prop-key">CLAUDE_API_KEY</span><span class="prop-tag tag-required">Required</span></div>
-          <div class="prop-body">
-            <p class="prop-desc">The Anthropic API key that powers both bill extraction passes. This is the only AI key the system needs.</p>
-            <div class="how-to"><strong>Where to get it:</strong><br>1. Go to <strong>console.anthropic.com</strong><br>2. Sign in or create a free account<br>3. Click <strong>API Keys</strong> in the left menu<br>4. Click <strong>Create Key</strong>, name it "Bill Parser"<br>5. Copy the key (starts with <code>sk-ant-api03-...</code>) — shown once only<br>6. Paste as the value for <code>CLAUDE_API_KEY</code></div>
-          </div>
+      <div class="content-wrap">
+        <div class="info-block"><strong>How to open Script Properties:</strong> In your Google Sheet, click Extensions → Apps Script. In the editor, click the gear icon (Project Settings) in the left sidebar. Scroll down to Script Properties and click Edit script properties.</div>
+        <div class="img-block">
+          <div class="img-block-label">Script Properties — What a correctly configured project looks like</div>
+          <img src="/assets/images/bill-parser-script-properties.png" alt="Script Properties correctly configured" />
         </div>
-        <div class="prop required">
-          <div class="prop-head"><span class="prop-key">ALERT_EMAIL_PRIMARY</span><span class="prop-tag tag-required">Required</span></div>
-          <div class="prop-body">
-            <p class="prop-desc">The main email that receives all daily summaries and error alerts.</p>
-            <div class="how-to"><strong>Set this to:</strong> Your main email address. Every alert and daily digest goes here.</div>
-          </div>
+        <div class="prop-list">
+          <div class="prop required"><div class="prop-head"><span class="prop-key">CLAUDE_API_KEY</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">The Anthropic API key that powers both bill extraction passes. This is the only AI key the system needs.</p><div class="how-to"><strong>Where to get it:</strong><br>1. Go to <strong>console.anthropic.com</strong><br>2. Sign in or create a free account<br>3. Click <strong>API Keys</strong> in the left menu<br>4. Click <strong>Create Key</strong>, name it "Bill Parser"<br>5. Copy the key (starts with <code>sk-ant-api03-...</code>) — shown once only<br>6. Paste as the value for <code>CLAUDE_API_KEY</code></div></div></div>
+          <div class="prop required"><div class="prop-head"><span class="prop-key">ALERT_EMAIL_PRIMARY</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">The main email that receives all daily summaries and error alerts.</p><div class="how-to"><strong>Set this to:</strong> Your main email address. Every alert and daily digest goes here.</div></div></div>
+          <div class="prop optional"><div class="prop-head"><span class="prop-key">ALERT_EMAIL_SECONDARY</span><span class="prop-tag tag-optional">Optional</span></div><div class="prop-body"><p class="prop-desc">A second email that also receives all alerts and summaries. Skip entirely if you only need one recipient — do not add this property with an empty value.</p><div class="how-to muted"><strong>Set this to:</strong> One additional email. Example: <code>manager@yourcompany.com</code><br><br>You can always add this later if needed.</div></div></div>
+          <div class="prop required"><div class="prop-head"><span class="prop-key">SHEET_ID</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">The Google Sheet where parsed bill data is written and the dashboard reads from.</p><div class="how-to"><strong>How to find it:</strong><br>1. Open your Google Sheet<br>2. Look at the URL:<br><code>docs.google.com/spreadsheets/d/<strong>[THIS PART]</strong>/edit</code><br>3. Copy the long string between <code>/d/</code> and <code>/edit</code><br>4. Paste as the value for <code>SHEET_ID</code></div></div></div>
+          <div class="prop required"><div class="prop-head"><span class="prop-key">DRIVE_FOLDER_ID</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">The Google Drive folder where utility bill PDFs are dropped for processing.</p><div class="how-to"><strong>How to find it:</strong><br>1. Open the Drive folder shared with you, or create a new one<br>2. Look at the URL:<br><code>drive.google.com/drive/folders/<strong>[THIS PART]</strong></code><br>3. Copy the long string at the end<br>4. Paste as the value for <code>DRIVE_FOLDER_ID</code></div></div></div>
         </div>
-        <div class="prop optional">
-          <div class="prop-head"><span class="prop-key">ALERT_EMAIL_SECONDARY</span><span class="prop-tag tag-optional">Optional</span></div>
-          <div class="prop-body">
-            <p class="prop-desc">A second email that also receives all alerts and summaries. Skip entirely if you only need one recipient — do not add this property with an empty value.</p>
-            <div class="how-to muted"><strong>Set this to:</strong> One additional email. Example: <code>manager@yourcompany.com</code><br><br>You can always add this later if needed.</div>
-          </div>
-        </div>
-        <div class="prop required">
-          <div class="prop-head"><span class="prop-key">SHEET_ID</span><span class="prop-tag tag-required">Required</span></div>
-          <div class="prop-body">
-            <p class="prop-desc">The Google Sheet where parsed bill data is written and the dashboard reads from.</p>
-            <div class="how-to"><strong>How to find it:</strong><br>1. Open your Google Sheet<br>2. Look at the URL:<br><code>docs.google.com/spreadsheets/d/<strong>[THIS PART]</strong>/edit</code><br>3. Copy the long string between <code>/d/</code> and <code>/edit</code><br>4. Paste as the value for <code>SHEET_ID</code></div>
-          </div>
-        </div>
-        <div class="prop required">
-          <div class="prop-head"><span class="prop-key">DRIVE_FOLDER_ID</span><span class="prop-tag tag-required">Required</span></div>
-          <div class="prop-body">
-            <p class="prop-desc">The Google Drive folder where utility bill PDFs are dropped for processing.</p>
-            <div class="how-to"><strong>How to find it:</strong><br>1. Open the Drive folder shared with you, or create a new one<br>2. Look at the URL:<br><code>drive.google.com/drive/folders/<strong>[THIS PART]</strong></code><br>3. Copy the long string at the end<br>4. Paste as the value for <code>DRIVE_FOLDER_ID</code></div>
-          </div>
-        </div>
+        <div class="nav-row"><button class="btn btn-back" onclick="goTo(0)">← Back</button><button class="btn btn-next" onclick="goTo(2)">Next: Carry Over →</button></div>
       </div>
-      <div class="nav-row"><button class="btn btn-back" onclick="goTo(0)">← Back</button><button class="btn btn-next" onclick="goTo(2)">Next: Carry Over →</button></div>
     </div>
 
     <!-- STEP 3: CARRY OVER -->
     <div class="step-section" id="step-2">
       <div class="step-header">
         <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">03</span></div>
-        <div class="step-title-block">
-          <div class="gradient-line"></div>
-          <h2>Carry Over Values</h2>
-          <p>These two values come directly from Keyona. Do not look these up yourself — paste them exactly as provided.</p>
-        </div>
+        <div class="step-title-block"><div class="gradient-line"></div><h2>Carry Over Values</h2><p>These two values come directly from Keyona. Do not look these up yourself — paste them exactly as provided.</p></div>
       </div>
-      <div class="prop-list">
-        <div class="prop carry-over">
-          <div class="prop-head"><span class="prop-key">FINGERPRINTS_JSON</span><span class="prop-tag tag-carry">Carry Over</span></div>
-          <div class="prop-body"><p class="prop-desc">Known bill layout signatures for each utility provider. Enables fast, accurate parsing of bills the system has seen before.</p><div class="how-to amber">Paste the value exactly as provided by Keyona. Do not modify it.</div></div>
+      <div class="content-wrap">
+        <div class="prop-list">
+          <div class="prop carry-over"><div class="prop-head"><span class="prop-key">FINGERPRINTS_JSON</span><span class="prop-tag tag-carry">Carry Over</span></div><div class="prop-body"><p class="prop-desc">Known bill layout signatures for each utility provider. Enables fast, accurate parsing of bills the system has seen before.</p><div class="how-to amber">Paste the value exactly as provided by Keyona. Do not modify it.</div></div></div>
+          <div class="prop carry-over"><div class="prop-head"><span class="prop-key">PROVIDERS_JSON</span><span class="prop-tag tag-carry">Carry Over</span></div><div class="prop-body"><p class="prop-desc">All known utility providers and their account structures. Allows the system to categorize bills by type automatically.</p><div class="how-to amber">Paste the value exactly as provided by Keyona. Do not modify it.</div></div></div>
         </div>
-        <div class="prop carry-over">
-          <div class="prop-head"><span class="prop-key">PROVIDERS_JSON</span><span class="prop-tag tag-carry">Carry Over</span></div>
-          <div class="prop-body"><p class="prop-desc">All known utility providers and their account structures. Allows the system to categorize bills by type automatically.</p><div class="how-to amber">Paste the value exactly as provided by Keyona. Do not modify it.</div></div>
-        </div>
+        <div class="nav-row"><button class="btn btn-back" onclick="goTo(1)">← Back</button><button class="btn btn-next" onclick="goTo(3)">Next: Auto Props →</button></div>
       </div>
-      <div class="nav-row"><button class="btn btn-back" onclick="goTo(1)">← Back</button><button class="btn btn-next" onclick="goTo(3)">Next: Auto Props →</button></div>
     </div>
 
     <!-- STEP 4: AUTO PROPS -->
     <div class="step-section" id="step-3">
       <div class="step-header">
         <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">04</span></div>
-        <div class="step-title-block">
-          <div class="gradient-line"></div>
-          <h2>Auto-Managed Properties</h2>
-          <p>For your reference only. The system creates and manages all of these — you will never need to add or edit them.</p>
+        <div class="step-title-block"><div class="gradient-line"></div><h2>Auto-Managed Properties</h2><p>For your reference only. The system creates and manages all of these — you will never need to add or edit them.</p></div>
+      </div>
+      <div class="content-wrap">
+        <div class="no-action-banner"><div class="no-action-icon">✋</div><div><div class="no-action-text">No action needed on this page.</div><div class="no-action-sub">All properties below are created automatically the first time the system runs. Do not add them manually — Google Apps Script will not save a property with an empty value, and pre-creating these will cause errors.</div></div></div>
+        <div class="prop-list">
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_STATUS</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Whether the standard bill processing queue is running or idle.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_FILES</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">JSON array of files currently in the processing queue.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_TOTAL</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Total file count for the current run.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_PROCESSED</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">How many files have been processed in the current run.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_FAILED</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">How many files failed in the current run.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_MODE</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Whether the queue is in normal or retry mode.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_STARTED_AT</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Timestamp of when the current run started.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">ME_QUEUE_STATUS</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Status flag for the multi-entity file queue.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">ME_QUEUE_FILES</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">JSON array of multi-entity files pending processing.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">ME_QUEUE_TOTAL</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Total multi-entity file count for the current run.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">ME_QUEUE_PROCESSED</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">How many multi-entity files have been processed.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">ME_QUEUE_FAILED</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">How many multi-entity files failed.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">PROCESSED_FILE_IDS</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">JSON array of Drive file IDs already processed. Prevents duplicate parsing.</p></div></div>
+          <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">TEMPLATES_JSON</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Template thumbnail registry. Populated when you run Render Template Thumbnails from the Bill Parser menu.</p></div></div>
         </div>
+        <div class="nav-row"><button class="btn btn-back" onclick="goTo(2)">← Back</button><button class="btn btn-next" onclick="goTo(4)">Next: Menu Setup →</button></div>
       </div>
-      <div class="no-action-banner">
-        <div class="no-action-icon">✋</div>
-        <div>
-          <div class="no-action-text">No action needed on this page.</div>
-          <div class="no-action-sub">All properties below are created automatically the first time the system runs. Do not add them manually — Google Apps Script will not save a property with an empty value, and pre-creating these will cause errors.</div>
-        </div>
-      </div>
-      <div class="prop-list">
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_STATUS</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Whether the standard bill processing queue is running or idle.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_FILES</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">JSON array of files currently in the processing queue.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_TOTAL</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Total file count for the current run.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_PROCESSED</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">How many files have been processed in the current run.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_FAILED</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">How many files failed in the current run.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_MODE</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Whether the queue is in normal or retry mode.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">QUEUE_STARTED_AT</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Timestamp of when the current run started.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">ME_QUEUE_STATUS</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Status flag for the multi-entity file queue.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">ME_QUEUE_FILES</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">JSON array of multi-entity files pending processing.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">ME_QUEUE_TOTAL</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Total multi-entity file count for the current run.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">ME_QUEUE_PROCESSED</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">How many multi-entity files have been processed.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">ME_QUEUE_FAILED</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">How many multi-entity files failed.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">PROCESSED_FILE_IDS</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">JSON array of Drive file IDs already processed. Prevents duplicate parsing.</p></div></div>
-        <div class="prop auto-prop"><div class="prop-head"><span class="prop-key">TEMPLATES_JSON</span><span class="prop-tag tag-auto">Auto</span></div><div class="prop-body"><p class="prop-desc">Template thumbnail registry. Populated when you run Render Template Thumbnails from the Bill Parser menu.</p></div></div>
-      </div>
-      <div class="nav-row"><button class="btn btn-back" onclick="goTo(2)">← Back</button><button class="btn btn-next" onclick="goTo(4)">Next: Menu Setup →</button></div>
     </div>
 
     <!-- STEP 5: MENU SETUP -->
     <div class="step-section" id="step-4">
       <div class="step-header">
         <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">05</span></div>
-        <div class="step-title-block">
-          <div class="gradient-line"></div>
-          <h2>Menu Setup</h2>
-          <p>Once your Script Properties are saved, go back to your Google Sheet. After refreshing, a Bill Parser menu will appear in the top menu bar. Run these three steps in order.</p>
-        </div>
+        <div class="step-title-block"><div class="gradient-line"></div><h2>Menu Setup</h2><p>Once your Script Properties are saved, go back to your Google Sheet. After refreshing, a Bill Parser menu will appear in the top menu bar. Run these three steps in order.</p></div>
       </div>
-      <div class="img-block">
-        <div class="img-block-label">What your Google Sheet tabs will look like after Setup Sheets</div>
-        <img src="/assets/images/bill-parser-sheet-tabs.png" alt="Google Sheet tabs after setup" />
+      <div class="content-wrap">
+        <div class="img-block"><div class="img-block-label">What your Google Sheet tabs will look like after Setup Sheets</div><img src="/assets/images/bill-parser-sheet-tabs.png" alt="Google Sheet tabs after setup" /></div>
+        <div class="setup-step"><div class="setup-step-num">1</div><div class="setup-step-body"><div class="setup-step-title">Run Setup Sheets</div><div class="setup-step-desc">In your Google Sheet, click <strong>Bill Parser → Setup Sheets</strong>. This creates all required tabs: Electricity, NaturalGas, Water, Review Queue, Run Status, and more. You only need to do this once. A confirmation dialog will appear when done.</div></div></div>
+        <div class="setup-step"><div class="setup-step-num">2</div><div class="setup-step-body"><div class="setup-step-title">Run Setup Trigger</div><div class="setup-step-desc">Click <strong>Bill Parser → Setup Trigger</strong>. This installs two automated triggers: one that checks your Drive folder for new bills every 15 minutes, and one that sends a daily summary email at 6pm. Without this step the system will not run automatically.</div></div></div>
+        <div class="setup-step"><div class="setup-step-num">3</div><div class="setup-step-body"><div class="setup-step-title">Deploy the Web App</div><div class="setup-step-desc">Go back to Apps Script. Click <strong>Deploy → New Deployment</strong>. Set type to Web App. Set Execute as to <strong>Me</strong> and Who has access to <strong>Anyone</strong>. Click Deploy and copy the <code>/exec</code> URL — that is your dashboard link.</div></div></div>
+        <div class="menu-group-label">Full Bill Parser Menu Reference</div>
+        <div class="menu-item-card"><div class="menu-item-name">Run Now</div><div class="menu-item-desc">Manually triggers a processing run immediately. Scans the Drive folder for new PDFs and processes them. Use this when you've just dropped new bills and don't want to wait for the 15-minute trigger.</div></div>
+        <div class="menu-item-card"><div class="menu-item-name">Retry Pending Review Queue</div><div class="menu-item-desc">Re-runs processing on any bills in the Review Queue with PENDING status. Use this after fixing a setup issue or when asked to retry a failed bill.</div></div>
+        <div class="menu-item-card"><div class="menu-item-name">Cancel Run</div><div class="menu-item-desc">Stops any active processing run and resets the queue to idle. Use this if a run appears stuck or if you need to interrupt processing for any reason.</div></div>
+        <div class="menu-item-card"><div class="menu-item-name">Generate Final File</div><div class="menu-item-desc">Exports a clean spreadsheet of all non-duplicate bills for a specific account and emails it to you. Use when you need a formatted file for reporting. <strong>Do not run this while a processing run is active.</strong></div></div>
+        <div class="menu-item-card"><div class="menu-item-name">Delete a Bill</div><div class="menu-item-desc">Removes a specific bill row from the sheet by tab type and row number, and moves it to the Trash tab. Use to clean up test entries or incorrectly parsed rows.</div></div>
+        <div class="menu-item-card"><div class="menu-item-name">Setup Sheets</div><div class="menu-item-desc">Creates all required tabs in the Google Sheet. Run once during initial setup. Safe to re-run if a tab is accidentally deleted.</div></div>
+        <div class="menu-item-card"><div class="menu-item-name">Setup Trigger</div><div class="menu-item-desc">Installs the 15-minute processing trigger and the 6pm daily summary trigger. Run once during initial setup.</div></div>
+        <div class="menu-item-card"><div class="menu-item-name">Send Daily Summary Now</div><div class="menu-item-desc">Sends the daily summary email immediately rather than waiting for 6pm. Useful for testing your alert email or getting an on-demand status report.</div></div>
+        <div class="menu-item-card"><div class="menu-item-name">Clear Processed Cache</div><div class="menu-item-desc">Resets the list of processed file IDs. Use only if you need the system to re-evaluate files it has already seen. Keyona should confirm before you run this.</div></div>
+        <div class="menu-item-card"><div class="menu-item-name">Show Dashboard URL</div><div class="menu-item-desc">Displays your web app URL in a dialog. Use this if you lose your dashboard link and need to find it again quickly.</div></div>
+        <div class="nav-row"><button class="btn btn-back" onclick="goTo(3)">← Back</button><button class="btn btn-next" onclick="goTo(5)">Next: Launch →</button></div>
       </div>
-      <div class="setup-step">
-        <div class="setup-step-num">1</div>
-        <div class="setup-step-body">
-          <div class="setup-step-title">Run Setup Sheets</div>
-          <div class="setup-step-desc">In your Google Sheet, click <strong>Bill Parser → Setup Sheets</strong>. This creates all required tabs: Electricity, NaturalGas, Water, Review Queue, Run Status, and more. You only need to do this once. A confirmation dialog will appear when done.</div>
-        </div>
-      </div>
-      <div class="setup-step">
-        <div class="setup-step-num">2</div>
-        <div class="setup-step-body">
-          <div class="setup-step-title">Run Setup Trigger</div>
-          <div class="setup-step-desc">Click <strong>Bill Parser → Setup Trigger</strong>. This installs two automated triggers: one that checks your Drive folder for new bills every 15 minutes, and one that sends a daily summary email at 6pm. Without this step the system will not run automatically.</div>
-        </div>
-      </div>
-      <div class="setup-step">
-        <div class="setup-step-num">3</div>
-        <div class="setup-step-body">
-          <div class="setup-step-title">Deploy the Web App</div>
-          <div class="setup-step-desc">Go back to Apps Script. Click <strong>Deploy → New Deployment</strong>. Set type to Web App. Set Execute as to <strong>Me</strong> and Who has access to <strong>Anyone</strong>. Click Deploy and copy the <code>/exec</code> URL — that is your dashboard link.</div>
-        </div>
-      </div>
-      <div class="menu-group-label">Full Bill Parser Menu Reference</div>
-      <div class="menu-item-card"><div class="menu-item-name">Run Now</div><div class="menu-item-desc">Manually triggers a processing run immediately. Scans the Drive folder for new PDFs and processes them. Use this when you've just dropped new bills and don't want to wait for the 15-minute trigger.</div></div>
-      <div class="menu-item-card"><div class="menu-item-name">Retry Pending Review Queue</div><div class="menu-item-desc">Re-runs processing on any bills in the Review Queue with PENDING status. Use this after fixing a setup issue or when asked to retry a failed bill.</div></div>
-      <div class="menu-item-card"><div class="menu-item-name">Cancel Run</div><div class="menu-item-desc">Stops any active processing run and resets the queue to idle. Use this if a run appears stuck or if you need to interrupt processing for any reason.</div></div>
-      <div class="menu-item-card"><div class="menu-item-name">Generate Final File</div><div class="menu-item-desc">Exports a clean spreadsheet of all non-duplicate bills for a specific account and emails it to you. Use when you need a formatted file for reporting. <strong>Do not run this while a processing run is active.</strong></div></div>
-      <div class="menu-item-card"><div class="menu-item-name">Delete a Bill</div><div class="menu-item-desc">Removes a specific bill row from the sheet by tab type and row number, and moves it to the Trash tab. Use to clean up test entries or incorrectly parsed rows.</div></div>
-      <div class="menu-item-card"><div class="menu-item-name">Setup Sheets</div><div class="menu-item-desc">Creates all required tabs in the Google Sheet. Run once during initial setup. Safe to re-run if a tab is accidentally deleted.</div></div>
-      <div class="menu-item-card"><div class="menu-item-name">Setup Trigger</div><div class="menu-item-desc">Installs the 15-minute processing trigger and the 6pm daily summary trigger. Run once during initial setup.</div></div>
-      <div class="menu-item-card"><div class="menu-item-name">Send Daily Summary Now</div><div class="menu-item-desc">Sends the daily summary email immediately rather than waiting for 6pm. Useful for testing your alert email or getting an on-demand status report.</div></div>
-      <div class="menu-item-card"><div class="menu-item-name">Clear Processed Cache</div><div class="menu-item-desc">Resets the list of processed file IDs. Use only if you need the system to re-evaluate files it has already seen. Keyona should confirm before you run this.</div></div>
-      <div class="menu-item-card"><div class="menu-item-name">Show Dashboard URL</div><div class="menu-item-desc">Displays your web app URL in a dialog. Use this if you lose your dashboard link and need to find it again quickly.</div></div>
-      <div class="nav-row"><button class="btn btn-back" onclick="goTo(3)">← Back</button><button class="btn btn-next" onclick="goTo(5)">Next: Launch →</button></div>
     </div>
 
     <!-- STEP 6: LAUNCH -->
     <div class="step-section" id="step-5">
       <div class="step-header">
         <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">06</span></div>
-        <div class="step-title-block">
-          <div class="gradient-line"></div>
-          <h2>Launch Checklist</h2>
-          <p>Check off each item. Once all are marked, you are fully configured and live.</p>
+        <div class="step-title-block"><div class="gradient-line"></div><h2>Launch Checklist</h2><p>Check off each item. Once all are marked, you are fully configured and live.</p></div>
+      </div>
+      <div class="content-wrap">
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div>Required</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--body);opacity:0.35"></div>Optional</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Carry over</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Menu step</div>
         </div>
-      </div>
-      <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div>Required</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--body);opacity:0.35"></div>Optional</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Carry over</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Menu step</div>
-      </div>
-      <div class="complete-banner" id="complete-banner">All steps complete — your Bill Parser is ready.</div>
-      <div class="checklist">
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">CLAUDE_API_KEY</span>Anthropic API key added to Script Properties</div></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">ALERT_EMAIL_PRIMARY</span>Primary alert email entered</div></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">ALERT_EMAIL_SECONDARY (optional)</span>Secondary email added if needed, or intentionally skipped</div></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">SHEET_ID</span>Sheet ID copied from your Google Sheet URL</div></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">DRIVE_FOLDER_ID</span>Drive Folder ID entered</div></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">FINGERPRINTS_JSON + PROVIDERS_JSON</span>Carry-over values pasted exactly as provided by Keyona</div></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Setup Sheets</span>Bill Parser menu → Setup Sheets completed. All tabs created.</div></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Setup Trigger</span>Bill Parser menu → Setup Trigger completed. 15-minute and daily summary triggers installed.</div></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Web App Deployed</span>Deployed from Apps Script. Dashboard /exec URL copied and saved.</div></div>
-      </div>
-      <div class="nav-row">
-        <button class="btn btn-back" onclick="goTo(4)">← Back</button>
-        <span style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;">Questions? keyona@rerev.io</span>
+        <div class="complete-banner" id="complete-banner">All steps complete — your Bill Parser is ready.</div>
+        <div class="checklist">
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">CLAUDE_API_KEY</span>Anthropic API key added to Script Properties</div></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">ALERT_EMAIL_PRIMARY</span>Primary alert email entered</div></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">ALERT_EMAIL_SECONDARY (optional)</span>Secondary email added if needed, or intentionally skipped</div></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">SHEET_ID</span>Sheet ID copied from your Google Sheet URL</div></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">DRIVE_FOLDER_ID</span>Drive Folder ID entered</div></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">FINGERPRINTS_JSON + PROVIDERS_JSON</span>Carry-over values pasted exactly as provided by Keyona</div></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Setup Sheets</span>Bill Parser menu → Setup Sheets completed. All tabs created.</div></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Setup Trigger</span>Bill Parser menu → Setup Trigger completed. 15-minute and daily summary triggers installed.</div></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Web App Deployed</span>Deployed from Apps Script. Dashboard /exec URL copied and saved.</div></div>
+        </div>
+        <div class="nav-row">
+          <button class="btn btn-back" onclick="goTo(4)">← Back</button>
+          <span style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;">Questions? keyona@rerev.io</span>
+        </div>
       </div>
     </div>
 
@@ -421,8 +444,37 @@
     const all = document.querySelectorAll('.check-item');
     const done = document.querySelectorAll('.check-item.checked');
     document.getElementById('complete-banner').style.display = done.length === all.length ? 'block' : 'none';
-    if (done.length === all.length) { document.querySelectorAll('.step-nav-item')[5].classList.add('done'); }
-    else { document.querySelectorAll('.step-nav-item')[5].classList.remove('done'); }
+    if (done.length === all.length) document.querySelectorAll('.step-nav-item')[5].classList.add('done');
+    else document.querySelectorAll('.step-nav-item')[5].classList.remove('done');
+  }
+  const vizMap = {
+    drive:  { nodes: ['vn-drive'],  paths: ['vp-drive-gas'] },
+    gas:    { nodes: ['vn-gas'],    paths: ['vp-drive-gas','vp-gas-queue','vp-gas-alert'] },
+    queue:  { nodes: ['vn-queue'],  paths: ['vp-gas-queue','vp-queue-p1','vp-queue-p2'] },
+    pass1:  { nodes: ['vn-p1'],     paths: ['vp-queue-p1','vp-p1-verify'] },
+    pass2:  { nodes: ['vn-p2'],     paths: ['vp-queue-p2','vp-p2-verify'] },
+    verify: { nodes: ['vn-verify'], paths: ['vp-p1-verify','vp-p2-verify','vp-verify-sheet','vp-verify-review'] },
+    sheet:  { nodes: ['vn-sheet'],  paths: ['vp-verify-sheet','vp-sheet-brian'] },
+    review: { nodes: ['vn-review'], paths: ['vp-verify-review'] },
+    brian:  { nodes: ['vn-brian'],  paths: ['vp-sheet-brian','vp-gas-alert'] },
+  };
+  function vizTrace(t) {
+    document.querySelectorAll('.vnode').forEach(n => n.classList.remove('active-path'));
+    document.querySelectorAll('.vline').forEach(p => p.classList.remove('active-line'));
+    const m = vizMap[t]; if (!m) return;
+    m.nodes.forEach(id => { const el=document.getElementById(id); if(el) el.classList.add('active-path'); });
+    m.paths.forEach(id => { const el=document.getElementById(id); if(el) el.classList.add('active-line'); });
+  }
+  document.getElementById('vizCanvas').addEventListener('click', function(e) {
+    if (!e.target.closest('.vnode')) {
+      document.querySelectorAll('.vnode').forEach(n => n.classList.remove('active-path'));
+      document.querySelectorAll('.vline').forEach(p => p.classList.remove('active-line'));
+    }
+  });
+  function vlc(row) {
+    const isOpen = row.classList.contains('open');
+    document.querySelectorAll('.vrow').forEach(r => r.classList.remove('open'));
+    if (!isOpen) row.classList.add('open');
   }
 </script>
 </body>
