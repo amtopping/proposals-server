@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bill Parser — GPM Property Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F0F7F7; --primary: #0D1F2D; --body-text: #3D5166; --cyan: #1A9E9E;
+    --purple: #7C3AED; --gradient: linear-gradient(90deg, #1A9E9E, #7C3AED);
+    --font-heading: 'Outfit', sans-serif; --font-body: 'Inter', sans-serif;
+    --border: rgba(13,31,45,0.1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font-body); background: var(--bg); color: var(--primary); }
+  .header-bar { background: var(--primary); padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header-gradient-line { width: 3px; height: 36px; background: var(--gradient); border-radius: 2px; flex-shrink: 0; }
+  .header-system { font-family: var(--font-heading); font-size: 16px; font-weight: 700; color: white; letter-spacing: -0.01em; }
+  .header-client { font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; margin-top: 2px; }
+  .header-tag { font-family: var(--font-heading); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); background: rgba(26,158,158,0.12); border: 1px solid rgba(26,158,158,0.25); padding: 4px 12px; border-radius: 4px; }
+  .topology-section { display: flex; border-bottom: 1px solid var(--border); }
+  .legend-sidebar { width: 180px; flex-shrink: 0; border-right: 1px solid var(--border); padding: 28px 20px; background: white; }
+  .legend-title { font-family: var(--font-heading); font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cyan); margin-bottom: 16px; }
+  .legend-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-family: var(--font-body); font-size: 11px; color: var(--body-text); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .legend-dot.system { background: white; border: 2px solid var(--primary); }
+  .legend-dot.ai { background: var(--cyan); }
+  .legend-dot.output { background: var(--bg); border: 2px solid var(--primary); }
+  .legend-dot.user { background: white; border: 2px dashed rgba(13,31,45,0.4); }
+  .layer-labels { margin-top: 28px; border-top: 1px solid var(--border); padding-top: 20px; }
+  .layer-label-item { font-family: var(--font-heading); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--body-text); opacity: 0.5; margin-bottom: 10px; }
+  .click-hint { margin-top: 28px; font-size: 11px; color: var(--body-text); opacity: 0.4; line-height: 1.6; font-style: italic; font-family: var(--font-body); }
+  .canvas-wrap { flex: 1; overflow-x: auto; }
+  .canvas { position: relative; width: 940px; height: 480px; background-image: linear-gradient(rgba(13,31,45,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(13,31,45,0.04) 1px, transparent 1px); background-size: 28px 28px; }
+  .col-divider { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(13,31,45,0.07); }
+  .col-label { position: absolute; top: 14px; font-family: var(--font-heading); font-size: 9px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--body-text); opacity: 0.28; transform: translateX(-50%); }
+  .node-card { position: absolute; background: white; border: 1.5px solid rgba(13,31,45,0.14); border-radius: 8px; box-shadow: 0 2px 8px rgba(13,31,45,0.06); padding: 10px 14px; cursor: pointer; transition: all 0.2s; user-select: none; z-index: 10; }
+  .node-card:hover { box-shadow: 0 4px 16px rgba(13,31,45,0.12); transform: translateY(-1px); border-color: var(--cyan); }
+  .node-card.ai-node { background: var(--cyan); border-color: var(--cyan); color: white; }
+  .node-card.user-node { border-style: dashed; border-color: rgba(13,31,45,0.25); }
+  .node-card.active-path { background: var(--primary) !important; border-color: var(--primary) !important; color: white !important; box-shadow: 0 4px 20px rgba(13,31,45,0.22) !important; transform: translateY(-2px) !important; }
+  .node-card.active-path .node-label { color: rgba(255,255,255,0.5) !important; }
+  .node-card.active-path .node-sub { color: rgba(255,255,255,0.55) !important; }
+  .node-label { font-family: var(--font-heading); font-size: 8px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cyan); margin-bottom: 3px; }
+  .node-card.ai-node .node-label { color: rgba(255,255,255,0.6); }
+  .node-card.user-node .node-label { color: var(--body-text); opacity: 0.5; }
+  .node-title { font-family: var(--font-heading); font-size: 11px; font-weight: 700; color: var(--primary); line-height: 1.2; }
+  .node-card.ai-node .node-title { color: white; }
+  .node-sub { font-family: var(--font-body); font-size: 9px; color: var(--body-text); margin-top: 4px; line-height: 1.4; opacity: 0.65; }
+  .node-card.ai-node .node-sub { color: rgba(255,255,255,0.7); opacity: 1; }
+  .svg-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+  .connection-line { fill: none; stroke: rgba(13,31,45,0.14); stroke-width: 1.5; transition: stroke 0.2s, stroke-width 0.2s; }
+  .connection-line.active-line { stroke: var(--cyan); stroke-width: 2.5; stroke-dasharray: 8 4; animation: dashFlow 0.5s linear infinite; }
+  @keyframes dashFlow { to { stroke-dashoffset: -12; } }
+  .packet { fill: var(--cyan); opacity: 0.65; }
+  .packet-purple { fill: var(--purple); opacity: 0.5; }
+  .lifecycle-section { background: white; }
+  .lifecycle-header { background: var(--primary); padding: 14px 40px; display: flex; align-items: center; gap: 14px; }
+  .lifecycle-gradient-line { width: 24px; height: 2px; background: var(--gradient); border-radius: 1px; }
+  .lifecycle-title { font-family: var(--font-heading); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: white; }
+  .lifecycle-count { font-family: var(--font-body); font-size: 10px; color: rgba(255,255,255,0.28); letter-spacing: 0.04em; }
+  .step-row { border-bottom: 1px solid var(--border); cursor: pointer; }
+  .step-row:last-child { border-bottom: none; }
+  .step-trigger { display: flex; align-items: center; gap: 20px; padding: 14px 40px; transition: background 0.15s; }
+  .step-row:hover .step-trigger { background: rgba(26,158,158,0.03); }
+  .step-row.open .step-trigger { background: rgba(26,158,158,0.05); }
+  .step-num { font-family: var(--font-heading); font-size: 26px; font-weight: 800; color: var(--primary); opacity: 0.07; width: 44px; flex-shrink: 0; letter-spacing: -0.03em; }
+  .step-title { font-family: var(--font-heading); font-size: 13px; font-weight: 700; color: var(--primary); flex: 1; }
+  .step-tag { font-family: var(--font-heading); font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); background: rgba(26,158,158,0.07); border: 1px solid rgba(26,158,158,0.18); padding: 3px 10px; border-radius: 3px; flex-shrink: 0; }
+  .step-arrow { font-size: 16px; color: var(--cyan); opacity: 0.35; transition: transform 0.2s, opacity 0.2s; }
+  .step-row.open .step-arrow { transform: rotate(90deg); opacity: 0.7; }
+  .step-body { display: none; padding: 0 40px 0 104px; }
+  .step-row.open .step-body { display: block; }
+  .step-content { font-family: var(--font-body); font-size: 13px; line-height: 1.75; color: var(--body-text); padding: 12px 0 20px; border-top: 1px solid var(--border); max-width: 640px; }
+  .step-row.final { background: var(--primary); }
+  .step-row.final:hover .step-trigger { background: rgba(255,255,255,0.03); }
+  .step-row.final.open .step-trigger { background: rgba(255,255,255,0.05); }
+  .step-row.final .step-num { color: white; opacity: 0.1; }
+  .step-row.final .step-title { color: white; }
+  .step-row.final .step-tag { color: var(--cyan); border-color: rgba(26,158,158,0.3); background: rgba(26,158,158,0.1); }
+  .step-row.final .step-arrow { color: var(--cyan); }
+  .step-row.final .step-content { border-top-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.55); }
+  .footer { background: var(--bg); border-top: 1px solid var(--border); padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-left { font-family: var(--font-heading); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--body-text); opacity: 0.35; }
+  .footer-gradient { width: 48px; height: 2px; background: var(--gradient); border-radius: 1px; }
+</style>
+</head>
+<body>
+
+<div class="header-bar">
+  <div class="header-left">
+    <div class="header-gradient-line"></div>
+    <div>
+      <div class="header-system">Bill Parser Automation</div>
+      <div class="header-client">Bryan &amp; Adrian · GPM Property Management</div>
+    </div>
+  </div>
+  <div class="header-tag">Built by ReRev Labs</div>
+</div>
+
+<div class="topology-section">
+  <div class="legend-sidebar">
+    <div class="legend-title">Legend</div>
+    <div class="legend-item"><div class="legend-dot system"></div>System component</div>
+    <div class="legend-item"><div class="legend-dot ai"></div>AI processing</div>
+    <div class="legend-item"><div class="legend-dot output"></div>Output / storage</div>
+    <div class="legend-item"><div class="legend-dot user"></div>End user</div>
+    <div class="layer-labels">
+      <div class="layer-label-item">① Intake</div>
+      <div class="layer-label-item">② Processing</div>
+      <div class="layer-label-item">③ AI Engine</div>
+      <div class="layer-label-item">④ Output</div>
+    </div>
+    <div class="click-hint">Click any node to trace its path through the system.</div>
+  </div>
+  <div class="canvas-wrap">
+    <div class="canvas">
+      <div class="col-divider" style="left:235px;"></div>
+      <div class="col-divider" style="left:470px;"></div>
+      <div class="col-divider" style="left:705px;"></div>
+      <div class="col-label" style="left:117px;">① Intake</div>
+      <div class="col-label" style="left:352px;">② Processing</div>
+      <div class="col-label" style="left:587px;">③ AI Engine</div>
+      <div class="col-label" style="left:822px;">④ Output</div>
+      <svg class="svg-layer" viewBox="0 0 940 480" preserveAspectRatio="none">
+        <path id="p-drive-gas" class="connection-line" d="M 162 148 C 210 148, 228 182, 258 182"/>
+        <path id="p-gas-queue" class="connection-line" d="M 378 182 C 420 182, 432 205, 465 205"/>
+        <path id="p-queue-pass1" class="connection-line" d="M 582 190 C 618 190, 628 158, 660 158"/>
+        <path id="p-queue-pass2" class="connection-line" d="M 582 220 C 618 220, 628 262, 660 262"/>
+        <path id="p-pass1-verify" class="connection-line" d="M 790 158 C 830 158, 840 205, 840 240 C 840 310, 815 345, 795 355"/>
+        <path id="p-pass2-verify" class="connection-line" d="M 790 262 C 820 262, 825 305, 795 345"/>
+        <path id="p-verify-sheet" class="connection-line" d="M 750 375 C 720 400, 680 415, 640 415 C 610 415, 570 408, 540 400"/>
+        <path id="p-verify-review" class="connection-line" d="M 710 375 C 680 380, 640 385, 600 385 C 560 385, 510 382, 470 378"/>
+        <path id="p-sheet-brian" class="connection-line" d="M 500 415 C 460 415, 400 408, 350 395 C 300 382, 240 365, 200 345 C 170 330, 155 318, 150 308"/>
+        <path id="p-gas-alert" class="connection-line" d="M 318 215 C 315 265, 290 295, 265 318 C 245 332, 210 342, 178 348"/>
+        <circle r="5" class="packet"><animateMotion dur="3.8s" repeatCount="indefinite" begin="0s" path="M 162 148 C 210 148, 228 182, 258 182 C 420 182, 432 205, 465 205 C 582 205, 618 190, 660 158"/></circle>
+        <circle r="5" class="packet"><animateMotion dur="3.8s" repeatCount="indefinite" begin="1.5s" path="M 162 148 C 210 148, 228 182, 258 182 C 420 182, 432 205, 465 205 C 582 205, 618 190, 660 158"/></circle>
+        <circle r="5" class="packet-purple"><animateMotion dur="4.4s" repeatCount="indefinite" begin="0.7s" path="M 660 158 C 790 158, 830 158, 840 205 C 840 310, 795 355, 750 375 C 680 415, 600 415, 540 400"/></circle>
+        <circle r="5" class="packet-purple"><animateMotion dur="4.4s" repeatCount="indefinite" begin="2.2s" path="M 660 262 C 790 262, 820 262, 820 305 C 820 335, 795 345, 750 375 C 680 415, 600 415, 540 400"/></circle>
+      </svg>
+      <div id="node-drive" class="node-card" style="left:32px;top:116px;width:135px;" onclick="tracePath('drive')"><div class="node-label">Intake</div><div class="node-title">Google Drive Folder</div><div class="node-sub">PDFs dropped here · watched every 15 min</div></div>
+      <div id="node-gas" class="node-card" style="left:252px;top:155px;width:132px;" onclick="tracePath('gas')"><div class="node-label">Orchestrator</div><div class="node-title">Apps Script Trigger</div><div class="node-sub">fires every 15 min · classifies + queues</div></div>
+      <div id="node-queue" class="node-card" style="left:460px;top:178px;width:128px;" onclick="tracePath('queue')"><div class="node-label">Queue</div><div class="node-title">Queue Manager</div><div class="node-sub">batches files · chains continuation triggers</div></div>
+      <div id="node-pass1" class="node-card ai-node" style="left:655px;top:122px;width:140px;" onclick="tracePath('pass1')"><div class="node-label">AI · Pass 1</div><div class="node-title">Claude API</div><div class="node-sub">primary extraction · usage, cost, dates</div></div>
+      <div id="node-pass2" class="node-card ai-node" style="left:655px;top:230px;width:140px;" onclick="tracePath('pass2')"><div class="node-label">AI · Pass 2</div><div class="node-title">Claude API</div><div class="node-sub">independent validation · cross-checks pass 1</div></div>
+      <div id="node-verify" class="node-card" style="left:700px;top:330px;width:128px;" onclick="tracePath('verify')"><div class="node-label">Conflict Check</div><div class="node-title">Verifier</div><div class="node-sub">compares passes · routes to sheet or review</div></div>
+      <div id="node-sheet" class="node-card" style="left:490px;top:375px;width:148px;" onclick="tracePath('sheet')"><div class="node-label">Output</div><div class="node-title">Google Sheet</div><div class="node-sub">Electricity / NaturalGas / Water tabs</div></div>
+      <div id="node-review" class="node-card" style="left:335px;top:352px;width:136px;" onclick="tracePath('review')"><div class="node-label">Fallback</div><div class="node-title">Review Queue</div><div class="node-sub">conflict or error · manual review + resolve</div></div>
+      <div id="node-brian" class="node-card user-node" style="left:32px;top:285px;width:135px;" onclick="tracePath('brian')"><div class="node-label">End Users</div><div class="node-title">Bryan &amp; Adrian</div><div class="node-sub">daily digest · dashboard · review queue</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="lifecycle-section">
+  <div class="lifecycle-header">
+    <div class="lifecycle-gradient-line"></div>
+    <div class="lifecycle-title">System Lifecycle</div>
+    <div class="lifecycle-count">8 steps · click to expand</div>
+  </div>
+  <div class="step-row" onclick="toggleStep(this)"><div class="step-trigger"><div class="step-num">01</div><div class="step-title">PDF Drop</div><span class="step-tag">Intake</span><div class="step-arrow">›</div></div><div class="step-body"><div class="step-content">Bryan or Adrian uploads utility bill PDFs to the designated Google Drive folder. No naming convention required — the system reads file content, not filenames. Files can be dropped at any time and will be picked up on the next trigger cycle.</div></div></div>
+  <div class="step-row" onclick="toggleStep(this)"><div class="step-trigger"><div class="step-num">02</div><div class="step-title">Trigger Fires</div><span class="step-tag">Apps Script</span><div class="step-arrow">›</div></div><div class="step-body"><div class="step-content">Every 15 minutes, a time-driven Google Apps Script trigger scans the Drive folder for new PDFs. It compares incoming files against a processed file cache and ignores duplicates. New files are classified as standard or multi-entity and loaded into the queue.</div></div></div>
+  <div class="step-row" onclick="toggleStep(this)"><div class="step-trigger"><div class="step-num">03</div><div class="step-title">Queue &amp; Classify</div><span class="step-tag">Apps Script</span><div class="step-arrow">›</div></div><div class="step-body"><div class="step-content">Files are classified before processing. Standard bills go into the main queue, multi-entity bills go into a separate queue. The Queue Manager batches files one at a time to stay within Google's execution limits, using continuation triggers to chain runs automatically for large batches.</div></div></div>
+  <div class="step-row open" onclick="toggleStep(this)"><div class="step-trigger"><div class="step-num">04</div><div class="step-title">Pass 1 — Extract</div><span class="step-tag">AI Engine</span><div class="step-arrow">›</div></div><div class="step-body"><div class="step-content">The PDF is sent to the Claude API for primary extraction. Claude reads the bill and extracts: bill type, account number, property address, billing period dates, usage amount, total cost, demand charges (for electricity), and whether the bill is an estimate. Large files over 800KB get an automatic delay between passes to stay within rate limits.</div></div></div>
+  <div class="step-row" onclick="toggleStep(this)"><div class="step-trigger"><div class="step-num">05</div><div class="step-title">Pass 2 — Validate</div><span class="step-tag">AI Engine</span><div class="step-arrow">›</div></div><div class="step-body"><div class="step-content">A second independent Claude API call re-reads the same bill without seeing Pass 1's output. Two passes catch OCR ambiguities, formatting edge cases, and the occasional misread — especially on usage figures and billing period dates where a one-digit error would compound over time.</div></div></div>
+  <div class="step-row" onclick="toggleStep(this)"><div class="step-trigger"><div class="step-num">06</div><div class="step-title">Conflict Check</div><span class="step-tag">Verifier</span><div class="step-arrow">›</div></div><div class="step-body"><div class="step-content">The Verifier compares every extracted field between Pass 1 and Pass 2. If both agree, data goes to the Google Sheet. If any field conflicts, the bill goes to the Review Queue and Bryan receives an email showing exactly which fields disagreed. Nothing ambiguous goes into the sheet automatically.</div></div></div>
+  <div class="step-row" onclick="toggleStep(this)"><div class="step-trigger"><div class="step-num">07</div><div class="step-title">Sheet Write</div><span class="step-tag">Output</span><div class="step-arrow">›</div></div><div class="step-body"><div class="step-content">Verified data is written to the correct tab — Electricity, NaturalGas, or Water — based on the bill type extracted by the AI. Each row includes the full extracted fields, a Duplicate flag, a verification formula, and a link back to the original PDF in Drive.</div></div></div>
+  <div class="step-row final" onclick="toggleStep(this)"><div class="step-trigger"><div class="step-num">08</div><div class="step-title">Daily Summary</div><span class="step-tag">Delivery</span><div class="step-arrow">›</div></div><div class="step-body"><div class="step-content">At 6pm every day, Bryan and Adrian receive an email digest showing how many bills were processed, how many are pending in the Review Queue, and the current collection status for each account. The dashboard is available anytime at the web app URL. No manual data entry required.</div></div></div>
+</div>
+
+<div class="footer">
+  <div class="footer-left">GPM Property Management · Bill Parser · ReRev Labs</div>
+  <div class="footer-gradient"></div>
+</div>
+
+<script>
+  const pathMap = {
+    drive:  { nodes: ['node-drive'],  paths: ['p-drive-gas'] },
+    gas:    { nodes: ['node-gas'],    paths: ['p-drive-gas','p-gas-queue','p-gas-alert'] },
+    queue:  { nodes: ['node-queue'],  paths: ['p-gas-queue','p-queue-pass1','p-queue-pass2'] },
+    pass1:  { nodes: ['node-pass1'],  paths: ['p-queue-pass1','p-pass1-verify'] },
+    pass2:  { nodes: ['node-pass2'],  paths: ['p-queue-pass2','p-pass2-verify'] },
+    verify: { nodes: ['node-verify'], paths: ['p-pass1-verify','p-pass2-verify','p-verify-sheet','p-verify-review'] },
+    sheet:  { nodes: ['node-sheet'],  paths: ['p-verify-sheet','p-sheet-brian'] },
+    review: { nodes: ['node-review'], paths: ['p-verify-review'] },
+    brian:  { nodes: ['node-brian'],  paths: ['p-sheet-brian','p-gas-alert'] },
+  };
+  function tracePath(t) {
+    document.querySelectorAll('.node-card').forEach(n => n.classList.remove('active-path'));
+    document.querySelectorAll('.connection-line').forEach(p => p.classList.remove('active-line'));
+    const m = pathMap[t]; if (!m) return;
+    m.nodes.forEach(id => { const el=document.getElementById(id); if(el) el.classList.add('active-path'); });
+    m.paths.forEach(id => { const el=document.getElementById(id); if(el) el.classList.add('active-line'); });
+  }
+  document.querySelector('.canvas').addEventListener('click', function(e) {
+    if (!e.target.closest('.node-card')) {
+      document.querySelectorAll('.node-card').forEach(n => n.classList.remove('active-path'));
+      document.querySelectorAll('.connection-line').forEach(p => p.classList.remove('active-line'));
+    }
+  });
+  function toggleStep(row) {
+    const isOpen = row.classList.contains('open');
+    document.querySelectorAll('.step-row').forEach(r => r.classList.remove('open'));
+    if (!isOpen) row.classList.add('open');
+  }
+</script>
+</body>
+</html>
