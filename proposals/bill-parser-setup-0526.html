@@ -7,20 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0B0F14;
-    --surface: #131920;
-    --border: #1E2A35;
-    --cyan: #00D4C8;
-    --cyan-dim: rgba(0,212,200,0.08);
-    --amber: #F5A623;
-    --amber-dim: rgba(245,166,35,0.08);
-    --green: #2DD4A0;
-    --green-dim: rgba(45,212,160,0.08);
-    --text: #E8EDF2;
-    --muted: #7A8A99;
-    --mono: 'DM Mono', monospace;
-    --head: 'Syne', sans-serif;
-    --body: 'DM Sans', sans-serif;
+    --bg: #0B0F14; --surface: #131920; --border: #1E2A35; --cyan: #00D4C8;
+    --cyan-dim: rgba(0,212,200,0.08); --amber: #F5A623; --amber-dim: rgba(245,166,35,0.08);
+    --green: #2DD4A0; --green-dim: rgba(45,212,160,0.08); --text: #E8EDF2; --muted: #7A8A99;
+    --mono: 'DM Mono', monospace; --head: 'Syne', sans-serif; --body: 'DM Sans', sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: var(--body); font-weight: 300; min-height: 100vh; padding: 60px 24px 80px; }
@@ -253,7 +243,7 @@
       <div class="step-badge">STEP 04</div>
       <div>
         <div class="section-title">Carry Over Values</div>
-        <div class="section-desc">These values will be provided to you by Keyona. Copy them in exactly as given — do not look these up yourself.</div>
+        <div class="section-desc">These two values will be provided by Keyona. Copy them in exactly as given.</div>
       </div>
     </div>
     <div class="section-body">
@@ -270,20 +260,6 @@
           <div class="prop-body">
             <p class="prop-desc">All known utility providers (electricity, gas, water) and their account structures. Allows the system to categorize bills by type automatically.</p>
             <div class="how-to amber">Paste the value exactly as provided by Keyona. Do not modify it.</div>
-          </div>
-        </div>
-        <div class="prop carry-over">
-          <div class="prop-head"><span class="prop-key">GITHUB_REPO</span><span class="prop-tag tag-carry">Carry Over</span></div>
-          <div class="prop-body">
-            <p class="prop-desc">The GitHub repository path for version-controlled config and template storage.</p>
-            <div class="how-to amber">Value: <code>keyona-rerev/TESTER_Resource-Bill-Parser-Github</code> — paste this exactly.</div>
-          </div>
-        </div>
-        <div class="prop carry-over">
-          <div class="prop-head"><span class="prop-key">GITHUB_TOKEN</span><span class="prop-tag tag-carry">Carry Over</span></div>
-          <div class="prop-body">
-            <p class="prop-desc">A personal access token authorizing the script to read from the GitHub repository.</p>
-            <div class="how-to amber">Paste the value exactly as provided by Keyona. Do not share this token anywhere.</div>
           </div>
         </div>
       </div>
@@ -320,11 +296,7 @@
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
-          <div class="check-text"><span class="check-key">FINGERPRINTS_JSON + PROVIDERS_JSON</span>Carry-over values pasted in exactly as provided</div>
-        </div>
-        <div class="check-item" onclick="toggleCheck(this)">
-          <div class="check-box"></div>
-          <div class="check-text"><span class="check-key">GITHUB_REPO + GITHUB_TOKEN</span>GitHub credentials entered</div>
+          <div class="check-text"><span class="check-key">FINGERPRINTS_JSON + PROVIDERS_JSON</span>Carry-over values pasted in exactly as provided by Keyona</div>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
