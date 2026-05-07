@@ -36,15 +36,18 @@
   .prop-list { display: flex; flex-direction: column; gap: 20px; }
   .prop { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
   .prop.required { border-color: rgba(0,212,200,0.25); }
+  .prop.optional { border-color: rgba(122,138,153,0.3); }
   .prop.carry-over { border-color: rgba(245,166,35,0.2); }
   .prop.auto { border-color: rgba(45,212,160,0.2); }
   .prop-head { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .prop.required .prop-head { background: var(--cyan-dim); }
+  .prop.optional .prop-head { background: rgba(122,138,153,0.06); }
   .prop.carry-over .prop-head { background: var(--amber-dim); }
   .prop.auto .prop-head { background: var(--green-dim); }
   .prop-key { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--text); }
   .prop-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 3px; text-transform: uppercase; flex-shrink: 0; }
   .tag-required { background: rgba(0,212,200,0.12); color: var(--cyan); }
+  .tag-optional { background: rgba(122,138,153,0.12); color: var(--muted); }
   .tag-carry { background: rgba(245,166,35,0.12); color: var(--amber); }
   .tag-auto { background: rgba(45,212,160,0.12); color: var(--green); }
   .prop-body { padding: 16px 18px; border-top: 1px solid var(--border); }
@@ -52,6 +55,7 @@
   .how-to { background: #0D1A24; border-left: 3px solid var(--cyan); padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.6; color: #9BB5C8; }
   .how-to.amber { border-left-color: var(--amber); }
   .how-to.green { border-left-color: var(--green); }
+  .how-to.muted { border-left-color: var(--muted); }
   .how-to strong { color: var(--text); font-weight: 500; }
   code { font-family: var(--mono); background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 3px; font-size: 12px; color: var(--cyan); }
   .instruction { background: #0D1A24; border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; font-size: 14px; line-height: 1.7; color: #9BB5C8; }
@@ -91,6 +95,7 @@
 
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div>REQUIRED — you fill this in</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--muted)"></div>OPTIONAL — skip if not needed</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>CARRY OVER — copy from setup doc</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>AUTO — populates on first run</div>
   </div>
@@ -156,8 +161,8 @@
     <div class="section-header">
       <div class="step-badge">STEP 02</div>
       <div>
-        <div class="section-title">Anthropic API Key</div>
-        <div class="section-desc">One API key powers both extraction passes. Both use the Anthropic Claude API.</div>
+        <div class="section-title">Anthropic API Key &amp; Alert Emails</div>
+        <div class="section-desc">One API key powers both extraction passes. Set your primary alert email and optionally a secondary one.</div>
       </div>
     </div>
     <div class="section-body">
@@ -180,9 +185,19 @@
         <div class="prop required">
           <div class="prop-head"><span class="prop-key">ALERT_EMAIL_PRIMARY</span><span class="prop-tag tag-required">Required</span></div>
           <div class="prop-body">
-            <p class="prop-desc">The email address that receives daily processing summaries and error alerts.</p>
+            <p class="prop-desc">The main email address that receives all daily summaries and error alerts.</p>
             <div class="how-to">
-              <strong>Set this to:</strong> Your main email address. This is where you will get a daily digest whenever bills are processed, and error notifications if the queue hits issues.
+              <strong>Set this to:</strong> Your main email address. Every alert and daily digest goes here.
+            </div>
+          </div>
+        </div>
+        <div class="prop optional">
+          <div class="prop-head"><span class="prop-key">ALERT_EMAIL_SECONDARY</span><span class="prop-tag tag-optional">Optional</span></div>
+          <div class="prop-body">
+            <p class="prop-desc">A second email address that will also receive all alerts and daily summaries. Leave this out entirely if you only need one recipient.</p>
+            <div class="how-to muted">
+              <strong>Set this to:</strong> One additional email address. Example: <code>manager@yourcompany.com</code><br><br>
+              If you skip this property entirely, only <code>ALERT_EMAIL_PRIMARY</code> will receive alerts. You can always add it later.
             </div>
           </div>
         </div>
@@ -284,7 +299,11 @@
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
-          <div class="check-text"><span class="check-key">ALERT_EMAIL_PRIMARY</span>Your email address entered for daily alerts</div>
+          <div class="check-text"><span class="check-key">ALERT_EMAIL_PRIMARY</span>Primary email address entered for daily alerts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"></div>
+          <div class="check-text"><span class="check-key">ALERT_EMAIL_SECONDARY (optional)</span>Secondary email added if needed, or skipped</div>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <div class="check-box"></div>
