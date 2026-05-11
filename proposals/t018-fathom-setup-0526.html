@@ -3,217 +3,237 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Post-Meeting Intelligence Engine — Setup Guide</title>
+<title>Post-Meeting Intelligence — Setup Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Courier+Prime:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Courier+Prime:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#F0F7F7;--primary:#0D1F2D;--body:#3D5166;--cyan:#1A9E9E;
-    --cyan-dim:rgba(26,158,158,0.07);--cyan-border:rgba(26,158,158,0.18);
-    --cream:#FAFCFC;--amber:#C47F2A;--amber-dim:rgba(196,127,42,0.07);
-    --amber-border:rgba(196,127,42,0.2);--green:#0F7B5C;
-    --green-dim:rgba(15,123,92,0.07);--green-border:rgba(15,123,92,0.2);
-    --purple:#7C3AED;--gradient:linear-gradient(90deg,#1A9E9E,#7C3AED);
-    --muted:rgba(61,81,102,0.5);--border:rgba(26,158,158,0.12);
-    --serif:'Cormorant Garamond',serif;--mono:'Courier Prime',monospace;
-    --sans:'DM Sans',sans-serif;--fh:'Outfit',sans-serif;--fb:'Inter',sans-serif;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--primary);font-family:var(--sans);font-size:15px;line-height:1.65;min-height:100vh;}
-  .grain-overlay{pointer-events:none;position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");z-index:9999;}
-  .layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh;}
-  .sidebar{background:var(--primary);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:44px 28px;overflow:hidden;}
-  .sidebar-watermark{position:absolute;bottom:-50px;right:-50px;font-family:var(--serif);font-size:180px;font-style:italic;color:rgba(26,158,158,0.04);pointer-events:none;line-height:1;white-space:nowrap;transform:rotate(-15deg);}
-  .sidebar-brand{margin-bottom:36px;}
-  .sidebar-brand h1{font-family:var(--serif);font-size:26px;font-weight:300;color:white;letter-spacing:-0.01em;line-height:1.1;margin-bottom:8px;}
-  .sidebar-brand h1 em{font-style:italic;font-size:18px;opacity:0.4;display:block;margin-top:2px;}
-  .sidebar-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
-  .pill{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.18em;padding:3px 9px;border-radius:2px;}
-  .pill-cyan{background:rgba(26,158,158,0.15);color:var(--cyan);}
-  .pill-white{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.35);}
-  .washi{height:5px;background:linear-gradient(90deg,rgba(26,158,158,0.3),rgba(124,58,237,0.2));margin:20px -28px;}
-  .sidebar-desc{font-size:11px;color:rgba(255,255,255,0.28);line-height:1.65;margin-bottom:28px;font-family:var(--mono);}
-  .step-nav{display:flex;flex-direction:column;gap:2px;flex:1;}
-  .step-nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:5px;cursor:pointer;transition:all 0.2s;border:1px solid transparent;}
-  .step-nav-item:hover{background:rgba(255,255,255,0.04);}
-  .step-nav-item.active{background:rgba(26,158,158,0.1);border-color:rgba(26,158,158,0.22);}
-  .snav-num{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.18);width:18px;flex-shrink:0;}
-  .step-nav-item.active .snav-num{color:var(--cyan);}
-  .snav-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.28);flex:1;}
-  .step-nav-item.active .snav-label{color:white;}
-  .snav-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.1);flex-shrink:0;}
-  .step-nav-item.active .snav-dot{background:var(--cyan);}
-  .step-nav-item.done .snav-dot{background:var(--green);}
-  .sidebar-footer{margin-top:auto;padding-top:24px;border-top:1px solid rgba(255,255,255,0.06);}
-  .sidebar-footer-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:rgba(255,255,255,0.18);margin-bottom:5px;}
-  .sidebar-footer-email{font-family:var(--serif);font-style:italic;font-size:14px;color:rgba(255,255,255,0.45);}
-  .main{padding:52px 32px 80px 52px;overflow-y:auto;}
-  .step-section{display:none;}
-  .step-section.active{display:block;animation:fadeUp 0.3s ease forwards;}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-  .step-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border);max-width:900px;}
-  .step-folio{width:64px;height:64px;border-radius:50%;border:1px dashed var(--cyan-border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
-  .step-folio-num{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);line-height:1;}
-  .step-folio-val{font-family:var(--serif);font-size:20px;font-style:italic;color:var(--cyan);line-height:1;margin-top:2px;}
-  .gradient-line{height:2px;background:linear-gradient(90deg,#1A9E9E,#7C3AED);border-radius:1px;width:40px;margin-bottom:12px;}
-  .step-title-block h2{font-family:var(--serif);font-size:34px;font-weight:400;letter-spacing:-0.01em;line-height:1.1;margin-bottom:8px;}
-  .step-title-block p{color:var(--body);font-size:14px;max-width:560px;line-height:1.65;}
-  .content-wrap{max-width:900px;}
-  .overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
-  .overview-card{background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:20px;}
-  .overview-card-num{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--cyan);margin-bottom:8px;}
-  .overview-card-title{font-family:var(--serif);font-size:19px;font-weight:600;margin-bottom:6px;color:var(--primary);}
-  .overview-card-desc{font-size:13px;color:var(--body);line-height:1.65;}
-  .info-block{background:var(--cream);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:16px 20px;margin-bottom:20px;font-size:14px;color:var(--body);line-height:1.7;}
-  .info-block strong{color:var(--primary);}
-  .warning-block{background:var(--amber-dim);border:1px solid var(--amber-border);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:16px 20px;margin-bottom:20px;font-size:14px;color:var(--body);line-height:1.7;}
-  .warning-block strong{color:var(--primary);}
-  .no-action-banner{background:var(--green-dim);border:1px solid var(--green-border);border-radius:6px;padding:16px 20px;display:flex;gap:14px;align-items:flex-start;margin-bottom:28px;}
-  .no-action-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
-  .no-action-text{font-family:var(--serif);font-size:17px;font-style:italic;color:var(--green);margin-bottom:3px;}
-  .no-action-sub{font-size:13px;color:var(--body);line-height:1.6;}
-  .prop-list{display:flex;flex-direction:column;gap:1px;margin-bottom:32px;}
-  .prop{background:var(--cream);border:1px solid var(--border);overflow:hidden;transition:box-shadow 0.2s;}
-  .prop:first-child{border-radius:8px 8px 0 0;}.prop:last-child{border-radius:0 0 8px 8px;}.prop:only-child{border-radius:8px;}.prop:not(:first-child){border-top:none;}
-  .prop:hover{z-index:1;position:relative;box-shadow:0 4px 12px -4px rgba(13,31,45,0.1);}
-  .prop.required{border-left:3px solid var(--cyan);}
-  .prop.optional{border-left:3px solid rgba(61,81,102,0.2);}
-  .prop.carry-over{border-left:3px solid var(--amber);}
-  .prop.auto-prop{border-left:3px solid var(--green);}
-  .prop-head{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-  .prop-key{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--primary);letter-spacing:0.02em;}
-  .prop-tag{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.12em;padding:3px 8px;border-radius:2px;flex-shrink:0;}
-  .tag-required{background:var(--cyan-dim);color:var(--cyan);border:1px solid var(--cyan-border);}
-  .tag-optional{background:rgba(61,81,102,0.05);color:var(--body);border:1px solid rgba(61,81,102,0.12);}
-  .tag-carry{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-border);}
-  .tag-auto{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);}
-  .prop-body{padding:0 18px 18px;border-top:1px solid var(--border);}
-  .prop-desc{font-size:13px;color:var(--body);line-height:1.65;margin:13px 0 11px;}
-  .how-to{background:var(--bg);border-left:2px solid var(--cyan);padding:11px 15px;border-radius:0 4px 4px 0;font-size:12px;line-height:1.8;color:var(--body);font-family:var(--mono);}
-  .how-to.amber{border-left-color:var(--amber);}
-  .how-to.green{border-left-color:var(--green);}
-  code{font-family:var(--mono);background:rgba(26,158,158,0.07);border:1px solid var(--cyan-border);padding:1px 5px;border-radius:3px;font-size:12px;color:var(--cyan);}
-  .setup-step{background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:10px;display:flex;gap:16px;align-items:flex-start;}
-  .setup-step-num{width:28px;height:28px;border-radius:50%;background:var(--primary);color:white;font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-  .setup-step-body{flex:1;}
-  .setup-step-title{font-family:var(--serif);font-size:17px;font-weight:600;margin-bottom:5px;color:var(--primary);}
-  .setup-step-desc{font-size:13px;color:var(--body);line-height:1.65;}
-  .action-card{background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:10px;display:flex;gap:16px;align-items:flex-start;}
-  .action-card-name{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--primary);background:var(--cyan-dim);border:1px solid var(--cyan-border);padding:4px 10px;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:2px;}
-  .action-card-desc{font-size:14px;color:var(--body);line-height:1.6;}
-  .action-card-desc strong{color:var(--primary);}
-  .action-group-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.18em;color:var(--muted);margin:24px 0 10px;}
-  .checklist{display:flex;flex-direction:column;gap:2px;margin-bottom:28px;}
-  .check-item{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;background:var(--cream);border:1px solid var(--border);cursor:pointer;transition:all 0.2s;}
-  .check-item:first-child{border-radius:8px 8px 0 0;}.check-item:last-child{border-radius:0 0 8px 8px;}.check-item:not(:first-child){border-top:none;}
-  .check-item:hover{background:white;z-index:1;position:relative;}
-  .check-item.checked{background:var(--green-dim);border-color:var(--green-border);z-index:1;position:relative;}
-  .check-box{width:19px;height:19px;border:1px solid var(--border);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px;transition:all 0.2s;background:white;}
-  .check-item.checked .check-box{background:var(--green);border-color:var(--green);color:white;}
-  .check-item.checked .check-box::after{content:'✓';font-size:11px;font-weight:700;}
-  .check-text{font-size:13px;color:var(--body);line-height:1.65;}
-  .check-key{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--primary);display:block;margin-bottom:2px;}
-  .complete-banner{display:none;background:var(--green);color:white;border-radius:6px;padding:16px 20px;font-family:var(--serif);font-size:18px;font-style:italic;margin-bottom:24px;text-align:center;}
-  .legend{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:20px;}
-  .legend-item{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:var(--body);}
-  .legend-dot{width:8px;height:8px;border-radius:50%;}
-  .nav-row{display:flex;align-items:center;justify-content:space-between;margin-top:32px;padding-top:24px;border-top:1px solid var(--border);}
-  .btn{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.12em;padding:10px 20px;border-radius:4px;border:1px solid;cursor:pointer;transition:all 0.2s;}
-  .btn-next{background:var(--primary);color:white;border-color:var(--primary);}
-  .btn-next:hover{background:var(--cyan);border-color:var(--cyan);}
-  .btn-back{background:transparent;color:var(--body);border-color:var(--border);}
-  .btn-back:hover{border-color:var(--primary);color:var(--primary);}
-  .file-tabs{display:flex;gap:2px;margin-bottom:0;flex-wrap:wrap;}
-  .file-tab{font-family:var(--mono);font-size:10px;padding:6px 14px;border:1px solid var(--border);border-bottom:none;border-radius:4px 4px 0 0;cursor:pointer;background:var(--bg);color:var(--muted);transition:all 0.15s;}
-  .file-tab.active{background:var(--primary);color:var(--cyan);border-color:var(--primary);}
-  .file-tab:hover:not(.active){background:var(--cream);}
-  .code-panel{display:none;background:var(--primary);border-radius:0 4px 4px 4px;overflow:hidden;margin-bottom:28px;}
-  .code-panel.active{display:block;}
-  .code-top{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid rgba(255,255,255,0.06);}
-  .code-filename{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:0.05em;}
-  .copy-btn{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--cyan);background:rgba(26,158,158,0.12);border:1px solid rgba(26,158,158,0.25);padding:4px 10px;border-radius:3px;cursor:pointer;}
-  .copy-btn:hover{background:rgba(26,158,158,0.22);}
-  .copy-btn.copied{color:var(--green);border-color:var(--green);background:rgba(15,123,92,0.12);}
-  .code-body{padding:16px;font-family:var(--mono);font-size:11px;line-height:1.8;color:rgba(255,255,255,0.78);white-space:pre;overflow-x:auto;max-height:420px;overflow-y:auto;}
+:root{--bg:#F0F7F7;--primary:#0D1F2D;--body:#3D5166;--cyan:#1A9E9E;--cyan-dim:rgba(26,158,158,0.07);--cyan-border:rgba(26,158,158,0.18);--cream:#FAFCFC;--amber:#C47F2A;--amber-dim:rgba(196,127,42,0.07);--amber-border:rgba(196,127,42,0.2);--green:#0F7B5C;--green-dim:rgba(15,123,92,0.07);--green-border:rgba(15,123,92,0.2);--purple:#7C3AED;--muted:rgba(61,81,102,0.5);--border:rgba(26,158,158,0.12);--serif:'Cormorant Garamond',serif;--mono:'Courier Prime',monospace;--fh:'Outfit',sans-serif;--fb:'Inter',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--primary);font-family:var(--fb);font-size:15px;line-height:1.65;min-height:100vh;}
+.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh;}
+.sidebar{background:var(--primary);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:32px 24px;overflow:hidden;}
+.sidebar-logo{margin-bottom:20px;flex-shrink:0;}
+.sidebar-logo img{height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:0.9;}
+.washi{height:3px;background:linear-gradient(90deg,rgba(26,158,158,0.4),rgba(124,58,237,0.25));margin:0 -24px 20px;}
+.sidebar-brand h1{font-family:var(--serif);font-size:22px;font-weight:300;color:white;line-height:1.2;margin-bottom:6px;}
+.sidebar-brand h1 em{font-style:italic;font-size:16px;opacity:0.4;display:block;margin-top:2px;}
+.sidebar-pills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px;}
+.pill{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.16em;padding:3px 8px;border-radius:2px;}
+.pill-cyan{background:rgba(26,158,158,0.15);color:var(--cyan);}
+.pill-white{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.3);}
+.sidebar-desc{font-size:10px;color:rgba(255,255,255,0.25);line-height:1.6;margin-bottom:20px;font-family:var(--mono);}
+.step-nav{display:flex;flex-direction:column;gap:2px;flex:1;overflow-y:auto;}
+.step-nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:4px;cursor:pointer;transition:all 0.2s;border:1px solid transparent;}
+.step-nav-item:hover{background:rgba(255,255,255,0.04);}
+.step-nav-item.active{background:rgba(26,158,158,0.1);border-color:rgba(26,158,158,0.2);}
+.snav-num{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.18);width:16px;flex-shrink:0;}
+.step-nav-item.active .snav-num{color:var(--cyan);}
+.snav-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);flex:1;}
+.step-nav-item.active .snav-label{color:white;}
+.snav-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.08);flex-shrink:0;}
+.step-nav-item.active .snav-dot{background:var(--cyan);}
+.step-nav-item.done .snav-dot{background:var(--green);}
+.sidebar-footer{padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);flex-shrink:0;}
+.sidebar-footer-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.18em;color:rgba(255,255,255,0.15);margin-bottom:4px;}
+.sidebar-footer-email{font-family:var(--serif);font-style:italic;font-size:13px;color:rgba(255,255,255,0.4);}
+.main{padding:52px 40px 80px 52px;overflow-y:auto;}
+.step-section{display:none;}
+.step-section.active{display:block;animation:fadeUp 0.3s ease forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.step-header{display:flex;align-items:flex-start;gap:18px;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border);max-width:860px;}
+.step-folio{width:60px;height:60px;border-radius:50%;border:1px dashed var(--cyan-border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.step-folio-num{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);line-height:1;}
+.step-folio-val{font-family:var(--serif);font-size:18px;font-style:italic;color:var(--cyan);line-height:1;margin-top:2px;}
+.gradient-line{height:2px;background:linear-gradient(90deg,#1A9E9E,#7C3AED);border-radius:1px;width:36px;margin-bottom:10px;}
+.step-title-block h2{font-family:var(--serif);font-size:32px;font-weight:400;letter-spacing:-0.01em;line-height:1.1;margin-bottom:6px;}
+.step-title-block p{color:var(--body);font-size:14px;max-width:520px;line-height:1.65;}
+.content-wrap{max-width:860px;}
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;}
+.overview-card{background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:18px;}
+.overview-card-num{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.12em;color:var(--cyan);margin-bottom:6px;}
+.overview-card-title{font-family:var(--serif);font-size:18px;font-weight:600;margin-bottom:5px;}
+.overview-card-desc{font-size:13px;color:var(--body);line-height:1.65;}
+.info-block{background:var(--cream);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:18px;font-size:13px;color:var(--body);line-height:1.7;}
+.info-block strong{color:var(--primary);}
+.warning-block{background:var(--amber-dim);border:1px solid var(--amber-border);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:18px;font-size:13px;color:var(--body);line-height:1.7;}
+.warning-block strong{color:var(--primary);}
+.prop-list{display:flex;flex-direction:column;gap:1px;margin-bottom:28px;}
+.prop{background:var(--cream);border:1px solid var(--border);overflow:hidden;}
+.prop:first-child{border-radius:8px 8px 0 0;}.prop:last-child{border-radius:0 0 8px 8px;}.prop:only-child{border-radius:8px;}.prop:not(:first-child){border-top:none;}
+.prop.required{border-left:3px solid var(--cyan);}
+.prop.optional{border-left:3px solid rgba(61,81,102,0.18);}
+.prop.carry-over{border-left:3px solid var(--amber);}
+.prop-head{padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.prop-key{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--primary);}
+.prop-tag{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:0.12em;padding:2px 7px;border-radius:2px;flex-shrink:0;}
+.tag-required{background:var(--cyan-dim);color:var(--cyan);border:1px solid var(--cyan-border);}
+.tag-optional{background:rgba(61,81,102,0.05);color:var(--body);border:1px solid rgba(61,81,102,0.1);}
+.tag-carry{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-border);}
+.prop-body{padding:0 16px 16px;border-top:1px solid var(--border);}
+.prop-desc{font-size:13px;color:var(--body);line-height:1.65;margin:11px 0 9px;}
+.how-to{background:var(--bg);border-left:2px solid var(--cyan);padding:10px 13px;border-radius:0 4px 4px 0;font-size:11px;line-height:1.8;color:var(--body);font-family:var(--mono);}
+.how-to.amber{border-left-color:var(--amber);}
+code{font-family:var(--mono);background:rgba(26,158,158,0.07);border:1px solid var(--cyan-border);padding:1px 5px;border-radius:3px;font-size:11px;color:var(--cyan);}
+.setup-step{background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start;}
+.setup-step-num{width:26px;height:26px;border-radius:50%;background:var(--primary);color:white;font-family:var(--mono);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.setup-step-body{flex:1;}
+.setup-step-title{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;}
+.setup-step-desc{font-size:13px;color:var(--body);line-height:1.65;}
+.file-hint{font-family:var(--mono);font-size:10px;color:var(--cyan);background:var(--cyan-dim);border:1px solid var(--cyan-border);border-radius:6px;padding:8px 14px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.file-hint::before{content:'↓';font-size:14px;}
+.file-accordion{display:flex;flex-direction:column;gap:0;margin-bottom:28px;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.file-row{border-bottom:1px solid var(--border);}
+.file-row:last-child{border-bottom:none;}
+.file-trigger{display:flex;align-items:center;cursor:pointer;background:var(--cream);transition:background 0.15s;user-select:none;}
+.file-trigger:hover{background:white;}
+.file-row.open .file-trigger{background:white;}
+.file-checkbox-wrap{padding:16px 14px;display:flex;align-items:center;border-right:1px solid var(--border);}
+.file-cb{width:17px;height:17px;border:1.5px solid var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;background:white;flex-shrink:0;}
+.file-cb.ticked{background:var(--green);border-color:var(--green);}
+.file-cb.ticked::after{content:'✓';font-size:10px;font-weight:700;color:white;}
+.file-name-wrap{flex:1;padding:16px;display:flex;align-items:center;}
+.file-name{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--primary);letter-spacing:0.04em;}
+.file-tag{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:0.1em;padding:2px 8px;border-radius:2px;background:var(--cyan-dim);color:var(--cyan);border:1px solid var(--cyan-border);margin-left:10px;}
+.file-arrow-wrap{padding:16px 18px;display:flex;align-items:center;}
+.file-arrow{font-size:16px;color:var(--muted);transition:transform 0.2s;font-weight:300;}
+.file-row.open .file-arrow{transform:rotate(90deg);color:var(--cyan);}
+.file-body{display:none;border-top:1px solid var(--border);}
+.file-row.open .file-body{display:block;}
+.file-desc{font-size:13px;color:var(--body);line-height:1.65;padding:14px 16px 10px;border-bottom:1px solid var(--border);}
+.code-wrap{position:relative;background:var(--primary);}
+.code-copy-btn{position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--cyan);background:rgba(26,158,158,0.12);border:1px solid rgba(26,158,158,0.25);padding:4px 10px;border-radius:3px;cursor:pointer;z-index:2;}
+.code-copy-btn:hover{background:rgba(26,158,158,0.22);}
+.code-copy-btn.copied{color:var(--green);border-color:var(--green);background:rgba(15,123,92,0.12);}
+.code-block{font-family:var(--mono);font-size:11px;line-height:1.8;color:rgba(255,255,255,0.78);white-space:pre;overflow-x:auto;padding:16px;max-height:420px;overflow-y:auto;}
+.checklist{display:flex;flex-direction:column;gap:2px;margin-bottom:28px;}
+.check-item{display:flex;align-items:flex-start;gap:13px;padding:14px 16px;background:var(--cream);border:1px solid var(--border);cursor:pointer;transition:all 0.2s;}
+.check-item:first-child{border-radius:8px 8px 0 0;}.check-item:last-child{border-radius:0 0 8px 8px;}.check-item:not(:first-child){border-top:none;}
+.check-item:hover{background:white;z-index:1;position:relative;}
+.check-item.checked{background:var(--green-dim);border-color:var(--green-border);z-index:1;position:relative;}
+.check-box{width:18px;height:18px;border:1px solid var(--border);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px;transition:all 0.2s;background:white;}
+.check-item.checked .check-box{background:var(--green);border-color:var(--green);color:white;}
+.check-item.checked .check-box::after{content:'✓';font-size:10px;font-weight:700;}
+.check-text{font-size:13px;color:var(--body);line-height:1.65;}
+.check-key{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--primary);display:block;margin-bottom:2px;}
+.complete-banner{display:none;background:var(--green);color:white;border-radius:6px;padding:14px 18px;font-family:var(--serif);font-size:17px;font-style:italic;margin-bottom:22px;text-align:center;}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px;}
+.legend-item{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;color:var(--body);}
+.legend-dot{width:7px;height:7px;border-radius:50%;}
+.nav-row{display:flex;align-items:center;justify-content:space-between;margin-top:28px;padding-top:22px;border-top:1px solid var(--border);}
+.btn{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.12em;padding:9px 18px;border-radius:4px;border:1px solid;cursor:pointer;transition:all 0.2s;}
+.btn-next{background:var(--primary);color:white;border-color:var(--primary);}
+.btn-next:hover{background:var(--cyan);border-color:var(--cyan);}
+.btn-back{background:transparent;color:var(--body);border-color:var(--border);}
+.btn-back:hover{border-color:var(--primary);color:var(--primary);}
+.props-table{width:100%;border-collapse:collapse;margin-bottom:28px;font-size:12px;}
+.props-table th{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);background:var(--bg);}
+.props-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--body);vertical-align:top;line-height:1.55;}
+.props-table tr:last-child td{border-bottom:none;}
+.props-table tr:hover td{background:white;}
+.props-table td:first-child{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--primary);white-space:nowrap;}
+.req-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle;}
 </style>
 </head>
 <body>
-<div class="grain-overlay"></div>
 <div class="layout">
-  <aside class="sidebar">
-    <div class="sidebar-watermark">T018</div>
-    <div class="sidebar-brand">
-      <h1>Post-Meeting<br>Intelligence<em>Setup Guide</em></h1>
-      <div class="sidebar-pills">
-        <span class="pill pill-cyan">Fathom API</span>
-        <span class="pill pill-cyan">Claude AI</span>
-        <span class="pill pill-white">Gmail</span>
-        <span class="pill pill-white">Google Drive</span>
-      </div>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="https://res.cloudinary.com/dialhpycd/image/upload/v1770670281/rerev_labs_title_logo_afrgnu.png" alt="ReRev Labs">
+  </div>
+  <div class="washi"></div>
+  <div class="sidebar-brand">
+    <h1>Post-Meeting<br>Intelligence<em>Setup Guide</em></h1>
+    <div class="sidebar-pills">
+      <span class="pill pill-cyan">Fathom API</span>
+      <span class="pill pill-cyan">Claude AI</span>
+      <span class="pill pill-white">Gmail</span>
+      <span class="pill pill-white">Google Drive</span>
     </div>
-    <div class="washi"></div>
-    <div class="sidebar-desc">Connects Fathom to Claude AI and routes ready-to-review follow-up drafts to Gmail. Nothing sends automatically.</div>
-    <nav class="step-nav">
-      <div class="step-nav-item active" onclick="goTo(0)"><span class="snav-num">01</span><span class="snav-label">Overview</span><span class="snav-dot"></span></div>
-      <div class="step-nav-item" onclick="goTo(1)"><span class="snav-num">02</span><span class="snav-label">Prerequisites</span><span class="snav-dot"></span></div>
-      <div class="step-nav-item" onclick="goTo(2)"><span class="snav-num">03</span><span class="snav-label">Create Project</span><span class="snav-dot"></span></div>
-      <div class="step-nav-item" onclick="goTo(3)"><span class="snav-num">04</span><span class="snav-label">Script Files</span><span class="snav-dot"></span></div>
-      <div class="step-nav-item" onclick="goTo(4)"><span class="snav-num">05</span><span class="snav-label">Script Properties</span><span class="snav-dot"></span></div>
-      <div class="step-nav-item" onclick="goTo(5)"><span class="snav-num">06</span><span class="snav-label">Deploy Dashboard</span><span class="snav-dot"></span></div>
-      <div class="step-nav-item" onclick="goTo(6)"><span class="snav-num">07</span><span class="snav-label">Launch Checklist</span><span class="snav-dot"></span></div>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="sidebar-footer-label">Questions</div>
-      <div class="sidebar-footer-email">keyona@rerev.io</div>
+  </div>
+  <div class="sidebar-desc">Connects Fathom to Claude AI and routes ready-to-review follow-up drafts to Gmail. Nothing sends automatically.</div>
+  <nav class="step-nav">
+    <div class="step-nav-item active" onclick="goTo(0)"><span class="snav-num">01</span><span class="snav-label">Overview</span><span class="snav-dot"></span></div>
+    <div class="step-nav-item" onclick="goTo(1)"><span class="snav-num">02</span><span class="snav-label">Prerequisites</span><span class="snav-dot"></span></div>
+    <div class="step-nav-item" onclick="goTo(2)"><span class="snav-num">03</span><span class="snav-label">Create Project</span><span class="snav-dot"></span></div>
+    <div class="step-nav-item" onclick="goTo(3)"><span class="snav-num">04</span><span class="snav-label">Script Files</span><span class="snav-dot"></span></div>
+    <div class="step-nav-item" onclick="goTo(4)"><span class="snav-num">05</span><span class="snav-label">Script Properties</span><span class="snav-dot"></span></div>
+    <div class="step-nav-item" onclick="goTo(5)"><span class="snav-num">06</span><span class="snav-label">Deploy Dashboard</span><span class="snav-dot"></span></div>
+    <div class="step-nav-item" onclick="goTo(6)"><span class="snav-num">07</span><span class="snav-label">Launch Checklist</span><span class="snav-dot"></span></div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-label">Questions</div>
+    <div class="sidebar-footer-email">keyona@rerev.io</div>
+  </div>
+</aside>
+<main class="main">
+
+<div class="step-section active" id="step-0">
+  <div class="step-header">
+    <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">01</span></div>
+    <div class="step-title-block"><div class="gradient-line"></div><h2>How This System Works</h2><p>A quick orientation before you build. Understand what the system does and what it produces before touching any configuration.</p></div>
+  </div>
+  <div class="content-wrap">
+    <div class="overview-grid">
+      <div class="overview-card"><div class="overview-card-num">The loop</div><div class="overview-card-title">Fathom in, draft out</div><div class="overview-card-desc">After every Fathom-recorded meeting, the script fetches the transcript and summary via API, sends both to Claude, and creates a follow-up draft in Gmail. Runs every 5 minutes automatically.</div></div>
+      <div class="overview-card"><div class="overview-card-num">Human in the loop</div><div class="overview-card-title">Nothing sends automatically</div><div class="overview-card-desc">Every output lands in Gmail as a draft. You review, adjust if needed, and send when ready. A digest email also notifies you each time a meeting is processed with links to the recording and draft.</div></div>
+      <div class="overview-card"><div class="overview-card-num">9 files</div><div class="overview-card-title">What gets built</div><div class="overview-card-desc">Config · FathomClient · MeetingProcessor · ProcessingLog · OutputDispatcher · TriggerSetup · FathomDiagnostic · Dashboard (HTML) · appsscript.json. Each file has one job.</div></div>
+      <div class="overview-card"><div class="overview-card-num">Fully configurable</div><div class="overview-card-title">No hardcoded values</div><div class="overview-card-desc">Every client-specific value — name, email, company, tone, colors — lives in Script Properties. The code is generic. Your configuration makes it yours.</div></div>
     </div>
-  </aside>
-  <main class="main">
-    <div class="step-section active" id="step-0">
-      <div class="step-header">
-        <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">01</span></div>
-        <div class="step-title-block"><div class="gradient-line"></div><h2>How This System Works</h2><p>Understand what gets built before you start. This system has 9 files, one web app dashboard, and two API connections.</p></div>
-      </div>
-      <div class="content-wrap">
-        <div class="overview-grid">
-          <div class="overview-card"><div class="overview-card-num">The loop</div><div class="overview-card-title">Fathom in, draft out</div><div class="overview-card-desc">After every Fathom-recorded meeting, the script fetches the transcript and Fathom-generated summary via API, sends both to Claude, and creates a follow-up draft in Gmail. Runs every 5 minutes automatically.</div></div>
-          <div class="overview-card"><div class="overview-card-num">Human in the loop</div><div class="overview-card-title">Nothing sends automatically</div><div class="overview-card-desc">Every output lands in Gmail as a draft. You review, adjust if needed, and send when ready. A digest email also notifies you each time a meeting is processed with links to the Fathom recording and the draft.</div></div>
-          <div class="overview-card"><div class="overview-card-num">9 files</div><div class="overview-card-title">What gets built</div><div class="overview-card-desc">Config · FathomClient · MeetingProcessor · ProcessingLog · OutputDispatcher · TriggerSetup · FathomDiagnostic · Dashboard (HTML) · appsscript.json. Each file has one job.</div></div>
-          <div class="overview-card"><div class="overview-card-num">Dashboard</div><div class="overview-card-title">Web app control panel</div><div class="overview-card-desc">A deployed GAS web app: run now, load past meetings, reprocess specific meetings, and view the processing log. No Google Sheets required after setup.</div></div>
+    <div class="info-block"><strong>Staging mode is built in.</strong> Set a <code>STAGING_EMAIL</code> Script Property and all drafts and digests route there instead of real recipients.</div>
+    <div class="nav-row"><span></span><button class="btn btn-next" onclick="goTo(1)">Next: Prerequisites →</button></div>
+  </div>
+</div>
+
+<div class="step-section" id="step-1">
+  <div class="step-header">
+    <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">02</span></div>
+    <div class="step-title-block"><div class="gradient-line"></div><h2>What You Need First</h2><p>Gather these before touching any code. All are free or pay-as-you-go.</p></div>
+  </div>
+  <div class="content-wrap">
+    <div class="prop-list">
+      <div class="prop required"><div class="prop-head"><span class="prop-key">Fathom API Key</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">Used to fetch meeting transcripts and summaries via the Fathom external API.</p><div class="how-to">app.fathom.video → Settings → Integrations → API → Generate key → copy it.</div></div></div>
+      <div class="prop required"><div class="prop-head"><span class="prop-key">Anthropic API Key</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">Sends the structured transcript to Claude and receives the follow-up draft. Model defaults to <code>claude-sonnet-4-5</code>. Typical cost under $5/month.</p><div class="how-to">console.anthropic.com → API Keys → Create new secret key → copy it.</div></div></div>
+      <div class="prop required"><div class="prop-head"><span class="prop-key">Google Account</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">Gmail + Google Drive + Apps Script + Calendar. All standard with any Google account.</p></div></div>
+      <div class="prop optional"><div class="prop-head"><span class="prop-key">Staging Email Address</span><span class="prop-tag tag-optional">Recommended</span></div><div class="prop-body"><p class="prop-desc">A secondary email where drafts and digests route during testing. Your own Gmail works.</p><div class="how-to amber">Set this first. Easier to turn staging off than explain a test email to a real contact.</div></div></div>
+    </div>
+    <div class="nav-row"><button class="btn btn-back" onclick="goTo(0)">← Back</button><button class="btn btn-next" onclick="goTo(2)">Next: Create Project →</button></div>
+  </div>
+</div>
+
+<div class="step-section" id="step-2">
+  <div class="step-header">
+    <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">03</span></div>
+    <div class="step-title-block"><div class="gradient-line"></div><h2>Create the Apps Script Project</h2><p>Set up a blank GAS project, name it, and configure the manifest before adding any files.</p></div>
+  </div>
+  <div class="content-wrap">
+    <div class="warning-block"><strong>Do this while logged into the correct Google account.</strong> The script creates Gmail drafts and sends digest emails from whichever account owns the project.</div>
+    <div class="setup-step"><div class="setup-step-num">1</div><div class="setup-step-body"><div class="setup-step-title">Open Google Apps Script</div><div class="setup-step-desc">Go to <code>script.google.com</code> and click <strong>New project</strong>. Rename it to <strong>Post-Meeting Intelligence</strong> by clicking "Untitled project" at the top.</div></div></div>
+    <div class="setup-step"><div class="setup-step-num">2</div><div class="setup-step-body"><div class="setup-step-title">Show the manifest file</div><div class="setup-step-desc"><strong>Project Settings</strong> (gear icon) → check <strong>Show "appsscript.json" manifest file in editor</strong>.</div></div></div>
+    <div class="setup-step"><div class="setup-step-num">3</div><div class="setup-step-body"><div class="setup-step-title">Replace the manifest</div><div class="setup-step-desc">Click <strong>appsscript.json</strong>. Delete everything and paste the manifest from Step 04 below.</div></div></div>
+    <div class="nav-row"><button class="btn btn-back" onclick="goTo(1)">← Back</button><button class="btn btn-next" onclick="goTo(3)">Next: Script Files →</button></div>
+  </div>
+</div>
+
+<div class="step-section" id="step-3">
+  <div class="step-header">
+    <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">04</span></div>
+    <div class="step-title-block"><div class="gradient-line"></div><h2>Add the Script Files</h2><p>For each file below: check the box when done, click the arrow to expand the code, create the file in GAS, paste, and save.</p></div>
+  </div>
+  <div class="content-wrap">
+    <div class="info-block"><strong>How to add a file:</strong> Click <strong>+</strong> next to "Files" in the GAS sidebar → select <strong>Script</strong> (or <strong>HTML</strong> for Dashboard) → name it exactly as shown → paste → Cmd+S / Ctrl+S.</div>
+    <div class="file-hint">Click the arrow on any file to expand the code. Check the box once you've created and saved it in GAS.</div>
+    <div class="file-accordion">
+
+      <div class="file-row" id="fr-manifest">
+        <div class="file-trigger" onclick="toggleFile('fr-manifest')">
+          <div class="file-checkbox-wrap"><div class="file-cb" onclick="tickFile(event,'fr-manifest')"></div></div>
+          <div class="file-name-wrap"><span class="file-name">appsscript.json</span><span class="file-tag">Manifest</span></div>
+          <div class="file-arrow-wrap"><span class="file-arrow">›</span></div>
         </div>
-        <div class="info-block"><strong>Staging mode is built in.</strong> Set a <code>STAGING_EMAIL</code> script property and all drafts and digests route to that address instead of your real recipients.</div>
-        <div class="nav-row"><span></span><button class="btn btn-next" onclick="goTo(1)">Next: Prerequisites →</button></div>
-      </div>
-    </div>
-    <div class="step-section" id="step-1">
-      <div class="step-header">
-        <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">02</span></div>
-        <div class="step-title-block"><div class="gradient-line"></div><h2>What You Need First</h2><p>Gather these before touching any code. All are free or pay-as-you-go.</p></div>
-      </div>
-      <div class="content-wrap">
-        <div class="prop-list">
-          <div class="prop required"><div class="prop-head"><span class="prop-key">Fathom API Key</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">Used to fetch meeting transcripts and summaries. The system uses the Fathom external API at <code>https://api.fathom.ai/external/v1</code>.</p><div class="how-to">app.fathom.video → Settings → Integrations → API → Generate key → copy it. Paste into Script Properties in Step 05.</div></div></div>
-          <div class="prop required"><div class="prop-head"><span class="prop-key">Anthropic API Key</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">Sends the structured transcript to Claude and receives the follow-up draft. Model is <code>claude-sonnet-4-5</code>. Typical cost under $5/month for regular VC meeting volume.</p><div class="how-to">console.anthropic.com → API Keys → Create new secret key → copy it. Paste into Script Properties in Step 05.</div></div></div>
-          <div class="prop required"><div class="prop-head"><span class="prop-key">Google Account</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">Gmail + Google Drive + Apps Script + Calendar. All standard with any Google account. Calendar is used as a fallback to identify attendees when Fathom does not have invitee emails.</p></div></div>
-          <div class="prop optional"><div class="prop-head"><span class="prop-key">Staging Email Address</span><span class="prop-tag tag-optional">Recommended</span></div><div class="prop-body"><p class="prop-desc">A secondary email (your own Gmail works) where all drafts and digests route during testing.</p><div class="how-to amber">Set this first. Easier to turn staging off than explain a test email to a real contact.</div></div></div>
-        </div>
-        <div class="nav-row"><button class="btn btn-back" onclick="goTo(0)">← Back</button><button class="btn btn-next" onclick="goTo(2)">Next: Create Project →</button></div>
-      </div>
-    </div>
-    <div class="step-section" id="step-2">
-      <div class="step-header">
-        <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">03</span></div>
-        <div class="step-title-block"><div class="gradient-line"></div><h2>Create the Apps Script Project</h2><p>Set up a blank GAS project, name it, and configure the manifest before adding any files.</p></div>
-      </div>
-      <div class="content-wrap">
-        <div class="warning-block"><strong>Do this while logged into the correct Google account.</strong> The script creates Gmail drafts and sends digest emails from whichever account owns the project.</div>
-        <div class="setup-step"><div class="setup-step-num">1</div><div class="setup-step-body"><div class="setup-step-title">Open Google Apps Script</div><div class="setup-step-desc">Go to <code>script.google.com</code> and click <strong>New project</strong>. Rename it to <strong>T018 Post-Meeting Intelligence</strong> by clicking "Untitled project" at the top.</div></div></div>
-        <div class="setup-step"><div class="setup-step-num">2</div><div class="setup-step-body"><div class="setup-step-title">Show the manifest file</div><div class="setup-step-desc"><strong>Project Settings</strong> (gear icon) → check <strong>Show "appsscript.json" manifest file in editor</strong>.</div></div></div>
-        <div class="setup-step"><div class="setup-step-num">3</div><div class="setup-step-body"><div class="setup-step-title">Replace the manifest content</div><div class="setup-step-desc">Click <strong>appsscript.json</strong> in the file list. Delete everything and paste the manifest below. This enables required OAuth scopes.</div></div></div>
-        <div class="file-tabs"><div class="file-tab active" onclick="switchTab(this,'tab-manifest')">appsscript.json</div></div>
-        <div class="code-panel active" id="tab-manifest">
-          <div class="code-top"><span class="code-filename">appsscript.json</span><button class="copy-btn" onclick="copyCode(this,'code-manifest')">Copy</button></div>
-          <div class="code-body" id="code-manifest">{
+        <div class="file-body">
+          <div class="file-desc">Project manifest. Controls OAuth scopes and web app settings. Paste this into the appsscript.json file in your GAS editor.</div>
+          <div class="code-wrap"><button class="code-copy-btn" onclick="copyCode(this,'code-manifest')">Copy</button><div class="code-block" id="code-manifest">{
   "timeZone": "America/New_York",
   "dependencies": {},
   "exceptionLogging": "STACKDRIVER",
@@ -233,49 +253,72 @@
     "https://www.googleapis.com/auth/script.scriptapp",
     "https://www.googleapis.com/auth/userinfo.email"
   ]
-}</div>
+}</div></div>
         </div>
-        <div class="nav-row"><button class="btn btn-back" onclick="goTo(1)">← Back</button><button class="btn btn-next" onclick="goTo(3)">Next: Script Files →</button></div>
       </div>
-    </div>
-    <div class="step-section" id="step-3">
-      <div class="step-header">
-        <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">04</span></div>
-        <div class="step-title-block"><div class="gradient-line"></div><h2>Add the Script Files</h2><p>Create each file in the GAS editor and paste the source. Add them in the sequence listed here.</p></div>
-      </div>
-      <div class="content-wrap">
-        <div class="info-block"><strong>How to add a file:</strong> Click <strong>+</strong> next to "Files" → select <strong>Script</strong> → name it exactly as shown (case-sensitive, no extension) → paste → Cmd+S / Ctrl+S.</div>
-        <div class="file-tabs">
-          <div class="file-tab active" onclick="switchTab(this,'tab-config')">Config.gs</div>
-          <div class="file-tab" onclick="switchTab(this,'tab-fathom')">FathomClient.gs</div>
-          <div class="file-tab" onclick="switchTab(this,'tab-processor')">MeetingProcessor.gs</div>
-          <div class="file-tab" onclick="switchTab(this,'tab-log')">ProcessingLog.gs</div>
-          <div class="file-tab" onclick="switchTab(this,'tab-output')">OutputDispatcher.gs</div>
-          <div class="file-tab" onclick="switchTab(this,'tab-trigger')">TriggerSetup.gs</div>
-          <div class="file-tab" onclick="switchTab(this,'tab-diag')">FathomDiagnostic.gs</div>
-          <div class="file-tab" onclick="switchTab(this,'tab-dashboard')">Dashboard.html</div>
+
+      <div class="file-row" id="fr-config">
+        <div class="file-trigger" onclick="toggleFile('fr-config')">
+          <div class="file-checkbox-wrap"><div class="file-cb" onclick="tickFile(event,'fr-config')"></div></div>
+          <div class="file-name-wrap"><span class="file-name">Config.gs</span></div>
+          <div class="file-arrow-wrap"><span class="file-arrow">›</span></div>
         </div>
-        <div class="code-panel active" id="tab-config">
-          <div class="code-top"><span class="code-filename">Config.gs — configuration and constants</span><button class="copy-btn" onclick="copyCode(this,'code-config')">Copy</button></div>
-          <div class="code-body" id="code-config">const CONFIG = {
+        <div class="file-body">
+          <div class="file-desc">All configuration. Every value reads from Script Properties — nothing hardcoded. Fill in the properties in Step 05.</div>
+          <div class="code-wrap"><button class="code-copy-btn" onclick="copyCode(this,'code-config')">Copy</button><div class="code-block" id="code-config">const CONFIG = {
+  // API CREDENTIALS
   get FATHOM_API_KEY() { return PropertiesService.getScriptProperties().getProperty('FATHOM_API_KEY'); },
   get ANTHROPIC_API_KEY() { return PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY'); },
-  get PRIMARY_EMAIL() { return PropertiesService.getScriptProperties().getProperty('PRIMARY_EMAIL') || 'constance@korainsights.com'; },
+
+  // EXTERNAL ENDPOINTS
+  get FATHOM_BASE() { return PropertiesService.getScriptProperties().getProperty('FATHOM_BASE') || 'https://api.fathom.ai/external/v1'; },
+  get CLAUDE_MODEL() { return PropertiesService.getScriptProperties().getProperty('CLAUDE_MODEL') || 'claude-sonnet-4-5'; },
+
+  // CLIENT IDENTITY
+  get PERSON_NAME() { return PropertiesService.getScriptProperties().getProperty('PERSON_NAME') || ''; },
+  get PERSON_FULL_NAME() { return PropertiesService.getScriptProperties().getProperty('PERSON_FULL_NAME') || ''; },
+  get PERSON_ROLE() { return PropertiesService.getScriptProperties().getProperty('PERSON_ROLE') || ''; },
+  get COMPANY_NAME() { return PropertiesService.getScriptProperties().getProperty('COMPANY_NAME') || ''; },
+  get COMPANY_DESCRIPTION() { return PropertiesService.getScriptProperties().getProperty('COMPANY_DESCRIPTION') || ''; },
+  get MY_EMAIL() { return (PropertiesService.getScriptProperties().getProperty('MY_EMAIL') || '').toLowerCase(); },
+
+  // EMAIL ROUTING
+  get PRIMARY_EMAIL() { return PropertiesService.getScriptProperties().getProperty('PRIMARY_EMAIL') || ''; },
   get STAGING_EMAIL() { return PropertiesService.getScriptProperties().getProperty('STAGING_EMAIL') || ''; },
   get CC_EMAIL() { return PropertiesService.getScriptProperties().getProperty('CC_EMAIL') || ''; },
-  get LOG_SHEET_ID() { return '1D2e4mj3maRnLz_qZh2uGDQsKyeqon6agApyRo41dYHM'; },
+
+  // EMAIL STYLE
+  get SIGNATURE_CLOSE() { return PropertiesService.getScriptProperties().getProperty('SIGNATURE_CLOSE') || 'Best,'; },
+  get SIGNATURE_NAME() { return PropertiesService.getScriptProperties().getProperty('SIGNATURE_NAME') || ''; },
+  get DEFAULT_SUBJECT_PREFIX() { return PropertiesService.getScriptProperties().getProperty('DEFAULT_SUBJECT_PREFIX') || 'Following up'; },
+
+  // PROMPT OVERRIDE
+  get SYSTEM_PROMPT() { return PropertiesService.getScriptProperties().getProperty('SYSTEM_PROMPT') || ''; },
+
+  // LOGGING
+  get LOG_SHEET_ID() { return PropertiesService.getScriptProperties().getProperty('LOG_SHEET_ID') || ''; },
+  get LOG_SHEET_NAME() { return PropertiesService.getScriptProperties().getProperty('LOG_SHEET_NAME') || 'Meeting Log'; },
+
+  // BRANDING
+  get BRAND_COLOR() { return PropertiesService.getScriptProperties().getProperty('BRAND_COLOR') || '#1A9E9E'; },
+  get SYSTEM_LABEL() { return PropertiesService.getScriptProperties().getProperty('SYSTEM_LABEL') || 'Post-Meeting Intelligence'; },
+
+  // STATE
   get LAST_RUN_TIMESTAMP() { return PropertiesService.getScriptProperties().getProperty('LAST_RUN_TIMESTAMP') || ''; },
-  set LAST_RUN_TIMESTAMP(val) { PropertiesService.getScriptProperties().setProperty('LAST_RUN_TIMESTAMP', val); },
-  FATHOM_BASE: 'https://api.fathom.ai/external/v1',
-  CLAUDE_MODEL: 'claude-sonnet-4-5',
-  PERSON_NAME: 'Constance',
-  PERSON_FULL_NAME: 'Constance Thurmond',
-  MY_EMAIL: 'constance@korainsights.com'
-};</div>
+  set LAST_RUN_TIMESTAMP(val) { PropertiesService.getScriptProperties().setProperty('LAST_RUN_TIMESTAMP', val); }
+};</div></div>
         </div>
-        <div class="code-panel" id="tab-fathom">
-          <div class="code-top"><span class="code-filename">FathomClient.gs — Fathom API integration</span><button class="copy-btn" onclick="copyCode(this,'code-fathom')">Copy</button></div>
-          <div class="code-body" id="code-fathom">const FathomClient = {
+      </div>
+
+      <div class="file-row" id="fr-fathom">
+        <div class="file-trigger" onclick="toggleFile('fr-fathom')">
+          <div class="file-checkbox-wrap"><div class="file-cb" onclick="tickFile(event,'fr-fathom')"></div></div>
+          <div class="file-name-wrap"><span class="file-name">FathomClient.gs</span></div>
+          <div class="file-arrow-wrap"><span class="file-arrow">›</span></div>
+        </div>
+        <div class="file-body">
+          <div class="file-desc">Handles all communication with the Fathom API. Fetches new meetings, transcripts, summaries, and attendee data.</div>
+          <div class="code-wrap"><button class="code-copy-btn" onclick="copyCode(this,'code-fathom')">Copy</button><div class="code-block" id="code-fathom">const FathomClient = {
   getNewMeetings() {
     const headers = { 'X-Api-Key': CONFIG.FATHOM_API_KEY };
     let url = CONFIG.FATHOM_BASE + '/meetings?limit=10&include_transcript=true&include_summary=true';
@@ -283,19 +326,15 @@
     try {
       const res = UrlFetchApp.fetch(url, { headers, muteHttpExceptions: true });
       if (res.getResponseCode() !== 200) { Logger.log('Fathom error ' + res.getResponseCode()); return []; }
-      const body = JSON.parse(res.getContentText());
-      const items = body.items || [];
-      Logger.log('Fathom returned ' + items.length + ' new meeting(s).');
-      return items.map(m => this._normalize(m)).filter(Boolean);
+      return (JSON.parse(res.getContentText()).items || []).map(m => this._normalize(m)).filter(Boolean);
     } catch(e) { Logger.log('getNewMeetings error: ' + e.message); return []; }
   },
   getAllMeetings(limit) {
     limit = limit || 100;
     const headers = { 'X-Api-Key': CONFIG.FATHOM_API_KEY };
     const all = []; let cursor = null, pages = 0;
-    const maxPages = Math.ceil(limit / 25);
     try {
-      while (pages < maxPages) {
+      while (pages < Math.ceil(limit / 25)) {
         let url = CONFIG.FATHOM_BASE + '/meetings?limit=25';
         if (cursor) url += '&cursor=' + encodeURIComponent(cursor);
         const res = UrlFetchApp.fetch(url, { headers, muteHttpExceptions: true });
@@ -307,21 +346,19 @@
         cursor = body.next_cursor || null; pages++;
         if (!cursor || all.length >= limit) break;
       }
-      Logger.log('Backfill fetched ' + all.length + ' meetings.');
       return all.slice(0, limit).map(m => this._normalizeShallow(m)).filter(Boolean);
     } catch(e) { Logger.log('getAllMeetings error: ' + e.message); return []; }
   },
   getMeetingById(recordingId) {
     const headers = { 'X-Api-Key': CONFIG.FATHOM_API_KEY };
     const recIdInt = parseInt(recordingId, 10);
-    if (!recIdInt) { Logger.log('Invalid recording_id: ' + recordingId); return null; }
+    if (!recIdInt) return null;
     try {
       const tRes = UrlFetchApp.fetch(CONFIG.FATHOM_BASE + '/recordings/' + recIdInt + '/transcript', { headers, muteHttpExceptions: true });
       let transcriptText = '', attendeesFromTranscript = [];
       if (tRes.getResponseCode() === 200) {
-        const td = JSON.parse(tRes.getContentText());
-        const lines = td.transcript || [];
-        if (Array.isArray(lines) && lines.length) {
+        const lines = JSON.parse(tRes.getContentText()).transcript || [];
+        if (lines.length) {
           transcriptText = lines.map(l => ((l.speaker && l.speaker.display_name) || 'Unknown') + ': ' + (l.text || '')).join('\n');
           const seen = new Set();
           lines.forEach(l => {
@@ -334,74 +371,73 @@
         }
       }
       const sRes = UrlFetchApp.fetch(CONFIG.FATHOM_BASE + '/recordings/' + recIdInt + '/summary', { headers, muteHttpExceptions: true });
-      let summary = '';
-      if (sRes.getResponseCode() === 200) { const sd = JSON.parse(sRes.getContentText()); summary = (sd.summary && sd.summary.markdown_formatted) || ''; }
+      const summary = sRes.getResponseCode() === 200 ? ((JSON.parse(sRes.getContentText()).summary || {}).markdown_formatted || '') : '';
       const lRes = UrlFetchApp.fetch(CONFIG.FATHOM_BASE + '/meetings?limit=50', { headers, muteHttpExceptions: true });
-      let meta = null;
-      if (lRes.getResponseCode() === 200) { const lb = JSON.parse(lRes.getContentText()); meta = (lb.items || []).find(m => String(m.recording_id) === String(recIdInt)) || null; }
-      const m = meta || {};
-      const title = m.meeting_title || m.title || 'Meeting';
+      const meta = lRes.getResponseCode() === 200 ? ((JSON.parse(lRes.getContentText()).items || []).find(m => String(m.recording_id) === String(recIdInt)) || {}) : {};
       let attendees = attendeesFromTranscript;
       if (!attendees.length) {
         const seen = new Set();
-        (m.calendar_invitees || []).forEach(inv => { const email = (inv.email || '').toLowerCase().trim(); const name = inv.name || ''; if (!email || email === CONFIG.MY_EMAIL || seen.has(email)) return; seen.add(email); attendees.push({ name, email }); });
+        (meta.calendar_invitees || []).forEach(inv => { const email = (inv.email||'').toLowerCase().trim(); if (!email || email === CONFIG.MY_EMAIL || seen.has(email)) return; seen.add(email); attendees.push({ name: inv.name||'', email }); });
       }
-      if (!attendees.length) attendees = this._getAttendeesFromCalendar(m);
+      if (!attendees.length) attendees = this._getAttendeesFromCalendar(meta);
       const hasTranscript = transcriptText.trim().length > 50;
-      return { id: String(recIdInt), title, createdAt: m.created_at || new Date().toISOString(), fathomUrl: m.share_url || m.url || '', attendees, transcriptText: hasTranscript ? transcriptText.substring(0, 15000) : '', hasTranscript, hasContent: hasTranscript || summary.length > 0, summary };
+      return { id: String(recIdInt), title: meta.meeting_title || meta.title || 'Meeting', createdAt: meta.created_at || new Date().toISOString(), fathomUrl: meta.share_url || meta.url || '', attendees, transcriptText: hasTranscript ? transcriptText.substring(0, 15000) : '', hasTranscript, hasContent: hasTranscript || summary.length > 0, summary };
     } catch(e) { Logger.log('getMeetingById error: ' + e.message); return null; }
   },
   _normalize(m) {
     if (!m) return null;
     const id = m.recording_id ? String(m.recording_id) : ''; if (!id) return null;
-    let transcriptText = '';
     const lines = m.transcript || [];
-    if (Array.isArray(lines) && lines.length) transcriptText = lines.map(l => ((l.speaker && l.speaker.display_name) || 'Unknown') + ': ' + (l.text || '')).join('\n');
+    let transcriptText = lines.length ? lines.map(l => ((l.speaker && l.speaker.display_name) || 'Unknown') + ': ' + (l.text || '')).join('\n') : '';
     const hasTranscript = transcriptText.trim().length > 50;
     let attendees = [], seen = new Set();
-    if (Array.isArray(lines) && lines.length) { lines.forEach(l => { if (!l.speaker) return; const email = (l.speaker.matched_calendar_invitee_email || '').toLowerCase().trim(); const name = l.speaker.display_name || ''; if (!email || email === CONFIG.MY_EMAIL || seen.has(email)) return; seen.add(email); attendees.push({ name, email }); }); }
-    if (!attendees.length) (m.calendar_invitees || []).forEach(inv => { const email = (inv.email || '').toLowerCase().trim(); const name = inv.name || ''; if (!email || email === CONFIG.MY_EMAIL || seen.has(email)) return; seen.add(email); attendees.push({ name, email }); });
+    lines.forEach(l => { if (!l.speaker) return; const email = (l.speaker.matched_calendar_invitee_email||'').toLowerCase().trim(); const name = l.speaker.display_name||''; if (!email||email===CONFIG.MY_EMAIL||seen.has(email)) return; seen.add(email); attendees.push({name,email}); });
+    if (!attendees.length) (m.calendar_invitees||[]).forEach(inv => { const email=(inv.email||'').toLowerCase().trim(); if (!email||email===CONFIG.MY_EMAIL||seen.has(email)) return; seen.add(email); attendees.push({name:inv.name||'',email}); });
     if (!attendees.length) attendees = this._getAttendeesFromCalendar(m);
     const summary = (m.default_summary && m.default_summary.markdown_formatted) || '';
-    return { id, title: m.meeting_title || m.title || 'Untitled Meeting', createdAt: m.created_at || m.recording_start_time || new Date().toISOString(), fathomUrl: m.share_url || m.url || '', attendees, transcriptText: hasTranscript ? transcriptText.substring(0, 15000) : '', hasTranscript, hasContent: hasTranscript || summary.length > 0, summary };
+    return { id, title: m.meeting_title||m.title||'Untitled Meeting', createdAt: m.created_at||m.recording_start_time||new Date().toISOString(), fathomUrl: m.share_url||m.url||'', attendees, transcriptText: hasTranscript ? transcriptText.substring(0,15000) : '', hasTranscript, hasContent: hasTranscript||summary.length>0, summary };
   },
   _normalizeShallow(m) {
     if (!m) return null;
     const id = m.recording_id ? String(m.recording_id) : ''; if (!id) return null;
     const attendees = [], seen = new Set();
-    (m.calendar_invitees || []).forEach(inv => { const email = (inv.email || '').toLowerCase().trim(); const name = inv.name || ''; if (!email || email === CONFIG.MY_EMAIL || seen.has(email)) return; seen.add(email); attendees.push({ name, email }); });
+    (m.calendar_invitees||[]).forEach(inv => { const email=(inv.email||'').toLowerCase().trim(); if (!email||email===CONFIG.MY_EMAIL||seen.has(email)) return; seen.add(email); attendees.push({name:inv.name||'',email}); });
     const summary = (m.default_summary && m.default_summary.markdown_formatted) || '';
-    return { id, title: m.meeting_title || m.title || 'Untitled Meeting', createdAt: m.created_at || m.recording_start_time || new Date().toISOString(), fathomUrl: m.share_url || m.url || '', attendees, transcriptText: '', hasTranscript: false, hasContent: summary.length > 0, summary };
+    return { id, title: m.meeting_title||m.title||'Untitled Meeting', createdAt: m.created_at||m.recording_start_time||new Date().toISOString(), fathomUrl: m.share_url||m.url||'', attendees, transcriptText:'', hasTranscript:false, hasContent:summary.length>0, summary };
   },
   _getAttendeesFromCalendar(m) {
     try {
-      const title = m.meeting_title || m.title || ''; if (!title) return [];
-      const meetingDate = new Date(m.created_at || m.recording_start_time || Date.now());
-      const windowStart = new Date(meetingDate.getTime() - 24*60*60*1000);
-      const windowEnd = new Date(meetingDate.getTime() + 24*60*60*1000);
-      const searchWords = title.replace(/[^a-z0-9 ]/gi,' ').toLowerCase().split(/\s+/).filter(w => w.length > 2);
-      const events = CalendarApp.getDefaultCalendar().getEvents(windowStart, windowEnd);
+      const title = m.meeting_title||m.title||''; if (!title) return [];
+      const meetingDate = new Date(m.created_at||m.recording_start_time||Date.now());
+      const events = CalendarApp.getDefaultCalendar().getEvents(new Date(meetingDate.getTime()-86400000), new Date(meetingDate.getTime()+86400000));
+      const searchWords = title.replace(/[^a-z0-9 ]/gi,' ').toLowerCase().split(/\s+/).filter(w=>w.length>2);
       let bestEvent = null, bestScore = 0;
-      events.forEach(ev => { const score = searchWords.filter(w => ev.getTitle().toLowerCase().includes(w)).length; if (score > bestScore) { bestScore = score; bestEvent = ev; } });
-      if (!bestEvent || bestScore === 0) return [];
-      const token = ScriptApp.getOAuthToken();
+      events.forEach(ev => { const score = searchWords.filter(w=>ev.getTitle().toLowerCase().includes(w)).length; if(score>bestScore){bestScore=score;bestEvent=ev;} });
+      if (!bestEvent||bestScore===0) return [];
       const calId = encodeURIComponent(CalendarApp.getDefaultCalendar().getId());
       const evId = encodeURIComponent(bestEvent.getId().split('@')[0]);
-      const res = UrlFetchApp.fetch('https://www.googleapis.com/calendar/v3/calendars/' + calId + '/events/' + evId, { headers: { Authorization: 'Bearer ' + token }, muteHttpExceptions: true });
-      if (res.getResponseCode() === 200) {
-        const data = JSON.parse(res.getContentText());
-        const attendees = [], seen = new Set();
-        (data.attendees || []).forEach(a => { const email = (a.email || '').toLowerCase().trim(); if (!email || email === CONFIG.MY_EMAIL || seen.has(email) || a.resource) return; seen.add(email); attendees.push({ name: a.displayName || '', email }); });
+      const res = UrlFetchApp.fetch('https://www.googleapis.com/calendar/v3/calendars/'+calId+'/events/'+evId, { headers:{Authorization:'Bearer '+ScriptApp.getOAuthToken()}, muteHttpExceptions:true });
+      if (res.getResponseCode()===200) {
+        const attendees=[], seen=new Set();
+        (JSON.parse(res.getContentText()).attendees||[]).forEach(a => { const email=(a.email||'').toLowerCase().trim(); if(!email||email===CONFIG.MY_EMAIL||seen.has(email)||a.resource) return; seen.add(email); attendees.push({name:a.displayName||'',email}); });
         return attendees;
       }
       return [];
-    } catch(e) { Logger.log('Calendar fallback error: ' + e.message); return []; }
+    } catch(e) { Logger.log('Calendar fallback error: '+e.message); return []; }
   }
-};</div>
+};</div></div>
         </div>
-        <div class="code-panel" id="tab-processor">
-          <div class="code-top"><span class="code-filename">MeetingProcessor.gs — Claude integration and processing logic</span><button class="copy-btn" onclick="copyCode(this,'code-processor')">Copy</button></div>
-          <div class="code-body" id="code-processor">const MeetingProcessor = {
+      </div>
+
+      <div class="file-row" id="fr-processor">
+        <div class="file-trigger" onclick="toggleFile('fr-processor')">
+          <div class="file-checkbox-wrap"><div class="file-cb" onclick="tickFile(event,'fr-processor')"></div></div>
+          <div class="file-name-wrap"><span class="file-name">MeetingProcessor.gs</span></div>
+          <div class="file-arrow-wrap"><span class="file-arrow">›</span></div>
+        </div>
+        <div class="file-body">
+          <div class="file-desc">Orchestrates the full processing loop. Calls FathomClient, builds the Claude prompt from Script Properties, parses the response, and dispatches outputs. The system prompt is assembled from your configured identity fields — no hardcoded names or company info.</div>
+          <div class="code-wrap"><button class="code-copy-btn" onclick="copyCode(this,'code-processor')">Copy</button><div class="code-block" id="code-processor">const MeetingProcessor = {
   run() {
     if (!CONFIG.FATHOM_API_KEY) return 'FATHOM_API_KEY not set.';
     if (!CONFIG.ANTHROPIC_API_KEY) return 'ANTHROPIC_API_KEY not set.';
@@ -425,8 +461,7 @@
     let added = 0;
     meetings.forEach(meeting => {
       if (existing.has(meeting.id)) return;
-      const attendeeStr = meeting.attendees.map(a => a.name || a.email).filter(Boolean).join(', ') || 'Unknown';
-      ProcessingLog.markBackfilled(meeting.id, meeting.title, attendeeStr, meeting.fathomUrl);
+      ProcessingLog.markBackfilled(meeting.id, meeting.title, meeting.attendees.map(a=>a.name||a.email).filter(Boolean).join(', ')||'Unknown', meeting.fathomUrl);
       added++;
     });
     return 'Loaded ' + added + ' meetings (' + (meetings.length - added) + ' already existed). Select any to reprocess.';
@@ -438,8 +473,14 @@
     return 'Reprocessed: ' + meeting.title;
   },
   _getSystemPrompt(meeting) {
-    const custom = PropertiesService.getScriptProperties().getProperty('SYSTEM_PROMPT');
+    const custom = CONFIG.SYSTEM_PROMPT;
     if (custom && custom.trim().length > 50) return custom.trim();
+    const personFullName = CONFIG.PERSON_FULL_NAME || CONFIG.PERSON_NAME || 'the user';
+    const personRole = CONFIG.PERSON_ROLE || '';
+    const companyName = CONFIG.COMPANY_NAME || '';
+    const companyDescription = CONFIG.COMPANY_DESCRIPTION || '';
+    const signatureClose = CONFIG.SIGNATURE_CLOSE || 'Best,';
+    const signatureName = CONFIG.SIGNATURE_NAME || CONFIG.PERSON_NAME || '';
     const meetingDate = new Date(meeting.createdAt);
     const now = new Date();
     const daysDiff = Math.floor((now - meetingDate) / (1000*60*60*24));
@@ -447,279 +488,470 @@
     const sendDateStr = now.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
     const isGroup = meeting.attendees.filter(a => a.email).length > 1;
     const fathomRef = meeting.fathomUrl ? '\nFathom recording: ' + meeting.fathomUrl : '';
+    const signatureBlock = signatureName ? 'Close with "' + signatureClose + '" then "' + signatureName + '" on the next line.' : 'Close with "' + signatureClose + '" on its own line.';
     const emailStyle = isGroup
-      ? 'EMAIL STYLE: group reply-all. Address everyone by first name. Warm, direct, specific. No generic openers. No emojis. No em dashes. Plain text only. Close with "Warmly," then "Constance" on the next line.' + fathomRef
-      : 'EMAIL STYLE: warm, direct, specific. No generic openers. No emojis. No em dashes. Plain text only. Lead with something concrete from the conversation. Close with "Warmly," then "Constance" on the next line.' + fathomRef;
-    return 'You are a post-meeting intelligence assistant for Constance Thurmond, Founder and Principal of Kora Insights.\n\nABOUT CONSTANCE AND KORA INSIGHTS:\n- Kora Insights is a venture services firm based in New York City\n- Kora partners with emerging VC managers (Fund II+, Fintech and AI, $100M-$500M AUM) to unlock consistent capital and strengthen LP/GP relationships\n- Services: AGM design, portfolio activation, LP access, GP programming\n- Also runs "The Company We Keep" podcast spotlighting emerging managers and ecosystem builders\n- Constance leads strategy, investor relationships, partnerships, and storytelling\n\n' + emailStyle + '\n\nTIME CONTEXT:\n- Meeting date: ' + meetingDateStr + '\n- Email send date: ' + sendDateStr + '\n- Time since meeting: ' + (meetingDate.toDateString() === now.toDateString() ? 'same day' : daysDiff + ' day(s) ago') + '\n\nTIME RULES: Never use relative time words. Use actual date or neutral opener.\n\nReturn ONLY raw JSON. No markdown. No preamble.\nSTRUCTURE: {"follow_up_draft":{"to":"string","subject":"string","body":"string"}}';
+      ? 'EMAIL STYLE: group reply-all. Address everyone by first name. Warm, direct, specific. No generic openers. No emojis. No em dashes. Plain text only. ' + signatureBlock + fathomRef
+      : 'EMAIL STYLE: warm, direct, specific. No generic openers. No emojis. No em dashes. Plain text only. Lead with something concrete from the conversation. ' + signatureBlock + fathomRef;
+    let identity = 'You are a post-meeting intelligence assistant';
+    if (personFullName !== 'the user') {
+      identity += ' for ' + personFullName;
+      if (personRole) identity += ', ' + personRole;
+      if (companyName) identity += ' of ' + companyName;
+    }
+    identity += '.';
+    let aboutBlock = '';
+    if (companyName || companyDescription) {
+      aboutBlock = '\n\nABOUT THE USER AND COMPANY:\n';
+      if (companyDescription) aboutBlock += companyDescription;
+    }
+    return identity + aboutBlock + '\n\n' + emailStyle
+      + '\n\nTIME CONTEXT:\n- Meeting date: ' + meetingDateStr
+      + '\n- Email send date: ' + sendDateStr
+      + '\n- Time since meeting: ' + (meetingDate.toDateString() === now.toDateString() ? 'same day' : daysDiff + ' day(s) ago')
+      + '\n\nTIME RULES: Never use relative time words. Use actual date or neutral opener. When in doubt omit the time reference.'
+      + '\n\nReturn ONLY raw JSON. No markdown. No preamble.'
+      + '\nSTRUCTURE: {"follow_up_draft":{"to":"string","subject":"string","body":"string"}}';
   },
   _processMeeting(meeting) {
     if (!meeting.hasContent && !meeting.hasTranscript && !meeting.summary) { ProcessingLog.markSkipped(meeting.id, meeting.title, 'No transcript or summary available'); return; }
     const { result, rawResponse } = this._callClaude(meeting);
-    if (!result) { ProcessingLog.markSkipped(meeting.id, meeting.title, 'Claude parse failed: ' + (rawResponse || 'no response').substring(0, 200)); return; }
+    if (!result) { ProcessingLog.markSkipped(meeting.id, meeting.title, 'Claude parse failed: ' + (rawResponse||'no response').substring(0,200)); return; }
     const { follow_up_draft } = result;
-    if (follow_up_draft && meeting.attendees.length) { const emails = meeting.attendees.map(a => a.email).filter(Boolean); if (emails.length && !follow_up_draft.to) follow_up_draft.to = emails.join(', '); }
+    if (follow_up_draft && meeting.attendees.length) {
+      const emails = meeting.attendees.map(a => a.email).filter(Boolean);
+      if (emails.length && !follow_up_draft.to) follow_up_draft.to = emails.join(', ');
+    }
     const draftId = OutputDispatcher.dispatchDraft(follow_up_draft, meeting.attendees, meeting.title);
     OutputDispatcher.sendDigest({ meetingName: meeting.title, fathomUrl: meeting.fathomUrl, attendees: meeting.attendees, draftId });
-    ProcessingLog.markProcessed(meeting.id, meeting.title, meeting.attendees.map(a => a.name || a.email).join(', '), draftId, meeting.fathomUrl);
+    ProcessingLog.markProcessed(meeting.id, meeting.title, meeting.attendees.map(a=>a.name||a.email).join(', '), draftId, meeting.fathomUrl);
+    Logger.log('Done: ' + meeting.title + ' | draftId: ' + draftId);
   },
   _callClaude(meeting) {
-    const attendeeList = meeting.attendees.length ? meeting.attendees.map(a => a.name + (a.email ? ' (' + a.email + ')' : '')).join(', ') : 'Unknown attendees';
-    const systemPrompt = this._getSystemPrompt(meeting);
+    const attendeeList = meeting.attendees.length ? meeting.attendees.map(a=>a.name+(a.email?' ('+a.email+')':'')).join(', ') : 'Unknown attendees';
     const content = meeting.summary
-      ? 'Meeting: ' + meeting.title + '\nAttendees: ' + attendeeList + '\n\nFATHOM SUMMARY:\n' + meeting.summary + (meeting.transcriptText ? '\n\nTRANSCRIPT EXCERPT:\n' + meeting.transcriptText.substring(0, 8000) : '')
-      : 'Meeting: ' + meeting.title + '\nAttendees: ' + attendeeList + '\n\nTRANSCRIPT:\n' + meeting.transcriptText;
-    const payload = { model: CONFIG.CLAUDE_MODEL, max_tokens: 1500, system: systemPrompt, messages: [{ role: 'user', content }] };
+      ? 'Meeting: '+meeting.title+'\nAttendees: '+attendeeList+'\n\nFATHOM SUMMARY:\n'+meeting.summary+(meeting.transcriptText?'\n\nTRANSCRIPT EXCERPT:\n'+meeting.transcriptText.substring(0,8000):'')
+      : 'Meeting: '+meeting.title+'\nAttendees: '+attendeeList+'\n\nTRANSCRIPT:\n'+meeting.transcriptText;
+    const payload = { model: CONFIG.CLAUDE_MODEL, max_tokens: 1500, system: this._getSystemPrompt(meeting), messages: [{role:'user',content}] };
     try {
-      const response = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', { method: 'post', contentType: 'application/json', headers: { 'x-api-key': CONFIG.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' }, payload: JSON.stringify(payload), muteHttpExceptions: true });
+      const response = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', { method:'post', contentType:'application/json', headers:{'x-api-key':CONFIG.ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01'}, payload:JSON.stringify(payload), muteHttpExceptions:true });
       const data = JSON.parse(response.getContentText());
-      if (!data.content || !data.content[0]) return { result: null, rawResponse: response.getContentText().substring(0, 200) };
+      if (!data.content||!data.content[0]) return {result:null,rawResponse:response.getContentText().substring(0,200)};
       const raw = data.content[0].text.trim();
-      try { return { result: JSON.parse(raw), rawResponse: raw }; } catch(e) {
+      try { return {result:JSON.parse(raw),rawResponse:raw}; } catch(e) {
         const cleaned = raw.replace(/^```json\n?/,'').replace(/```$/,'').trim();
-        try { return { result: JSON.parse(cleaned), rawResponse: raw }; } catch(e2) { return { result: null, rawResponse: raw }; }
+        try { return {result:JSON.parse(cleaned),rawResponse:raw}; } catch(e2) { return {result:null,rawResponse:raw}; }
       }
-    } catch(e) { Logger.log('Claude fetch error: ' + e.message); return { result: null, rawResponse: e.message }; }
+    } catch(e) { Logger.log('Claude fetch error: '+e.message); return {result:null,rawResponse:e.message}; }
   }
-};</div>
+};</div></div>
         </div>
-        <div class="code-panel" id="tab-log">
-          <div class="code-top"><span class="code-filename">ProcessingLog.gs — Google Sheets processing log</span><button class="copy-btn" onclick="copyCode(this,'code-log')">Copy</button></div>
-          <div class="code-body" id="code-log">const ProcessingLog = {
+      </div>
+
+      <div class="file-row" id="fr-log">
+        <div class="file-trigger" onclick="toggleFile('fr-log')">
+          <div class="file-checkbox-wrap"><div class="file-cb" onclick="tickFile(event,'fr-log')"></div></div>
+          <div class="file-name-wrap"><span class="file-name">ProcessingLog.gs</span></div>
+          <div class="file-arrow-wrap"><span class="file-arrow">›</span></div>
+        </div>
+        <div class="file-body">
+          <div class="file-desc">Logs every processed, skipped, or backfilled meeting to a Google Sheet. Creates the sheet automatically on first run if no LOG_SHEET_ID is set.</div>
+          <div class="code-wrap"><button class="code-copy-btn" onclick="copyCode(this,'code-log')">Copy</button><div class="code-block" id="code-log">const ProcessingLog = {
   HEADERS: ['Meeting ID','Meeting Title','Processed At','Attendees','Draft ID','Fathom URL','Status','Error Detail'],
   _getSheet() {
     let ss;
     try { ss = SpreadsheetApp.openById(CONFIG.LOG_SHEET_ID); } catch(e) { ss = null; }
-    if (!ss) { ss = SpreadsheetApp.create('Kora Insights - Meeting Log'); Logger.log('Created new log sheet: ' + ss.getUrl()); }
+    if (!ss) { ss = SpreadsheetApp.create(CONFIG.LOG_SHEET_NAME || 'Meeting Log'); Logger.log('Created new log sheet: ' + ss.getUrl()); }
     let sheet = ss.getSheetByName('Log');
     if (!sheet) { sheet = ss.getSheetByName('Sheet1') || ss.insertSheet('Log'); sheet.setName('Log'); sheet.getRange(1,1,1,this.HEADERS.length).setValues([this.HEADERS]); sheet.setFrozenRows(1); }
     return sheet;
   },
   getProcessedIds() {
-    try { const sheet = this._getSheet(); if (sheet.getLastRow() <= 1) return new Set(); const ids = sheet.getRange(2,1,sheet.getLastRow()-1,1).getValues().flat(); return new Set(ids.filter(Boolean).map(String)); }
-    catch(e) { Logger.log('getProcessedIds error: ' + e.message); return new Set(); }
+    try { const sheet=this._getSheet(); if(sheet.getLastRow()<=1) return new Set(); return new Set(sheet.getRange(2,1,sheet.getLastRow()-1,1).getValues().flat().filter(Boolean).map(String)); }
+    catch(e) { Logger.log('getProcessedIds error: '+e.message); return new Set(); }
   },
   getLog() {
-    try { const sheet = this._getSheet(); if (sheet.getLastRow() <= 1) return []; const rows = sheet.getDataRange().getValues(); const headers = rows[0]; return rows.slice(1).reverse().map(row => { const obj = {}; headers.forEach((h,i) => { obj[h] = row[i] instanceof Date ? row[i].toISOString() : String(row[i]||''); }); return obj; }); }
-    catch(e) { Logger.log('getLog error: ' + e.message); return []; }
+    try { const sheet=this._getSheet(); if(sheet.getLastRow()<=1) return []; const rows=sheet.getDataRange().getValues(); const headers=rows[0]; return rows.slice(1).reverse().map(row=>{const obj={};headers.forEach((h,i)=>{obj[h]=row[i] instanceof Date?row[i].toISOString():String(row[i]||'');});return obj;}); }
+    catch(e) { Logger.log('getLog error: '+e.message); return []; }
   },
-  markProcessed(meetingId, title, attendees, draftId, fathomUrl) { try { this._getSheet().appendRow([meetingId, title, new Date().toISOString(), attendees, draftId||'', fathomUrl||'', 'Processed', '']); } catch(e) { Logger.log('markProcessed error: ' + e.message); } },
-  markSkipped(meetingId, title, reason) { try { this._getSheet().appendRow([meetingId, title, new Date().toISOString(), '', '', '', 'Skipped', reason]); } catch(e) { Logger.log('markSkipped error: ' + e.message); } },
-  markBackfilled(meetingId, title, attendees, fathomUrl) { try { this._getSheet().appendRow([meetingId, title, '', attendees, '', fathomUrl||'', 'Backfilled', '']); } catch(e) { Logger.log('markBackfilled error: ' + e.message); } }
-};</div>
+  markProcessed(meetingId,title,attendees,draftId,fathomUrl){try{this._getSheet().appendRow([meetingId,title,new Date().toISOString(),attendees,draftId||'',fathomUrl||'','Processed','']);}catch(e){Logger.log('markProcessed error: '+e.message);}},
+  markSkipped(meetingId,title,reason){try{this._getSheet().appendRow([meetingId,title,new Date().toISOString(),'','','','Skipped',reason]);}catch(e){Logger.log('markSkipped error: '+e.message);}},
+  markBackfilled(meetingId,title,attendees,fathomUrl){try{this._getSheet().appendRow([meetingId,title,'',attendees,'',fathomUrl||'','Backfilled','']);}catch(e){Logger.log('markBackfilled error: '+e.message);}}
+};</div></div>
         </div>
-        <div class="code-panel" id="tab-output">
-          <div class="code-top"><span class="code-filename">OutputDispatcher.gs — Gmail draft creation and digest emails</span><button class="copy-btn" onclick="copyCode(this,'code-output')">Copy</button></div>
-          <div class="code-body" id="code-output">const RELATIVE_TIME_PATTERNS = [/\byesterday\b/gi,/\bearlier today\b/gi,/\bthis morning\b/gi,/\blast week\b/gi,/\bthe other day\b/gi,/\bjust recently\b/gi,/\ba few days ago\b/gi,/\ba couple days ago\b/gi,/\bearlier this week\b/gi,/\blast night\b/gi];
+      </div>
 
-function scrubRelativeTime(text) {
-  if (!text) return text;
-  let s = text;
-  RELATIVE_TIME_PATTERNS.forEach(p => { s = s.replace(p, 'during our conversation'); });
-  return s;
-}
+      <div class="file-row" id="fr-output">
+        <div class="file-trigger" onclick="toggleFile('fr-output')">
+          <div class="file-checkbox-wrap"><div class="file-cb" onclick="tickFile(event,'fr-output')"></div></div>
+          <div class="file-name-wrap"><span class="file-name">OutputDispatcher.gs</span></div>
+          <div class="file-arrow-wrap"><span class="file-arrow">›</span></div>
+        </div>
+        <div class="file-body">
+          <div class="file-desc">Creates Gmail drafts and sends digest notification emails. Brand color, footer label, and subject prefix all come from Script Properties.</div>
+          <div class="code-wrap"><button class="code-copy-btn" onclick="copyCode(this,'code-output')">Copy</button><div class="code-block" id="code-output">const RELATIVE_TIME_PATTERNS=[/\byesterday\b/gi,/\bearlier today\b/gi,/\bthis morning\b/gi,/\blast week\b/gi,/\bthe other day\b/gi,/\bjust recently\b/gi,/\ba few days ago\b/gi,/\ba couple days ago\b/gi,/\bearlier this week\b/gi,/\blast night\b/gi];
+function scrubRelativeTime(text){if(!text)return text;let s=text;RELATIVE_TIME_PATTERNS.forEach(p=>{s=s.replace(p,'during our conversation');});return s;}
+function _stripEmoji(text){if(!text)return text;return text.replace(/[\u{1F000}-\u{1FFFF}]/gu,'').replace(/[\u{2600}-\u{27FF}]/gu,'').replace(/[\u{2B00}-\u{2BFF}]/gu,'').replace(/[\u{FE00}-\u{FEFF}]/gu,'').replace(/[\u{1F900}-\u{1F9FF}]/gu,'').replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,'').replace(/  +/g,' ').trim();}
+function _textToHtml(text){if(!text)return '';return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').split(/\n\n+/).map(p=>'<p>'+p.replace(/\n/g,'<br>')+'</p>').join('\n');}
 
-function _stripEmoji(text) {
-  if (!text) return text;
-  return text.replace(/[\u{1F000}-\u{1FFFF}]/gu,'').replace(/[\u{2600}-\u{27FF}]/gu,'').replace(/[\u{2B00}-\u{2BFF}]/gu,'').replace(/[\u{FE00}-\u{FEFF}]/gu,'').replace(/[\u{1F900}-\u{1F9FF}]/gu,'').replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,'').replace(/  +/g,' ').trim();
-}
-
-function _textToHtml(text) {
-  if (!text) return '';
-  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').split(/\n\n+/).map(p => '<p>' + p.replace(/\n/g,'<br>') + '</p>').join('\n');
-}
-
-const OutputDispatcher = {
-  dispatchDraft(followUpDraft, attendees, meetingName) {
-    if (!followUpDraft || !followUpDraft.body) { Logger.log('dispatchDraft: no body for ' + meetingName); return null; }
-    try {
-      const stagingEmail = CONFIG.STAGING_EMAIL;
-      const ccEmail = CONFIG.CC_EMAIL;
-      const realTo = followUpDraft.to || attendees.map(a => a.email).filter(Boolean).join(', ') || '';
-      const toField = stagingEmail || realTo;
-      const subject = stagingEmail ? '[STAGING - would send to: ' + realTo + '] ' + (followUpDraft.subject || 'Following up - ' + meetingName) : (followUpDraft.subject || 'Following up - ' + meetingName);
-      const cleanBody = scrubRelativeTime(_stripEmoji(followUpDraft.body));
-      const opts = { htmlBody: _textToHtml(cleanBody) };
-      if (ccEmail && !stagingEmail) opts.cc = ccEmail;
-      const draft = GmailApp.createDraft(toField, subject, cleanBody, opts);
-      const draftId = draft.getMessage().getId();
-      Logger.log('Draft created: ' + draftId);
+const OutputDispatcher={
+  dispatchDraft(followUpDraft,attendees,meetingName){
+    if(!followUpDraft||!followUpDraft.body){Logger.log('dispatchDraft: no body for '+meetingName);return null;}
+    try{
+      const stagingEmail=CONFIG.STAGING_EMAIL,ccEmail=CONFIG.CC_EMAIL,subjectPrefix=CONFIG.DEFAULT_SUBJECT_PREFIX||'Following up';
+      const realTo=followUpDraft.to||attendees.map(a=>a.email).filter(Boolean).join(', ')||'';
+      const toField=stagingEmail||realTo;
+      const subject=stagingEmail?'[STAGING - would send to: '+realTo+'] '+(followUpDraft.subject||subjectPrefix+' - '+meetingName):(followUpDraft.subject||subjectPrefix+' - '+meetingName);
+      const cleanBody=scrubRelativeTime(_stripEmoji(followUpDraft.body));
+      const opts={htmlBody:_textToHtml(cleanBody)};
+      if(ccEmail&&!stagingEmail)opts.cc=ccEmail;
+      const draft=GmailApp.createDraft(toField,subject,cleanBody,opts);
+      const draftId=draft.getMessage().getId();
+      Logger.log('Draft created: '+draftId);
       return draftId;
-    } catch(e) { Logger.log('dispatchDraft error: ' + e.message); return null; }
+    }catch(e){Logger.log('dispatchDraft error: '+e.message);return null;}
   },
-  sendDigest({ meetingName, fathomUrl, attendees, draftId }) {
-    try {
-      const stagingEmail = CONFIG.STAGING_EMAIL;
-      const primaryEmail = CONFIG.PRIMARY_EMAIL;
-      const digestTo = stagingEmail || primaryEmail;
-      if (!digestTo) { Logger.log('No digest recipient.'); return; }
-      const date = new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
-      const attendeeStr = attendees.map(a => a.name || a.email).filter(Boolean).join(', ') || 'Unknown';
-      const draftLink = draftId ? 'https://mail.google.com/mail/#all/' + draftId : null;
-      let html = '<div style="font-family:Arial,sans-serif;max-width:600px;color:#1a1a1a">';
-      if (stagingEmail) html += '<p style="background:#fff3cd;padding:8px 12px;border-radius:6px;font-size:12px;margin-bottom:16px">STAGING MODE</p>';
-      html += '<h2 style="color:#2c2c2c;border-bottom:2px solid #e5e5e5;padding-bottom:8px">Meeting Processed: ' + meetingName + '</h2>';
-      html += '<p style="color:#555;font-size:14px">' + date + ' &middot; ' + attendeeStr + '</p>';
-      const links = [];
-      if (fathomUrl) links.push('<a href="' + fathomUrl + '" style="color:#1A9E9E">View Fathom recording</a>');
-      if (draftLink) links.push('<a href="' + draftLink + '" style="color:#1A9E9E">Open draft</a>');
-      if (links.length) html += '<p>' + links.join(' &nbsp;|&nbsp; ') + '</p>';
-      html += '</div>';
-      GmailApp.sendEmail(digestTo, (stagingEmail ? '[STAGING] ' : '') + 'Meeting Processed: ' + meetingName, 'Enable HTML to view.', { htmlBody: html });
-    } catch(e) { Logger.log('sendDigest error: ' + e.message); }
+  sendDigest({meetingName,fathomUrl,attendees,draftId}){
+    try{
+      const digestTo=CONFIG.STAGING_EMAIL||CONFIG.PRIMARY_EMAIL;
+      if(!digestTo){Logger.log('No digest recipient.');return;}
+      const brandColor=CONFIG.BRAND_COLOR||'#1A9E9E';
+      const systemLabel=CONFIG.SYSTEM_LABEL||'Post-Meeting Intelligence';
+      const companyName=CONFIG.COMPANY_NAME||'';
+      const footerLabel=companyName?systemLabel+' &middot; '+companyName:systemLabel;
+      const date=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+      const attendeeStr=attendees.map(a=>a.name||a.email).filter(Boolean).join(', ')||'Unknown';
+      const draftLink=draftId?'https://mail.google.com/mail/#all/'+draftId:null;
+      let html='<div style="font-family:Arial,sans-serif;max-width:600px;color:#1a1a1a">';
+      if(CONFIG.STAGING_EMAIL)html+='<p style="background:#fff3cd;padding:8px 12px;border-radius:6px;font-size:12px;margin-bottom:16px">STAGING MODE</p>';
+      html+='<h2 style="color:#2c2c2c;border-bottom:2px solid #e5e5e5;padding-bottom:8px">Meeting Processed: '+meetingName+'</h2>';
+      html+='<p style="color:#555;font-size:14px">'+date+' &middot; '+attendeeStr+'</p>';
+      const links=[];
+      if(fathomUrl)links.push('<a href="'+fathomUrl+'" style="color:'+brandColor+'">View Fathom recording</a>');
+      if(draftLink)links.push('<a href="'+draftLink+'" style="color:'+brandColor+'">Open draft</a>');
+      if(links.length)html+='<p>'+links.join(' &nbsp;|&nbsp; ')+'</p>';
+      html+='<hr style="border:none;border-top:1px solid #e5e5e5;margin:24px 0"><p style="color:#aaa;font-size:11px">'+footerLabel+'</p></div>';
+      GmailApp.sendEmail(digestTo,(CONFIG.STAGING_EMAIL?'[STAGING] ':'')+'Meeting Processed: '+meetingName,'Enable HTML to view.',{htmlBody:html});
+    }catch(e){Logger.log('sendDigest error: '+e.message);}
   }
-};</div>
+};</div></div>
         </div>
-        <div class="code-panel" id="tab-trigger">
-          <div class="code-top"><span class="code-filename">TriggerSetup.gs — web app entry, server functions, trigger management</span><button class="copy-btn" onclick="copyCode(this,'code-trigger')">Copy</button></div>
-          <div class="code-body" id="code-trigger">function doGet() {
-  return HtmlService.createHtmlOutputFromFile('Dashboard')
-    .setTitle('Kora Insights - Meeting Engine')
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+      </div>
+
+      <div class="file-row" id="fr-trigger">
+        <div class="file-trigger" onclick="toggleFile('fr-trigger')">
+          <div class="file-checkbox-wrap"><div class="file-cb" onclick="tickFile(event,'fr-trigger')"></div></div>
+          <div class="file-name-wrap"><span class="file-name">TriggerSetup.gs</span></div>
+          <div class="file-arrow-wrap"><span class="file-arrow">›</span></div>
+        </div>
+        <div class="file-body">
+          <div class="file-desc">Web app entry point, all server functions the dashboard calls, trigger install/remove utilities, and ping functions. The dashboard is rendered as a template so company name and brand color are injected from Script Properties.</div>
+          <div class="code-wrap"><button class="code-copy-btn" onclick="copyCode(this,'code-trigger')">Copy</button><div class="code-block" id="code-trigger">function doGet(){
+  const companyName=CONFIG.COMPANY_NAME||'';
+  const pageTitle=companyName?companyName+' - Meeting Engine':'Meeting Engine';
+  const template=HtmlService.createTemplateFromFile('Dashboard');
+  template.companyName=companyName;
+  template.brandColor=CONFIG.BRAND_COLOR||'#1A9E9E';
+  template.pageTitle=pageTitle;
+  return template.evaluate().setTitle(pageTitle).setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
-function serverRunNow() { try { return JSON.parse(JSON.stringify({ success: true, message: MeetingProcessor.run() })); } catch(e) { return JSON.parse(JSON.stringify({ success: false, message: e.message })); } }
-function serverBackfill() { try { return JSON.parse(JSON.stringify({ success: true, message: MeetingProcessor.backfill(100) })); } catch(e) { return JSON.parse(JSON.stringify({ success: false, message: e.message })); } }
-function serverReprocessSelected(ids) {
-  if (!ids || !ids.length) return JSON.parse(JSON.stringify({ success: false, message: 'No meetings selected.' }));
-  const results = [];
-  ids.forEach(id => { try { results.push({ id, success: true, message: MeetingProcessor.reprocessById(id) }); } catch(e) { results.push({ id, success: false, message: e.message }); } });
-  return JSON.parse(JSON.stringify({ success: true, results }));
+function serverRunNow(){try{return JSON.parse(JSON.stringify({success:true,message:MeetingProcessor.run()}));}catch(e){return JSON.parse(JSON.stringify({success:false,message:e.message}));}}
+function serverBackfill(){try{return JSON.parse(JSON.stringify({success:true,message:MeetingProcessor.backfill(100)}));}catch(e){return JSON.parse(JSON.stringify({success:false,message:e.message}));}}
+function serverReprocessSelected(ids){
+  if(!ids||!ids.length)return JSON.parse(JSON.stringify({success:false,message:'No meetings selected.'}));
+  const results=[];
+  ids.forEach(id=>{try{results.push({id,success:true,message:MeetingProcessor.reprocessById(id)});}catch(e){results.push({id,success:false,message:e.message});}});
+  return JSON.parse(JSON.stringify({success:true,results}));
 }
-function serverGetLog() { return JSON.parse(JSON.stringify(ProcessingLog.getLog())); }
-function serverGetStatus() {
-  const props = PropertiesService.getScriptProperties().getProperties();
-  return JSON.parse(JSON.stringify({ hasFathomKey: !!props.FATHOM_API_KEY, hasAnthropicKey: !!props.ANTHROPIC_API_KEY, primaryEmail: props.PRIMARY_EMAIL || '', stagingMode: !!props.STAGING_EMAIL, stagingEmail: props.STAGING_EMAIL || '', lastRun: props.LAST_RUN_TIMESTAMP || 'Never' }));
+function serverGetLog(){return JSON.parse(JSON.stringify(ProcessingLog.getLog()));}
+function serverGetStatus(){
+  const props=PropertiesService.getScriptProperties().getProperties();
+  return JSON.parse(JSON.stringify({hasFathomKey:!!props.FATHOM_API_KEY,hasAnthropicKey:!!props.ANTHROPIC_API_KEY,primaryEmail:props.PRIMARY_EMAIL||'',stagingMode:!!props.STAGING_EMAIL,stagingEmail:props.STAGING_EMAIL||'',lastRun:props.LAST_RUN_TIMESTAMP||'Never'}));
 }
-function installTrigger() {
-  ScriptApp.getProjectTriggers().forEach(t => { if (t.getHandlerFunction() === 'runEngine') ScriptApp.deleteTrigger(t); });
+function serverRunDiagnostic(){
+  const lines=[],log=msg=>{lines.push(msg);Logger.log(msg);};
+  try{
+    const key=CONFIG.FATHOM_API_KEY;
+    log('Fathom key: '+(key?'YES (length '+key.length+')':'NO'));
+    if(!key)return JSON.parse(JSON.stringify({success:false,lines}));
+    const res=UrlFetchApp.fetch(CONFIG.FATHOM_BASE+'/meetings?limit=2',{headers:{'X-Api-Key':key},muteHttpExceptions:true});
+    log('List status: '+res.getResponseCode());
+    if(res.getResponseCode()!==200){log('Error: '+res.getContentText().substring(0,200));return JSON.parse(JSON.stringify({success:false,lines}));}
+    const items=JSON.parse(res.getContentText()).items||[];
+    log('Meetings found: '+items.length);
+    if(items.length){const f=items[0];log('recording_id: '+(f.recording_id||'NOT FOUND'));log('title: '+(f.meeting_title||f.title||'none'));}
+    const claudeKey=CONFIG.ANTHROPIC_API_KEY;
+    log('Claude key: '+(claudeKey?'YES':'NO'));
+    return JSON.parse(JSON.stringify({success:true,lines}));
+  }catch(e){log('Error: '+e.message);return JSON.parse(JSON.stringify({success:false,lines}));}
+}
+function installTrigger(){
+  ScriptApp.getProjectTriggers().forEach(t=>{if(t.getHandlerFunction()==='runEngine')ScriptApp.deleteTrigger(t);});
   ScriptApp.newTrigger('runEngine').timeBased().everyMinutes(5).create();
   Logger.log('Trigger installed.');
 }
-function runEngine() { MeetingProcessor.run(); }
-function removeTriggers() { ScriptApp.getProjectTriggers().forEach(t => ScriptApp.deleteTrigger(t)); Logger.log('All triggers removed.'); }
-function pingFathom() {
-  const key = CONFIG.FATHOM_API_KEY; if (!key) { Logger.log('No key.'); return; }
-  const r = UrlFetchApp.fetch(CONFIG.FATHOM_BASE + '/meetings?limit=1', { headers: { 'X-Api-Key': key }, muteHttpExceptions: true });
-  Logger.log('Fathom: ' + r.getResponseCode() + ' | ' + r.getContentText().substring(0,200));
+function runEngine(){MeetingProcessor.run();}
+function removeTriggers(){ScriptApp.getProjectTriggers().forEach(t=>ScriptApp.deleteTrigger(t));Logger.log('All triggers removed.');}
+function pingFathom(){
+  const key=CONFIG.FATHOM_API_KEY;if(!key){Logger.log('No key.');return;}
+  const r=UrlFetchApp.fetch(CONFIG.FATHOM_BASE+'/meetings?limit=1',{headers:{'X-Api-Key':key},muteHttpExceptions:true});
+  Logger.log('Fathom: '+r.getResponseCode()+' | '+r.getContentText().substring(0,200));
 }
-function pingClaude() {
-  const key = CONFIG.ANTHROPIC_API_KEY; if (!key) { Logger.log('No key.'); return; }
-  const r = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', { method:'post', contentType:'application/json', headers:{'x-api-key':key,'anthropic-version':'2023-06-01'}, payload:JSON.stringify({model:CONFIG.CLAUDE_MODEL,max_tokens:10,messages:[{role:'user',content:'Say OK'}]}), muteHttpExceptions:true });
-  Logger.log('Claude: ' + r.getResponseCode() + ' | ' + r.getContentText().substring(0,200));
-}</div>
+function pingClaude(){
+  const key=CONFIG.ANTHROPIC_API_KEY;if(!key){Logger.log('No key.');return;}
+  const r=UrlFetchApp.fetch('https://api.anthropic.com/v1/messages',{method:'post',contentType:'application/json',headers:{'x-api-key':key,'anthropic-version':'2023-06-01'},payload:JSON.stringify({model:CONFIG.CLAUDE_MODEL,max_tokens:10,messages:[{role:'user',content:'Say OK'}]}),muteHttpExceptions:true});
+  Logger.log('Claude: '+r.getResponseCode()+' | '+r.getContentText().substring(0,200));
+}</div></div>
         </div>
-        <div class="code-panel" id="tab-diag">
-          <div class="code-top"><span class="code-filename">FathomDiagnostic.gs — diagnostic runner</span><button class="copy-btn" onclick="copyCode(this,'code-diag')">Copy</button></div>
-          <div class="code-body" id="code-diag">function diagnoseFathomApi() {
+      </div>
+
+      <div class="file-row" id="fr-diag">
+        <div class="file-trigger" onclick="toggleFile('fr-diag')">
+          <div class="file-checkbox-wrap"><div class="file-cb" onclick="tickFile(event,'fr-diag')"></div></div>
+          <div class="file-name-wrap"><span class="file-name">FathomDiagnostic.gs</span></div>
+          <div class="file-arrow-wrap"><span class="file-arrow">›</span></div>
+        </div>
+        <div class="file-body">
+          <div class="file-desc">Thin wrapper that runs the diagnostic from the Apps Script editor and logs output. Run this to verify your Fathom key before deploying.</div>
+          <div class="code-wrap"><button class="code-copy-btn" onclick="copyCode(this,'code-diag')">Copy</button><div class="code-block" id="code-diag">function diagnoseFathomApi() {
   const result = serverRunDiagnostic();
   result.lines.forEach(l => Logger.log(l));
-}</div>
+}</div></div>
         </div>
-        <div class="code-panel" id="tab-dashboard">
-          <div class="code-top"><span class="code-filename">Dashboard.html — add as HTML file (not Script)</span><button class="copy-btn" onclick="copyCode(this,'code-dashboard')">Copy</button></div>
-          <div class="code-body" id="code-dashboard">In the GAS editor: click + next to Files
-→ choose HTML (not Script)
-→ name it exactly "Dashboard" (no extension)
-→ paste the full Dashboard.html source
+      </div>
 
-The Dashboard.html source is provided separately.
-Contact keyona@rerev.io if you need it.</div>
+      <div class="file-row" id="fr-dashboard">
+        <div class="file-trigger" onclick="toggleFile('fr-dashboard')">
+          <div class="file-checkbox-wrap"><div class="file-cb" onclick="tickFile(event,'fr-dashboard')"></div></div>
+          <div class="file-name-wrap"><span class="file-name">Dashboard.html</span><span class="file-tag">HTML file</span></div>
+          <div class="file-arrow-wrap"><span class="file-arrow">›</span></div>
         </div>
-        <div class="nav-row"><button class="btn btn-back" onclick="goTo(2)">← Back</button><button class="btn btn-next" onclick="goTo(4)">Next: Script Properties →</button></div>
-      </div>
-    </div>
-    <div class="step-section" id="step-4">
-      <div class="step-header">
-        <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">05</span></div>
-        <div class="step-title-block"><div class="gradient-line"></div><h2>Set Script Properties</h2><p>API keys and config values are stored as Script Properties, not hardcoded. This keeps credentials secure.</p></div>
-      </div>
-      <div class="content-wrap">
-        <div class="setup-step"><div class="setup-step-num">1</div><div class="setup-step-body"><div class="setup-step-title">Open Script Properties</div><div class="setup-step-desc"><strong>Project Settings</strong> (gear icon) → scroll to <strong>Script Properties</strong> → click <strong>Edit script properties</strong>.</div></div></div>
-        <div class="setup-step"><div class="setup-step-num">2</div><div class="setup-step-body"><div class="setup-step-title">Add each property below</div><div class="setup-step-desc">Click <strong>Add property</strong> for each row. Names are case-sensitive. Paste values exactly.</div></div></div>
-        <div class="prop-list">
-          <div class="prop required"><div class="prop-head"><span class="prop-key">FATHOM_API_KEY</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">Your Fathom API key. app.fathom.video → Settings → Integrations → API.</p></div></div>
-          <div class="prop required"><div class="prop-head"><span class="prop-key">ANTHROPIC_API_KEY</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">Your Anthropic API key. console.anthropic.com → API Keys.</p></div></div>
-          <div class="prop required"><div class="prop-head"><span class="prop-key">PRIMARY_EMAIL</span><span class="prop-tag tag-required">Required</span></div><div class="prop-body"><p class="prop-desc">Email address where digests are sent and drafts route when staging is off.</p><div class="how-to">Example: your@email.com</div></div></div>
-          <div class="prop carry-over"><div class="prop-head"><span class="prop-key">STAGING_EMAIL</span><span class="prop-tag tag-carry">Set first</span></div><div class="prop-body"><p class="prop-desc">Your own email during testing. All drafts and digests route here instead of real recipients. Delete when ready to go live.</p><div class="how-to amber">Set before first run. Remove when output is confirmed correct.</div></div></div>
-          <div class="prop optional"><div class="prop-head"><span class="prop-key">CC_EMAIL</span><span class="prop-tag tag-optional">Optional</span></div><div class="prop-body"><p class="prop-desc">CC address on every sent follow-up. Only applies when staging is off.</p></div></div>
-          <div class="prop optional"><div class="prop-head"><span class="prop-key">SYSTEM_PROMPT</span><span class="prop-tag tag-optional">Optional</span></div><div class="prop-body"><p class="prop-desc">Custom system prompt that overrides the default. If set and longer than 50 characters, it replaces the built-in Kora Insights prompt entirely.</p><div class="how-to">Leave blank to use the default. The default already includes Kora Insights context and email style rules.</div></div></div>
+        <div class="file-body">
+          <div class="file-desc">The web app UI. Add this as an HTML file (not Script) in GAS. Brand color and company name are injected as template variables from your Script Properties.</div>
+          <div class="code-wrap"><button class="code-copy-btn" onclick="copyCode(this,'code-dashboard')">Copy</button><div class="code-block" id="code-dashboard">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;title&gt;&lt;?= pageTitle ?&gt;&lt;/title&gt;
+&lt;style&gt;
+  :root { --brand: &lt;?= brandColor ?&gt;; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; padding: 32px 24px; font-size: 14px; }
+  .container { max-width: 720px; margin: 0 auto; }
+  header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  header p { font-size: 12px; color: #888; margin-bottom: 24px; }
+  .status-bar { font-size: 12px; color: #666; margin-bottom: 24px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .pill { padding: 3px 10px; border-radius: 20px; font-weight: 600; font-size: 12px; }
+  .pill.ok { background: #e6f4ec; color: #1e6e3e; }
+  .pill.warn { background: #fef3e2; color: #8a5c00; }
+  .pill.staging { background: #fff3cd; color: #7a5c00; }
+  .card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; }
+  .card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #999; margin-bottom: 12px; }
+  button { height: 36px; padding: 0 16px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-secondary { background: #f0f0f0; color: #333; border: 1px solid #d8d8d8; }
+  .btn-outline { background: #fff; color: var(--brand); border: 1px solid var(--brand); }
+  .btn-ghost { background: #fff; color: #888; border: 1px solid #d8d8d8; font-size: 12px; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .toast { margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 13px; display: none; }
+  .toast.show { display: block; }
+  .toast.ok { background: #e6f4ec; color: #1e6e3e; }
+  .toast.err { background: #fdecea; color: #b91c1c; }
+  .toast.loading { background: rgba(26,158,158,0.08); color: var(--brand); }
+  .diag-output { margin-top: 12px; background: #1a1a1a; color: #e0e0e0; border-radius: 6px; padding: 12px 14px; font-family: monospace; font-size: 11px; line-height: 1.6; display: none; max-height: 260px; overflow-y: auto; white-space: pre-wrap; }
+  .diag-output.show { display: block; }
+  .log-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 8px; }
+  .log-hint { font-size: 12px; color: #999; margin-bottom: 12px; }
+  .log-empty { text-align: center; color: #aaa; font-size: 13px; padding: 24px 0; }
+  .log-item { border: 1px solid #e0e0e0; border-radius: 6px; padding: 11px 14px; margin-bottom: 8px; font-size: 13px; display: flex; gap: 10px; align-items: flex-start; }
+  .log-item.skipped { border-left: 3px solid #f59e0b; background: #fffbeb; }
+  .log-item.backfilled { border-left: 3px solid #a0a0a0; background: #fafafa; }
+  .log-item.processed { border-left: 3px solid #1e6e3e; }
+  .log-cb { width: 15px; height: 15px; margin-top: 2px; flex-shrink: 0; accent-color: var(--brand); cursor: pointer; }
+  .log-body { flex: 1; min-width: 0; }
+  .log-name { font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .log-id { font-family: monospace; font-size: 11px; color: #aaa; margin-bottom: 3px; }
+  .log-meta { display: flex; gap: 12px; flex-wrap: wrap; color: #888; font-size: 12px; }
+  .log-meta a { color: var(--brand); text-decoration: none; font-weight: 600; }
+  .log-error { font-size: 11px; color: #b91c1c; margin-top: 4px; }
+  .badge { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px; text-transform: uppercase; }
+  .badge.backfilled { background: #ebebeb; color: #888; }
+  .badge.processed { background: #e6f4ec; color: #1e6e3e; }
+  .badge.skipped { background: #fff3cd; color: #8a5c00; }
+  .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 5px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class="container"&gt;
+  &lt;header&gt;
+    &lt;h1&gt;Meeting Engine&lt;/h1&gt;
+    &lt;? if (companyName) { ?&gt;&lt;p&gt;&lt;?= companyName ?&gt; &amp;mdash; auto follow-up system&lt;/p&gt;&lt;? } else { ?&gt;&lt;p&gt;Auto follow-up system&lt;/p&gt;&lt;? } ?&gt;
+  &lt;/header&gt;
+  &lt;div class="status-bar" id="statusBar"&gt;Loading...&lt;/div&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="card-label"&gt;Run&lt;/div&gt;
+    &lt;div class="row"&gt;
+      &lt;button class="btn-primary" id="runBtn" onclick="runNow()"&gt;Run Now&lt;/button&gt;
+      &lt;button class="btn-outline" id="backfillBtn" onclick="backfill()"&gt;Load Past Meetings&lt;/button&gt;
+      &lt;button class="btn-ghost" id="diagBtn" onclick="runDiag()"&gt;Run Diagnostic&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="toast" id="runToast"&gt;&lt;/div&gt;
+    &lt;div class="diag-output" id="diagOutput"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="log-top"&gt;
+      &lt;div class="card-label" style="margin:0"&gt;Processing Log&lt;/div&gt;
+      &lt;div class="row"&gt;
+        &lt;button class="btn-secondary" id="reprocessBtn" onclick="reprocessSelected()" disabled style="height:30px;font-size:12px"&gt;Reprocess Selected&lt;/button&gt;
+        &lt;button class="btn-secondary" onclick="loadLog()" style="height:30px;font-size:12px"&gt;Refresh&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="log-hint"&gt;Gray = not processed. Green = done. Check up to 4 and hit Reprocess Selected.&lt;/div&gt;
+    &lt;div id="logContainer"&gt;&lt;div class="log-empty"&gt;Loading...&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="toast" id="reprocessToast"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+var logRows=[],MAX_SELECT=4;
+function toast(id,msg,type){var el=document.getElementById(id);el.className='toast show '+type;el.innerHTML=msg;}
+function checkedIds(){return Array.from(document.querySelectorAll('.log-cb:checked')).map(function(c){return c.dataset.id;});}
+function updateBtn(){var ids=checkedIds(),btn=document.getElementById('reprocessBtn');btn.disabled=ids.length===0;btn.textContent=ids.length?'Reprocess Selected ('+ids.length+')':'Reprocess Selected';}
+function onCbChange(cb){var item=cb.closest('.log-item');if(!item)return;if(cb.checked&amp;&amp;checkedIds().length&gt;MAX_SELECT){cb.checked=false;toast('reprocessToast','Max 4 at a time.','err');return;}item.classList.toggle('checked',cb.checked);updateBtn();}
+function loadStatus(){google.script.run.withSuccessHandler(function(s){if(!s)return;var p=[];p.push('&lt;span class="pill '+(s.hasFathomKey?'ok':'warn')+'"&gt;'+(s.hasFathomKey?'Fathom connected':'Fathom key missing')+'&lt;/span&gt;');p.push('&lt;span class="pill '+(s.hasAnthropicKey?'ok':'warn')+'"&gt;'+(s.hasAnthropicKey?'Claude connected':'Claude key missing')+'&lt;/span&gt;');if(s.stagingMode)p.push('&lt;span class="pill staging"&gt;Staging &amp;rarr; '+s.stagingEmail+'&lt;/span&gt;');if(s.primaryEmail)p.push('&lt;span&gt;Sending to: '+s.primaryEmail+'&lt;/span&gt;');p.push('&lt;span&gt;Last run: '+(s.lastRun==='Never'?'Never':new Date(s.lastRun).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}))+'&lt;/span&gt;');document.getElementById('statusBar').innerHTML=p.join('');}).withFailureHandler(function(){}).serverGetStatus();}
+function runNow(){var btn=document.getElementById('runBtn');btn.disabled=true;toast('runToast','&lt;span class="spinner"&gt;&lt;/span&gt;Checking for new meetings...','loading');google.script.run.withSuccessHandler(function(r){toast('runToast',r&amp;&amp;r.message?r.message:'Done.',r&amp;&amp;r.success?'ok':'err');btn.disabled=false;loadLog();loadStatus();}).withFailureHandler(function(e){toast('runToast',e.message||'Error.','err');btn.disabled=false;}).serverRunNow();}
+function backfill(){var btn=document.getElementById('backfillBtn');btn.disabled=true;toast('runToast','&lt;span class="spinner"&gt;&lt;/span&gt;Loading past meetings...','loading');google.script.run.withSuccessHandler(function(r){toast('runToast',r&amp;&amp;r.message?r.message:'Done.',r&amp;&amp;r.success?'ok':'err');btn.disabled=false;loadLog();}).withFailureHandler(function(e){toast('runToast',e.message||'Error.','err');btn.disabled=false;}).serverBackfill();}
+function runDiag(){var btn=document.getElementById('diagBtn'),out=document.getElementById('diagOutput');btn.disabled=true;out.className='diag-output show';out.textContent='Running diagnostic...';google.script.run.withSuccessHandler(function(r){btn.disabled=false;out.textContent=r&amp;&amp;r.lines&amp;&amp;r.lines.length?r.lines.join('\n'):'No output.';}).withFailureHandler(function(e){btn.disabled=false;out.textContent='Error: '+(e.message||'Unknown');}).serverRunDiagnostic();}
+function reprocessSelected(){var ids=checkedIds();if(!ids.length)return;var btn=document.getElementById('reprocessBtn');btn.disabled=true;toast('reprocessToast','&lt;span class="spinner"&gt;&lt;/span&gt;Reprocessing...','loading');google.script.run.withSuccessHandler(function(r){if(r&amp;&amp;r.success){toast('reprocessToast',(r.results||[]).map(function(x){return x.message;}).join('&lt;br&gt;')||'Done.','ok');document.querySelectorAll('.log-cb').forEach(function(c){c.checked=false;});document.querySelectorAll('.log-item').forEach(function(el){el.classList.remove('checked');});updateBtn();loadLog();}else{toast('reprocessToast',(r&amp;&amp;r.message)||'Error.','err');}btn.disabled=false;}).withFailureHandler(function(e){toast('reprocessToast',e.message||'Error.','err');btn.disabled=false;}).serverReprocessSelected(ids);}
+function loadLog(){document.getElementById('logContainer').innerHTML='&lt;div class="log-empty"&gt;Loading...&lt;/div&gt;';google.script.run.withSuccessHandler(function(rows){logRows=rows||[];var c=document.getElementById('logContainer');if(!logRows.length){c.innerHTML='&lt;div class="log-empty"&gt;No entries yet. Click "Load Past Meetings" to populate.&lt;/div&gt;';return;}var html='';logRows.slice(0,100).forEach(function(row){var id=row['Meeting ID']||'',title=row['Meeting Title']||'Unknown',status=(row['Status']||'').toLowerCase(),isSkipped=status==='skipped',isBackfilled=status==='backfilled',isProcessed=status==='processed',errorDetail=row['Error Detail']||'',date='';try{if(row['Processed At'])date=new Date(row['Processed At']).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){}var fUrl=row['Fathom URL']||'',dId=row['Draft ID']||'',att=row['Attendees']||'',links=[];if(fUrl)links.push('&lt;a href="'+fUrl+'" target="_blank"&gt;Fathom&lt;/a&gt;');if(dId)links.push('&lt;a href="https://mail.google.com/mail/#all/'+dId+'" target="_blank"&gt;Draft&lt;/a&gt;');var meta=[date,att].filter(function(m){return m&amp;&amp;m.trim();}),badgeHtml='';if(isBackfilled)badgeHtml='&lt;span class="badge backfilled"&gt;not processed&lt;/span&gt;';else if(isSkipped)badgeHtml='&lt;span class="badge skipped"&gt;skipped&lt;/span&gt;';else if(isProcessed)badgeHtml='&lt;span class="badge processed"&gt;done&lt;/span&gt;';var cls='log-item'+(isSkipped?' skipped':isBackfilled?' backfilled':isProcessed?' processed':'');html+='&lt;div class="'+cls+'"&gt;&lt;input type="checkbox" class="log-cb" data-id="'+id+'" onchange="onCbChange(this)"&gt;&lt;div class="log-body"&gt;&lt;div class="log-name"&gt;'+title+'&lt;/div&gt;';if(id)html+='&lt;div class="log-id"&gt;'+id+'&lt;/div&gt;';html+='&lt;div class="log-meta"&gt;'+meta.map(function(m){return'&lt;span&gt;'+m+'&lt;/span&gt;';}).join('')+links.map(function(l){return'&lt;span&gt;'+l+'&lt;/span&gt;';}).join('')+(badgeHtml?'&lt;span&gt;'+badgeHtml+'&lt;/span&gt;':'')+'&lt;/div&gt;';if(isSkipped&amp;&amp;errorDetail)html+='&lt;div class="log-error"&gt;'+errorDetail+'&lt;/div&gt;';html+='&lt;/div&gt;&lt;/div&gt;';});c.innerHTML=html;updateBtn();}).withFailureHandler(function(){document.getElementById('logContainer').innerHTML='&lt;div class="log-empty"&gt;Could not load log.&lt;/div&gt;';}).serverGetLog();}
+loadStatus();loadLog();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div></div>
         </div>
-        <div class="nav-row"><button class="btn btn-back" onclick="goTo(3)">← Back</button><button class="btn btn-next" onclick="goTo(5)">Next: Deploy Dashboard →</button></div>
       </div>
+
     </div>
-    <div class="step-section" id="step-5">
-      <div class="step-header">
-        <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">06</span></div>
-        <div class="step-title-block"><div class="gradient-line"></div><h2>Deploy the Dashboard</h2><p>Deploy the script as a web app to get your dashboard URL. Then install the automatic trigger.</p></div>
-      </div>
-      <div class="content-wrap">
-        <div class="setup-step"><div class="setup-step-num">1</div><div class="setup-step-body"><div class="setup-step-title">Deploy as web app</div><div class="setup-step-desc"><strong>Deploy</strong> (top right) → <strong>New deployment</strong> → gear icon → <strong>Web app</strong>. Set <strong>Execute as</strong> to "Me" and <strong>Who has access</strong> to "Only myself." Click <strong>Deploy</strong>.</div></div></div>
-        <div class="setup-step"><div class="setup-step-num">2</div><div class="setup-step-body"><div class="setup-step-title">Copy the web app URL</div><div class="setup-step-desc">Copy and save the URL Google shows after deploying. Format: <code>https://script.google.com/macros/s/[ID]/exec</code> — this is your dashboard link.</div></div></div>
-        <div class="setup-step"><div class="setup-step-num">3</div><div class="setup-step-body"><div class="setup-step-title">Authorize the script</div><div class="setup-step-desc">Open the URL in your browser. Click through the OAuth flow. If you see "unverified app," click <strong>Advanced</strong> → <strong>Go to T018 Post-Meeting Intelligence</strong>.</div></div></div>
-        <div class="setup-step"><div class="setup-step-num">4</div><div class="setup-step-body"><div class="setup-step-title">Run the diagnostic</div><div class="setup-step-desc">On the dashboard click <strong>Run Diagnostic</strong>. Confirms Fathom key works, meetings are available, and transcript/summary endpoints respond. All lines should show expected values before you proceed.</div></div></div>
-        <div class="setup-step"><div class="setup-step-num">5</div><div class="setup-step-body"><div class="setup-step-title">Install the trigger</div><div class="setup-step-desc">In the GAS editor, select <code>installTrigger</code> from the function dropdown at the top and click Run. This sets a 5-minute trigger calling <code>runEngine()</code>. Verify it appears under <strong>Triggers</strong> in the left sidebar.</div></div></div>
-        <div class="warning-block"><strong>Every time you change code, redeploy.</strong> Go to Deploy → Manage deployments → edit the existing deployment → save a new version.</div>
-        <div class="nav-row"><button class="btn btn-back" onclick="goTo(4)">← Back</button><button class="btn btn-next" onclick="goTo(6)">Next: Launch Checklist →</button></div>
-      </div>
+    <div class="nav-row"><button class="btn btn-back" onclick="goTo(2)">← Back</button><button class="btn btn-next" onclick="goTo(4)">Next: Script Properties →</button></div>
+  </div>
+</div>
+
+<div class="step-section" id="step-4">
+  <div class="step-header">
+    <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">05</span></div>
+    <div class="step-title-block"><div class="gradient-line"></div><h2>Set Script Properties</h2><p>Every configurable value lives here. Nothing is hardcoded in the files. Open Project Settings → Script Properties → Add property for each one below.</p></div>
+  </div>
+  <div class="content-wrap">
+    <div class="warning-block"><strong>Names are case-sensitive.</strong> Paste them exactly as shown. Values are stored securely and never appear in source code.</div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div>Required</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Set before first run</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--body);opacity:0.35"></div>Optional</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#aaa"></div>Auto-managed</div>
     </div>
-    <div class="step-section" id="step-6">
-      <div class="step-header">
-        <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">07</span></div>
-        <div class="step-title-block"><div class="gradient-line"></div><h2>Launch Checklist</h2><p>Check off each item. When all are marked, your system is live.</p></div>
-      </div>
-      <div class="content-wrap">
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div>Required</div>
-          <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Verify before going live</div>
-          <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Complete</div>
-        </div>
-        <div class="complete-banner" id="complete-banner">All steps complete — your Post-Meeting Intelligence Engine is live.</div>
-        <div class="checklist">
-          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">All 9 files added</span>Config · FathomClient · MeetingProcessor · ProcessingLog · OutputDispatcher · TriggerSetup · FathomDiagnostic · Dashboard · appsscript.json all present in the GAS editor.</div></div>
-          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">FATHOM_API_KEY set</span>Pasted into Script Properties. Key active and not expired.</div></div>
-          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">ANTHROPIC_API_KEY set</span>Pasted into Script Properties. Account has available credits.</div></div>
-          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">PRIMARY_EMAIL set</span>Set to the email that should receive digests and drafts.</div></div>
-          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">STAGING_EMAIL set for testing</span>Set to your own email before first run. Remove when output is confirmed correct.</div></div>
-          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Web app deployed</span>Deployment created, URL saved, authorization completed.</div></div>
-          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Diagnostic passed</span>Run Diagnostic showed Fathom connected, meetings available, transcript and summary endpoints responding.</div></div>
-          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Test run completed</span>Clicked Run Now. A meeting was processed, a draft appeared in Gmail, and a digest email arrived.</div></div>
-          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Draft quality verified</span>Reviewed the draft output. Tone, recipient, subject, and body match expectations. Adjust SYSTEM_PROMPT if needed.</div></div>
-          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Trigger installed</span>Ran installTrigger(). Trigger visible under Triggers. Handler is runEngine, every 5 minutes.</div></div>
-          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Staging mode removed</span>Deleted or cleared STAGING_EMAIL. System routing to real recipients.</div></div>
-        </div>
-        <div class="nav-row"><button class="btn btn-back" onclick="goTo(5)">← Back</button><span style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;">Questions? keyona@rerev.io</span></div>
-      </div>
+    <table class="props-table">
+      <thead><tr><th>Property</th><th>Status</th><th>Description</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>FATHOM_API_KEY</td><td><span class="req-dot" style="background:var(--cyan)"></span>Required</td><td>Your Fathom API key. app.fathom.video → Settings → Integrations → API.</td><td><code>fk_live_abc...</code></td></tr>
+        <tr><td>ANTHROPIC_API_KEY</td><td><span class="req-dot" style="background:var(--cyan)"></span>Required</td><td>Your Anthropic API key. console.anthropic.com → API Keys.</td><td><code>sk-ant-api03-...</code></td></tr>
+        <tr><td>PRIMARY_EMAIL</td><td><span class="req-dot" style="background:var(--cyan)"></span>Required</td><td>Your email. Digest notifications go here when staging is off.</td><td><code>you@company.com</code></td></tr>
+        <tr><td>MY_EMAIL</td><td><span class="req-dot" style="background:var(--cyan)"></span>Required</td><td>Your email, used to filter you out of attendee lists. Usually same as PRIMARY_EMAIL.</td><td><code>you@company.com</code></td></tr>
+        <tr><td>PERSON_NAME</td><td><span class="req-dot" style="background:var(--cyan)"></span>Required</td><td>Your first name. Used in email signatures and AI prompts.</td><td><code>Jane</code></td></tr>
+        <tr><td>PERSON_FULL_NAME</td><td><span class="req-dot" style="background:var(--cyan)"></span>Required</td><td>Your full name. Used in the AI system prompt identity line.</td><td><code>Jane Doe</code></td></tr>
+        <tr><td>PERSON_ROLE</td><td><span class="req-dot" style="background:var(--cyan)"></span>Required</td><td>Your title or role. Gives Claude context about who you are.</td><td><code>Founder and CEO</code></td></tr>
+        <tr><td>COMPANY_NAME</td><td><span class="req-dot" style="background:var(--cyan)"></span>Required</td><td>Your company name. Appears in the dashboard header and digest footer.</td><td><code>Acme Ventures</code></td></tr>
+        <tr><td>COMPANY_DESCRIPTION</td><td><span class="req-dot" style="background:var(--cyan)"></span>Required</td><td>1-3 sentences describing your company. Injected into the Claude prompt for context.</td><td><code>Acme Ventures is a seed-stage VC firm in Austin focused on climate tech.</code></td></tr>
+        <tr><td>STAGING_EMAIL</td><td><span class="req-dot" style="background:var(--amber)"></span>Set first</td><td>During testing, all drafts and digests route here instead of real recipients. Clear it when ready to go live.</td><td><code>you+test@gmail.com</code></td></tr>
+        <tr><td>SIGNATURE_CLOSE</td><td><span class="req-dot" style="background:var(--body);opacity:0.5"></span>Optional</td><td>Email closing. Defaults to "Best,".</td><td><code>Warmly,</code></td></tr>
+        <tr><td>SIGNATURE_NAME</td><td><span class="req-dot" style="background:var(--body);opacity:0.5"></span>Optional</td><td>Signature name. Defaults to PERSON_NAME.</td><td><code>Jane</code></td></tr>
+        <tr><td>CC_EMAIL</td><td><span class="req-dot" style="background:var(--body);opacity:0.5"></span>Optional</td><td>CC address on outgoing drafts. Only applied when staging is off.</td><td><code>assistant@company.com</code></td></tr>
+        <tr><td>DEFAULT_SUBJECT_PREFIX</td><td><span class="req-dot" style="background:var(--body);opacity:0.5"></span>Optional</td><td>Subject line prefix when Claude does not return one. Defaults to "Following up".</td><td><code>Following up on</code></td></tr>
+        <tr><td>LOG_SHEET_ID</td><td><span class="req-dot" style="background:var(--body);opacity:0.5"></span>Optional</td><td>ID of an existing Google Sheet for the processing log. If empty, a new sheet is created on first run.</td><td><code>1AbC...XyZ</code></td></tr>
+        <tr><td>LOG_SHEET_NAME</td><td><span class="req-dot" style="background:var(--body);opacity:0.5"></span>Optional</td><td>Name given to the log sheet when auto-created. Defaults to "Meeting Log".</td><td><code>Acme Meeting Log</code></td></tr>
+        <tr><td>SYSTEM_PROMPT</td><td><span class="req-dot" style="background:var(--body);opacity:0.5"></span>Optional</td><td>Full custom system prompt. If set and over 50 characters, it replaces the assembled default entirely.</td><td>Multi-paragraph custom prompt</td></tr>
+        <tr><td>BRAND_COLOR</td><td><span class="req-dot" style="background:var(--body);opacity:0.5"></span>Optional</td><td>Hex color used in the dashboard and digest email links. Defaults to #1A9E9E.</td><td><code>#0D1F2D</code></td></tr>
+        <tr><td>SYSTEM_LABEL</td><td><span class="req-dot" style="background:var(--body);opacity:0.5"></span>Optional</td><td>Label in digest footer before the company name. Defaults to "Post-Meeting Intelligence".</td><td><code>Meeting Intelligence</code></td></tr>
+        <tr><td>CLAUDE_MODEL</td><td><span class="req-dot" style="background:var(--body);opacity:0.5"></span>Optional</td><td>Anthropic model ID. Defaults to claude-sonnet-4-5.</td><td><code>claude-opus-4-5</code></td></tr>
+        <tr><td>FATHOM_BASE</td><td><span class="req-dot" style="background:var(--body);opacity:0.5"></span>Optional</td><td>Fathom API base URL. Only change if Fathom changes their endpoint.</td><td><code>https://api.fathom.ai/external/v1</code></td></tr>
+        <tr><td>LAST_RUN_TIMESTAMP</td><td><span class="req-dot" style="background:#aaa"></span>Auto</td><td>Set and managed by the script automatically. Do not set manually.</td><td>(managed by script)</td></tr>
+      </tbody>
+    </table>
+    <div class="nav-row"><button class="btn btn-back" onclick="goTo(3)">← Back</button><button class="btn btn-next" onclick="goTo(5)">Next: Deploy Dashboard →</button></div>
+  </div>
+</div>
+
+<div class="step-section" id="step-5">
+  <div class="step-header">
+    <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">06</span></div>
+    <div class="step-title-block"><div class="gradient-line"></div><h2>Deploy the Dashboard</h2><p>Deploy as a web app to get your dashboard URL, then install the automatic trigger.</p></div>
+  </div>
+  <div class="content-wrap">
+    <div class="setup-step"><div class="setup-step-num">1</div><div class="setup-step-body"><div class="setup-step-title">Deploy as web app</div><div class="setup-step-desc"><strong>Deploy</strong> (top right) → <strong>New deployment</strong> → gear icon → <strong>Web app</strong>. Set <strong>Execute as</strong> to "Me" and <strong>Who has access</strong> to "Only myself." Click <strong>Deploy</strong>.</div></div></div>
+    <div class="setup-step"><div class="setup-step-num">2</div><div class="setup-step-body"><div class="setup-step-title">Copy the web app URL</div><div class="setup-step-desc">Copy and save the URL shown after deploying. Format: <code>https://script.google.com/macros/s/[ID]/exec</code>. This is your dashboard.</div></div></div>
+    <div class="setup-step"><div class="setup-step-num">3</div><div class="setup-step-body"><div class="setup-step-title">Authorize the script</div><div class="setup-step-desc">Open the URL. Click through the Google authorization flow. If you see "unverified app," click <strong>Advanced</strong> → <strong>Go to [project name]</strong>.</div></div></div>
+    <div class="setup-step"><div class="setup-step-num">4</div><div class="setup-step-body"><div class="setup-step-title">Run the diagnostic</div><div class="setup-step-desc">On the dashboard, click <strong>Run Diagnostic</strong>. Confirms your Fathom key works and Claude is reachable before the trigger fires automatically.</div></div></div>
+    <div class="setup-step"><div class="setup-step-num">5</div><div class="setup-step-body"><div class="setup-step-title">Install the trigger</div><div class="setup-step-desc">In the GAS editor, select <code>installTrigger</code> from the function dropdown and click Run. Verify it appears under <strong>Triggers</strong> in the left sidebar with handler <code>runEngine</code>.</div></div></div>
+    <div class="warning-block"><strong>Every time you change code, redeploy.</strong> Deploy → Manage deployments → edit → save new version.</div>
+    <div class="nav-row"><button class="btn btn-back" onclick="goTo(4)">← Back</button><button class="btn btn-next" onclick="goTo(6)">Next: Launch Checklist →</button></div>
+  </div>
+</div>
+
+<div class="step-section" id="step-6">
+  <div class="step-header">
+    <div class="step-folio"><span class="step-folio-num">Step</span><span class="step-folio-val">07</span></div>
+    <div class="step-title-block"><div class="gradient-line"></div><h2>Launch Checklist</h2><p>Check off each item. When all are marked, your system is live.</p></div>
+  </div>
+  <div class="content-wrap">
+    <div class="complete-banner" id="complete-banner">All steps complete — your Post-Meeting Intelligence Engine is live.</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">All 9 files added</span>appsscript.json · Config · FathomClient · MeetingProcessor · ProcessingLog · OutputDispatcher · TriggerSetup · FathomDiagnostic · Dashboard all present in the GAS editor.</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">FATHOM_API_KEY set</span>Pasted into Script Properties. Key active and not expired.</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">ANTHROPIC_API_KEY set</span>Pasted into Script Properties. Account has available credits.</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Identity properties set</span>PERSON_NAME · PERSON_FULL_NAME · PERSON_ROLE · COMPANY_NAME · COMPANY_DESCRIPTION · MY_EMAIL · PRIMARY_EMAIL all filled in.</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">STAGING_EMAIL set for testing</span>Set to your own email before first run. Remove when output is confirmed correct.</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Web app deployed and authorized</span>Deployment created, URL saved, Google authorization completed.</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Diagnostic passed</span>Run Diagnostic showed Fathom connected and Claude reachable.</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Test run completed</span>Clicked Run Now. A meeting was processed, a draft appeared in Gmail, digest email arrived.</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Draft quality verified</span>Tone, recipient, subject, and body match expectations. Adjust SYSTEM_PROMPT if needed.</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Trigger installed</span>Ran installTrigger(). Visible under Triggers. Handler is runEngine, every 5 minutes.</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text"><span class="check-key">Staging mode removed</span>Cleared STAGING_EMAIL. System now routing to real recipients.</div></div>
     </div>
-  </main>
+    <div class="nav-row"><button class="btn btn-back" onclick="goTo(5)">← Back</button><span style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;">Questions? keyona@rerev.io</span></div>
+  </div>
+</div>
+
+</main>
 </div>
 <script>
-  function goTo(step) {
-    document.querySelectorAll('.step-section').forEach((s,i) => s.classList.toggle('active', i===step));
-    document.querySelectorAll('.step-nav-item').forEach((s,i) => s.classList.toggle('active', i===step));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-  function switchTab(tab, panelId) {
-    const wrap = tab.closest('.content-wrap');
-    wrap.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
-    wrap.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById(panelId).classList.add('active');
-  }
-  function copyCode(btn, id) {
-    const el = document.getElementById(id);
-    navigator.clipboard.writeText(el.innerText).then(() => {
-      btn.textContent = 'Copied!'; btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-    });
-  }
-  function toggleCheck(el) {
-    el.classList.toggle('checked');
-    const all = document.querySelectorAll('.check-item');
-    const done = document.querySelectorAll('.check-item.checked');
-    const lastNav = document.querySelectorAll('.step-nav-item').length - 1;
-    document.getElementById('complete-banner').style.display = done.length === all.length ? 'block' : 'none';
-    if (done.length === all.length) document.querySelectorAll('.step-nav-item')[lastNav].classList.add('done');
-    else document.querySelectorAll('.step-nav-item')[lastNav].classList.remove('done');
-  }
+function goTo(step){
+  document.querySelectorAll('.step-section').forEach((s,i)=>s.classList.toggle('active',i===step));
+  document.querySelectorAll('.step-nav-item').forEach((s,i)=>s.classList.toggle('active',i===step));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleFile(rowId){
+  document.getElementById(rowId).classList.toggle('open');
+}
+function tickFile(e,rowId){
+  e.stopPropagation();
+  document.getElementById(rowId).querySelector('.file-cb').classList.toggle('ticked');
+}
+function copyCode(btn,id){
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>{
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+function toggleCheck(el){
+  el.classList.toggle('checked');
+  const all=document.querySelectorAll('.check-item');
+  const done=document.querySelectorAll('.check-item.checked');
+  const lastNav=document.querySelectorAll('.step-nav-item').length-1;
+  document.getElementById('complete-banner').style.display=done.length===all.length?'block':'none';
+  if(done.length===all.length)document.querySelectorAll('.step-nav-item')[lastNav].classList.add('done');
+  else document.querySelectorAll('.step-nav-item')[lastNav].classList.remove('done');
+}
+document.getElementById('fr-manifest').classList.add('open');
 </script>
 </body>
 </html>
