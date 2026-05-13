@@ -461,7 +461,6 @@
         .automation-hub {
             width: 100%;
             max-width: 1200px;
-            height: 780px;
             margin: 4rem auto;
             background: linear-gradient(160deg, var(--bg-surface) 0%, var(--bg-warm) 100%);
             border: 1px solid var(--border);
@@ -472,6 +471,7 @@
             display: flex;
             flex-direction: column;
         }
+        .hub-body { min-height: 560px; }
         .label-bar {
             display: flex; width: 100%; height: 54px;
             flex-shrink: 0; border-bottom: 1px solid var(--border);
@@ -509,10 +509,11 @@
             align-items: center; padding: 32px 20px; gap: 18px; z-index: 3;
         }
         .admin-band {
-            width: 100%; height: 210px; flex-shrink: 0;
+            width: 100%; flex-shrink: 0;
             background: var(--col-admin); border-top: 1px solid var(--col-admin-border);
             position: relative; display: flex; align-items: center;
             justify-content: center; gap: 48px; z-index: 3;
+            padding: 56px 24px 40px;
         }
         .admin-band-label {
             position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
@@ -576,7 +577,7 @@
         .core-sub { font-size: 0.7rem; opacity: 0.9; margin-top: 3px; font-weight: 400; }
         .connection-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
         .connection-svg line { stroke: url(#grad); stroke-width: 1; stroke-dasharray: 4 3; opacity: 0.25; }
-        .admin-cards { display: flex; gap: 48px; align-items: center; margin-top: 32px; }
+        .admin-cards { display: flex; gap: 48px; align-items: center; }
         .admin-cards .automation-card { width: 200px; }
 
         /* ─── MODAL ─── */
@@ -625,7 +626,8 @@
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 1024px) {
-            .automation-hub { height: 650px; margin: 2rem auto; }
+            .automation-hub { margin: 2rem auto; }
+            .hub-body { min-height: 480px; }
             .label-outreach, .label-client { width: 200px; }
             .col-outreach, .col-client { width: 200px; }
             .automation-card { width: 140px; }
