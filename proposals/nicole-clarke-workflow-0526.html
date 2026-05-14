@@ -710,6 +710,83 @@
         .admin-cards { display: flex; gap: 48px; align-items: center; }
         .admin-cards .automation-card { width: 200px; }
 
+        /* ─── COMPANY / CLIENT TOGGLE ─── */
+        .cc-toggle-wrap {
+            max-width: 1200px;
+            margin: 0 auto 2.5rem;
+        }
+        .cc-toggle {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: stretch;
+            gap: 0;
+            background: var(--accent-warm);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 6px;
+            width: 100%;
+        }
+        .cc-toggle::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            bottom: 6px;
+            left: 6px;
+            width: calc(50% - 6px);
+            background: var(--bg-surface);
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1), box-shadow 0.45s ease;
+            z-index: 0;
+        }
+        .cc-toggle[data-active="client"]::before {
+            transform: translateX(100%);
+            box-shadow: 0 2px 16px rgba(124,58,237,0.2);
+        }
+        .cc-toggle button {
+            position: relative;
+            z-index: 1;
+            border: none;
+            background: transparent;
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            font-weight: 600;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.15rem;
+            line-height: 1.2;
+        }
+        .cc-toggle button .cc-btn-sub {
+            font-family: var(--font-sans);
+            font-size: 0.62rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+        }
+        .cc-toggle[data-active="company"] button[data-cc="company"] { color: var(--cyan-dark); }
+        .cc-toggle[data-active="client"] button[data-cc="client"] { color: var(--purple); }
+
+        .cc-intro {
+            display: none;
+            max-width: 760px;
+            margin: 1.75rem auto 0;
+            text-align: center;
+            font-size: 1.02rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            animation: baFade 0.45s ease;
+        }
+        .cc-intro.active { display: block; }
+        .cc-intro strong { color: var(--text-primary); }
+
         /* ─── MODAL ─── */
         .modal-overlay {
             position: fixed; inset: 0;
@@ -729,6 +806,30 @@
         .step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--cyan); color: white; font-weight: 600; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .step-content h5 { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; }
         .step-content p { font-size: 0.85rem; color: var(--text-secondary); }
+        /* human-in-the-loop checkpoint step */
+        .workflow-step.checkpoint {
+            background: rgba(217, 119, 6, 0.06);
+            border: 1px solid rgba(217, 119, 6, 0.22);
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            margin: 0 -0.25rem;
+        }
+        .workflow-step.checkpoint .step-num {
+            background: #D97706;
+        }
+        .checkpoint-flag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 6px;
+            font-family: var(--font-sans);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #B45309;
+        }
+        .checkpoint-flag svg { width: 12px; height: 12px; }
         .modal-metrics { display: flex; gap: 1rem; margin-top: 1.5rem; }
         .metric { background: var(--accent-warm); border-radius: 8px; border: 1px solid var(--border); padding: 0.9rem 1.25rem; text-align: center; flex: 1; }
         .metric-value { font-size: 1.3rem; font-weight: 600; color: var(--cyan); }
@@ -1004,7 +1105,26 @@
     <div class="container">
         <div class="section-label">The Complete System Available</div>
         <h2 class="section-title">Comprehensive Consultant Framework</h2>
-        <p class="section-subtitle">Your note processing request fits into a complete workflow optimization framework designed for sophisticated consultants</p>
+        <p class="section-subtitle">The same framework, seen through two lenses. Automate how your own studio runs, or deploy these systems into the client engagements you lead.</p>
+
+        <div class="cc-toggle-wrap">
+            <div class="cc-toggle" id="ccToggle" data-active="company" role="tablist">
+                <button data-cc="company" onclick="setCC('company')">
+                    For Your Company
+                    <span class="cc-btn-sub">Built around you</span>
+                </button>
+                <button data-cc="client" onclick="setCC('client')">
+                    For Your Clients
+                    <span class="cc-btn-sub">Built around their work</span>
+                </button>
+            </div>
+            <p class="cc-intro active" id="cc-intro-company">
+                Built around <strong>you and your team's priorities.</strong> Every automation is shaped to protect the encoding and learning-science opportunities that make your thinking sharp, while taking the manual friction off your plate. The goal is a studio that runs cleaner without changing the way you work.
+            </p>
+            <p class="cc-intro" id="cc-intro-client">
+                <strong>We are not redesigning what your client does.</strong> We look at what you do for them, work backwards, and build a custom automation process that lets your team's intelligence shine through, keeps product integrity intact for the client, and meets the client where they already work, mostly inside Google Workspace.
+            </p>
+        </div>
         
         <div class="automation-hub">
             <div class="label-bar">
@@ -1141,15 +1261,16 @@
             <div class="pricing-card featured">
                 <div class="pricing-label">Recommended</div>
                 <div class="pricing-title">Complete Framework</div>
-                <div class="pricing-value">$3,000</div>
-                <div class="pricing-desc">All seven automation systems integrated and optimized for your workflow.</div>
+                <div class="pricing-value" id="frameworkPrice">$3,000</div>
+                <div class="pricing-desc" id="frameworkDesc">All seven automation systems integrated and optimized for your own studio.</div>
                 <ul class="pricing-features">
-                    <li>$2,250 savings vs individual purchase</li>
+                    <li id="frameworkFeature">$2,250 savings vs individual purchase</li>
                     <li>Integrated system design</li>
                     <li>Priority implementation</li>
                     <li>Ongoing optimization included</li>
                     <li>Free strategy audit included</li>
                 </ul>
+                <p style="margin-top:1rem; font-size:0.72rem; color:var(--text-light); line-height:1.5;" id="frameworkNote">Pricing shown is for automating your own company. Client engagements run double, since the build is negotiated and delivered across two organizations.</p>
             </div>
             <div class="pricing-card">
                 <div class="pricing-label">Individual</div>
@@ -1211,7 +1332,7 @@
                 {h:'Meeting Ends', p:'Transcript captured via Google Meet or Zoom.'},
                 {h:'Auto Processing', p:'Claude extracts action items, insights, and contact updates.'},
                 {h:'Draft Generation', p:'Follow-up emails appear in Gmail drafts within 5 minutes.'},
-                {h:'Review & Send', p:'Quickly review and send. No manual notes needed.'}
+                {h:'Review & Send', p:'Nothing leaves your inbox until you have read it. You review each draft and send.', checkpoint:true}
             ],
             metrics: [{v:'100%', l:'Follow-up rate'}, {v:'10 hrs', l:'Weekly savings'}]
         },
@@ -1219,7 +1340,7 @@
             title: 'Proposal Publisher',
             desc: 'Turn a conversation into a live, branded proposal in under 30 minutes.',
             steps: [
-                {h:'Proposal Chat', p:'Discuss your needs with Claude in natural language.'},
+                {h:'Proposal Chat', p:'You direct the whole thing. Discuss the engagement with Claude in natural language and shape what the proposal says.', checkpoint:true},
                 {h:'Auto Generate', p:'HTML proposal built with your branding and content.'},
                 {h:'Live Deployment', p:'Published instantly via GitHub + Railway.'},
                 {h:'Share & Track', p:'Send the link and monitor client engagement.'}
@@ -1232,21 +1353,22 @@
             steps: [
                 {h:'Email Monitoring', p:'Scans conversations for intro opportunities.'},
                 {h:'Match Detection', p:'AI finds valuable connections in your network.'},
-                {h:'Consent Process', p:'Both parties contacted separately for approval.'},
+                {h:'Consent Process', p:'No introduction happens automatically. Both parties are contacted separately for approval before anything moves.', checkpoint:true},
                 {h:'Warm Introduction', p:'Professional intro email sent with full context.'}
             ],
             metrics: [{v:'2x', l:'Intro velocity'}, {v:'Auto', l:'Detection'}]
         },
         'content-automation': {
             title: 'Content Automation Engine',
-            desc: 'Three-tier content stack: flagship thought leadership, amplification, and engagement.',
+            desc: 'A three-tier content stack of flagship thought leadership, amplification, and engagement, all of it under your direction at every decision point.',
             steps: [
-                {h:'Signal Detection', p:'AI monitors news and finds content opportunities.'},
-                {h:'Content Planning', p:'Three tiers: flagship, amplification, engagement.'},
-                {h:'Auto Drafting', p:'Posts, articles, and insights generated from your voice.'},
-                {h:'Scheduled Publishing', p:'Multi-platform distribution with optimal timing.'}
+                {h:'Signal Detection', p:'The engine monitors news and surfaces content opportunities worth acting on.'},
+                {h:'You Set the Sources', p:'You choose and approve what the engine is allowed to draw from. Nothing gets sourced that you have not signed off on.', checkpoint:true},
+                {h:'Auto Drafting', p:'Posts and articles are drafted in your voice from the sources you approved.'},
+                {h:'Your Review', p:'Every piece comes back to you. Approve it, request a revision, or pivot the direction entirely from inside the system.', checkpoint:true},
+                {h:'Scheduled Publishing', p:'Only the content you approved goes out, distributed with optimal timing.'}
             ],
-            metrics: [{v:'3 Tiers', l:'Content stack'}, {v:'Auto', l:'Publishing'}]
+            metrics: [{v:'3 Tiers', l:'Content stack'}, {v:'You', l:'Approve every piece'}]
         },
         'client-intelligence': {
             title: 'Client Relationship Intelligence',
@@ -1265,7 +1387,7 @@
             steps: [
                 {h:'Data Pull', p:'Pulls activity, milestones, and metrics from your connected tools.'},
                 {h:'Report Generation', p:'Claude assembles a branded report in your format.'},
-                {h:'Review Gate', p:'You approve before it sends — human stays in the loop.'},
+                {h:'Review Gate', p:'Nothing reaches the client until you approve it. You stay in the loop on every report that goes out.', checkpoint:true},
                 {h:'Scheduled Delivery', p:'Delivered to the client automatically on your cadence.'}
             ],
             metrics: [{v:'Auto', l:'Report delivery'}, {v:'1–2 wks', l:'To deploy'}]
@@ -1287,9 +1409,14 @@
         const d = cardData[id]; if (!d) return;
         document.getElementById('modal-header').innerHTML = '<h3>' + d.title + '</h3>';
         document.getElementById('modal-desc').textContent = d.desc;
-        document.getElementById('modal-steps').innerHTML = d.steps.map((s,i) =>
-            '<div class="workflow-step"><div class="step-num">' + (i+1) + '</div><div class="step-content"><h5>' + s.h + '</h5><p>' + s.p + '</p></div></div>'
-        ).join('');
+        document.getElementById('modal-steps').innerHTML = d.steps.map((s,i) => {
+            const flag = s.checkpoint
+                ? '<span class="checkpoint-flag"><svg fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>You\'re in control here</span>'
+                : '';
+            return '<div class="workflow-step' + (s.checkpoint ? ' checkpoint' : '') + '">'
+                + '<div class="step-num">' + (i+1) + '</div>'
+                + '<div class="step-content"><h5>' + s.h + '</h5><p>' + s.p + '</p>' + flag + '</div></div>';
+        }).join('');
         document.getElementById('modal-metrics').innerHTML = d.metrics.map(m =>
             '<div class="metric"><div class="metric-value">' + m.v + '</div><div class="metric-label">' + m.l + '</div></div>'
         ).join('');
@@ -1332,6 +1459,32 @@
         document.getElementById('baToggle').setAttribute('data-active', state);
         document.getElementById('ba-before').classList.toggle('active', state === 'before');
         document.getElementById('ba-after').classList.toggle('active', state === 'after');
+    }
+
+    /* ─── COMPANY / CLIENT TOGGLE ─── */
+    const ccContent = {
+        company: {
+            price: '$3,000',
+            desc: 'All seven automation systems integrated and optimized for your own studio.',
+            feature: '$2,250 savings vs individual purchase',
+            note: 'Pricing shown is for automating your own company. Client engagements run double, since the build is negotiated and delivered across two organizations.'
+        },
+        client: {
+            price: '$6,000',
+            desc: 'The full framework, custom-built into a client engagement you lead and deliver.',
+            feature: 'Custom-fit to the client\'s existing Google Workspace',
+            note: 'Client engagements run double the in-house rate. The build is negotiated and delivered across two organizations, yours and the client\'s, while keeping product integrity intact for both.'
+        }
+    };
+    function setCC(state) {
+        document.getElementById('ccToggle').setAttribute('data-active', state);
+        document.getElementById('cc-intro-company').classList.toggle('active', state === 'company');
+        document.getElementById('cc-intro-client').classList.toggle('active', state === 'client');
+        const c = ccContent[state];
+        document.getElementById('frameworkPrice').textContent = c.price;
+        document.getElementById('frameworkDesc').textContent = c.desc;
+        document.getElementById('frameworkFeature').textContent = c.feature;
+        document.getElementById('frameworkNote').textContent = c.note;
     }
 </script>
 </body>
