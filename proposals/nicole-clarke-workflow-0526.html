@@ -195,8 +195,7 @@
             border-radius: 14px;
             padding: 6px;
             margin: 1.5rem 0 0;
-            max-width: 620px;
-            overflow: hidden;
+            width: 100%;
         }
         .ba-toggle::before {
             content: '';
@@ -233,6 +232,26 @@
             align-items: center;
             gap: 0.15rem;
             line-height: 1.2;
+        }
+        /* soft glow behind the After button to invite the click */
+        .ba-toggle button[data-state="after"]::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 10px;
+            background: radial-gradient(ellipse at center, rgba(26,158,158,0.28) 0%, rgba(26,158,158,0) 70%);
+            z-index: -1;
+            opacity: 1;
+            animation: baGlow 2.2s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .ba-toggle[data-active="after"] button[data-state="after"]::after {
+            animation: none;
+            opacity: 0;
+        }
+        @keyframes baGlow {
+            0%, 100% { opacity: 0.45; transform: scale(0.96); }
+            50% { opacity: 1; transform: scale(1.04); }
         }
         .ba-toggle button .ba-btn-sub {
             font-family: var(--font-sans);
@@ -752,7 +771,6 @@
             .pricing-grid { grid-template-columns: 1fr; gap: 1.5rem; }
             .section { padding: 4rem 0; }
             .workflow-viz { padding: 2rem 1.5rem; }
-            .ba-toggle { max-width: 100%; }
             .spectrum-cards { grid-template-columns: 1fr; }
             .science-strip { grid-template-columns: 1fr; }
             .spectrum-card { opacity: 1; transform: scale(1); }
