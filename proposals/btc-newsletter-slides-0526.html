@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTC Newsletter Planning — May 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #E8E8E8;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .deck {
+    width: 900px;
+    max-width: 98vw;
+  }
+
+  .slide {
+    display: none;
+    background: #FFFFFF;
+    border-radius: 6px;
+    min-height: 520px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .slide.active { display: flex; }
+
+  .slide-header {
+    background: #0D1F2D;
+    padding: 28px 36px;
+  }
+
+  .slide-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #C9A84C;
+    margin-bottom: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .slide-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.2;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .slide-header p {
+    font-size: 14px;
+    color: #9BB0BC;
+    margin-top: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .slide-body {
+    padding: 32px 36px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* TABLE SLIDE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  thead tr { background: #0D1F2D; }
+
+  thead th {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    padding: 11px 14px;
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+  }
+
+  tbody tr { border-bottom: 1px solid #E2DDD8; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #F7F5F2; }
+
+  td {
+    padding: 13px 14px;
+    vertical-align: top;
+    line-height: 1.5;
+    color: #3D4F5C;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+  }
+
+  td:first-child {
+    font-weight: 700;
+    color: #0D1F2D;
+    width: 42%;
+  }
+
+  .btc-read {
+    color: #1A5C3A;
+    font-style: italic;
+  }
+
+  /* CALENDAR TABLE */
+  .cal-table td:first-child { width: 80px; font-weight: 700; color: #0D1F2D; white-space: nowrap; }
+  .cal-table td:nth-child(2) { font-weight: 600; color: #0D1F2D; width: 200px; }
+  .cal-table td:nth-child(3) { font-size: 12px; color: #5A6E7A; }
+
+  .score {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 13px;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .s10 { background: #1A5C3A; }
+  .s9  { background: #2A7A50; }
+  .s8  { background: #3A8A60; }
+  .s7  { background: #6A8A70; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .tag-direct { background: #EBF5EF; color: #1A5C3A; border: 1px solid #7DC4A0; }
+  .tag-support { background: #FDF6E8; color: #9A6E1A; border: 1px solid #E8C97A; }
+  .tag-context { background: #F4F2EE; color: #7A8A94; border: 1px solid #E2DDD8; }
+
+  /* ISSUE DETAIL SLIDE */
+  .issue-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .issue-col h4 {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9A6E1A;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #E8C97A;
+    padding-bottom: 6px;
+  }
+
+  .issue-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .issue-col ul li {
+    font-size: 13px;
+    color: #3D4F5C;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .issue-col ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: #C8D4DA;
+  }
+
+  .issue-col ul li strong {
+    color: #0D1F2D;
+    font-weight: 700;
+  }
+
+  .tie-in {
+    grid-column: 1 / -1;
+    background: #EBF5EF;
+    border: 1px solid #7DC4A0;
+    border-radius: 4px;
+    padding: 16px 18px;
+    font-size: 13px;
+    color: #1A5C3A;
+    font-style: italic;
+    line-height: 1.65;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .tie-in strong {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #1A6B4A;
+    font-style: normal;
+    margin-bottom: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  /* INTRO SLIDE */
+  .intro-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .intro-point {
+    background: #F7F5F2;
+    border-left: 3px solid #0D1F2D;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: #0D1F2D;
+    line-height: 1.6;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .intro-point strong {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* NAVIGATION */
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .nav button {
+    background: #0D1F2D;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+  }
+
+  .nav button:disabled {
+    background: #C8D4DA;
+    cursor: default;
+  }
+
+  .nav button:not(:disabled):hover { background: #1A3A52; }
+
+  .slide-counter {
+    font-size: 13px;
+    color: #7A8A94;
+    font-family: Arial, Helvetica, sans-serif;
+    min-width: 60px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- SLIDE 1: INTRO -->
+  <div class="slide active" id="slide-1">
+    <div class="slide-header">
+      <div class="slide-eyebrow">BlackTech Capital — May 2026</div>
+      <h1>Newsletter Planning: H2 2026</h1>
+      <p>SVB report response + full content calendar</p>
+    </div>
+    <div class="slide-body">
+      <div class="intro-body">
+        <div class="intro-point">
+          <strong>What this is</strong>
+          SVB just dropped their annual climate tech report. Reading it clarified and strengthened our thesis more than it challenged it. The May issue will be a direct response — not a rebuttal of the data, but a challenge to its conclusions and the limits of its lens.
+        </div>
+        <div class="intro-point">
+          <strong>Why it matters for our content</strong>
+          The report is almost entirely US-centric. We are one of the few funds positioned to tell the full global story. That is the angle.
+        </div>
+        <div class="intro-point">
+          <strong>What else is in here</strong>
+          Working through the response also helped clarify what the rest of the year's issues should do. Each one is sequenced to match where our pipeline investors are in their decision-making at that point in the year.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: SVB TABLE -->
+  <div class="slide" id="slide-2">
+    <div class="slide-header">
+      <div class="slide-eyebrow">May Issue — SVB Response</div>
+      <h1>Key Takeaways vs. BTC's Read</h1>
+      <p>Where we agree with the data and where we push back on the conclusions</p>
+    </div>
+    <div class="slide-body" style="padding-top: 20px; padding-bottom: 20px;">
+      <table>
+        <thead>
+          <tr>
+            <th>SVB Takeaway</th>
+            <th>BTC's Read</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>$29B invested, third-highest year on record</td>
+            <td class="btc-read">Capital concentrated at the top means those are Series C plus companies on a clear path to exit. The exit market is waking up. That is exactly what early entry today is built for.</td>
+          </tr>
+          <tr>
+            <td>50+ federal actions creating headwinds since 2024</td>
+            <td class="btc-read">This is a uniquely American problem. Our thesis was never built on US federal tailwinds and this report makes that case for us.</td>
+          </tr>
+          <tr>
+            <td>Corporate earnings call mentions of climate down 69%</td>
+            <td class="btc-read">Corporate America went quiet. The demand did not. Only 8% of companies actually rolled back ESG commitments. The silence is political, not structural.</td>
+          </tr>
+          <tr>
+            <td>52% of climate companies reduced net burn YoY, record high</td>
+            <td class="btc-read">The best signal in the report. The sector is maturing in exactly the way we have always screened for. This validates our entry criteria.</td>
+          </tr>
+          <tr>
+            <td>Report focuses entirely on the US market</td>
+            <td class="btc-read">China deployed $625B into clean energy in 2024. India logged more climate tech IPOs than the US and Europe combined. The US is one chapter of a global story.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: CALENDAR TABLE -->
+  <div class="slide" id="slide-3">
+    <div class="slide-header">
+      <div class="slide-eyebrow">H2 2026 — Content Calendar</div>
+      <h1>Issue Sequencing + Investor Pipeline Alignment</h1>
+      <p>Each issue is sequenced to match where pipeline investors are in their decision-making</p>
+    </div>
+    <div class="slide-body" style="padding-top: 20px; padding-bottom: 20px;">
+      <table class="cal-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Issue</th>
+            <th>Investor Stage</th>
+            <th>Type</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>June</td>
+            <td>The Margin Revolution</td>
+            <td>First meaningful touch</td>
+            <td><span class="tag tag-direct">Direct</span></td>
+            <td><span class="score s9">9</span></td>
+          </tr>
+          <tr>
+            <td>July</td>
+            <td>The Exit Market Is Waking Up</td>
+            <td>Warm, not yet committed</td>
+            <td><span class="tag tag-direct">Direct</span></td>
+            <td><span class="score s9">9</span></td>
+          </tr>
+          <tr>
+            <td>August</td>
+            <td>The China / International Thesis</td>
+            <td>Evaluating, comparing funds</td>
+            <td><span class="tag tag-direct">Direct</span></td>
+            <td><span class="score s10">10</span></td>
+          </tr>
+          <tr>
+            <td>September</td>
+            <td>The Divergence Issue</td>
+            <td>In diligence</td>
+            <td><span class="tag tag-direct">Direct</span></td>
+            <td><span class="score s8">8</span></td>
+          </tr>
+          <tr>
+            <td>October</td>
+            <td>The National Labs Pipeline</td>
+            <td>Evaluating portfolio quality</td>
+            <td><span class="tag tag-support">Support</span></td>
+            <td><span class="score s8">8</span></td>
+          </tr>
+          <tr>
+            <td>November</td>
+            <td>The Vintage Year Thesis</td>
+            <td>At the edge of yes</td>
+            <td><span class="tag tag-direct">Direct</span></td>
+            <td><span class="score s10">10</span></td>
+          </tr>
+          <tr>
+            <td>December</td>
+            <td>Champagne</td>
+            <td>Committed LPs + Fund II seeding</td>
+            <td><span class="tag tag-context">Context</span></td>
+            <td><span class="score s7">7</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: JUNE -->
+  <div class="slide" id="slide-4">
+    <div class="slide-header">
+      <div class="slide-eyebrow">June — Score 9/10 — Direct Thesis Justification</div>
+      <h1>The Margin Revolution</h1>
+      <p>Profitability pivot in climate tech + diverse and women-led team performance data</p>
+    </div>
+    <div class="slide-body">
+      <div class="issue-grid">
+        <div class="issue-col">
+          <h4>What Each Section Does</h4>
+          <ul>
+            <li><strong>Open:</strong> The 52% net burn reduction data. Frame it as the market catching up to what disciplined investors always knew.</li>
+            <li><strong>Section 1:</strong> Why unit economics matter more than growth narrative. The AppHarvest cautionary tale.</li>
+            <li><strong>Section 2:</strong> Diverse and women-led teams double. Body of research showing stronger margin and revenue multiples. Performance data, not DEI language.</li>
+            <li><strong>Section 3:</strong> What this means for how BTC evaluates companies at entry.</li>
+          </ul>
+        </div>
+        <div class="issue-col">
+          <h4>Job Function for Pipeline Investors</h4>
+          <ul>
+            <li>Establishes <strong>BTC's analytical rigor</strong> as a portfolio selection filter</li>
+            <li>Signals we are <strong>not mission-driven alone</strong> — we screen for performance</li>
+            <li>Sets up diversity as <strong>a returns argument</strong>, not a values argument</li>
+          </ul>
+        </div>
+        <div class="tie-in">
+          <strong>BTC Tie-In</strong>
+          "The market is now confirming what our portfolio already reflects — the companies most likely to achieve durable margins are the ones built by teams that have always had to do more with less."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: JULY -->
+  <div class="slide" id="slide-5">
+    <div class="slide-header">
+      <div class="slide-eyebrow">July — Score 9/10 — Direct Thesis Justification</div>
+      <h1>The Exit Market Is Waking Up</h1>
+      <p>Late-stage signals and full-cycle return logic from early entry</p>
+    </div>
+    <div class="slide-body">
+      <div class="issue-grid">
+        <div class="issue-col">
+          <h4>What Each Section Does</h4>
+          <ul>
+            <li><strong>Open:</strong> $27.2B exit value in 2025, strongest post-2021 showing. Reframe the headline as a signal, not a stat.</li>
+            <li><strong>Section 1:</strong> What late-stage concentration means for the full cycle. Series C plus valuations and eventual liquidity events.</li>
+            <li><strong>Section 2:</strong> The exit pathways in climate tech — IPOs, acquisitions, secondary markets, future fund buyouts.</li>
+            <li><strong>Section 3:</strong> Why early entry in 2025/2026 maps directly to the companies producing those exits.</li>
+          </ul>
+        </div>
+        <div class="issue-col">
+          <h4>Job Function for Pipeline Investors</h4>
+          <ul>
+            <li>Directly addresses the <strong>liquidity objection</strong> — most common hesitation in early-stage climate</li>
+            <li>Demonstrates BTC's <strong>full-cycle thinking</strong>, not just entry discipline</li>
+            <li>Creates urgency — early entry pricing is <strong>finite</strong></li>
+          </ul>
+        </div>
+        <div class="tie-in">
+          <strong>BTC Tie-In</strong>
+          "The companies we are entering today are the ones that will be acquired by the strategic buyers currently going quiet on climate publicly while building their M&A pipelines privately."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: AUGUST -->
+  <div class="slide" id="slide-6">
+    <div class="slide-header">
+      <div class="slide-eyebrow">August — Score 10/10 — Direct Thesis Justification</div>
+      <h1>The China / International Thesis</h1>
+      <p>US psychosis does not equal global slowdown — state-level and CVC-level investment lens</p>
+    </div>
+    <div class="slide-body">
+      <div class="issue-grid">
+        <div class="issue-col">
+          <h4>What Each Section Does</h4>
+          <ul>
+            <li><strong>Open:</strong> China spent $625B on clean energy in 2024. The entire US VC debate is a rounding error by comparison.</li>
+            <li><strong>Section 1:</strong> State-level investment. China's Five-Year Plan, India's Hydrogen Mission, Singapore's Future Energy Fund, NEOM.</li>
+            <li><strong>Section 2:</strong> CVC and corporate-level investment. How international corporates are building supply chains while US corporates go silent.</li>
+            <li><strong>Section 3:</strong> Original reporting. Voices from BTC's international network.</li>
+          </ul>
+        </div>
+        <div class="issue-col">
+          <h4>Job Function for Pipeline Investors</h4>
+          <ul>
+            <li>The <strong>single strongest differentiator</strong> issue in the calendar</li>
+            <li>Establishes BTC as operating at a <strong>global level of analysis</strong> US-centric funds cannot match</li>
+            <li>Directly answers: <strong>why BTC and not another climate fund</strong></li>
+            <li>Plants the seed for <strong>Fund II's international deployment thesis</strong></li>
+          </ul>
+        </div>
+        <div class="tie-in">
+          <strong>BTC Tie-In</strong>
+          "Just because the US is going through a psychosis right now does not mean the rest of the world is. BlackTech Capital was built as an international firm from day one. Our thesis does not depend on US policy tailwinds."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: SEPTEMBER -->
+  <div class="slide" id="slide-7">
+    <div class="slide-header">
+      <div class="slide-eyebrow">September — Score 8/10 — Direct Thesis Justification</div>
+      <h1>The Divergence Issue</h1>
+      <p>Corporate America's silence vs. corporate Europe's mandatory disclosure culture</p>
+    </div>
+    <div class="slide-body">
+      <div class="issue-grid">
+        <div class="issue-col">
+          <h4>What Each Section Does</h4>
+          <ul>
+            <li><strong>Open:</strong> Corporate America climate mentions down 69%. Physical climate losses hit $417B globally in 2025. Set up the contradiction.</li>
+            <li><strong>Section 1:</strong> What corporate America is actually doing vs. what it is saying. 8% rollback vs. 32% expansion.</li>
+            <li><strong>Section 2:</strong> Corporate Europe as the foil. CSRD, mandatory disclosure, 40 global jurisdictions adopting ISSB frameworks.</li>
+            <li><strong>Section 3:</strong> What this divergence means for buyers of climate tech solutions.</li>
+          </ul>
+        </div>
+        <div class="issue-col">
+          <h4>Job Function for Pipeline Investors</h4>
+          <ul>
+            <li>Resolves what looks like a <strong>market contradiction</strong> for less sophisticated investors</li>
+            <li>Demonstrates BTC's ability to <strong>read signal through noise</strong></li>
+            <li>Reinforces the international positioning from August — <strong>corporate Europe is an active buyer</strong></li>
+          </ul>
+        </div>
+        <div class="tie-in">
+          <strong>BTC Tie-In</strong>
+          "The market is sending two signals at once — retreat in the language, acceleration in the physical demand. We invest in the demand, not the language."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: OCTOBER -->
+  <div class="slide" id="slide-8">
+    <div class="slide-header">
+      <div class="slide-eyebrow">October — Score 8/10 — Supporting Thesis</div>
+      <h1>The National Labs Pipeline</h1>
+      <p>How federally funded deep science becomes commercial technology — Mars Materials as live example</p>
+    </div>
+    <div class="slide-body">
+      <div class="issue-grid">
+        <div class="issue-col">
+          <h4>What Each Section Does</h4>
+          <ul>
+            <li><strong>Open:</strong> What national labs actually produce. Argonne, NREL, ORNL, Lawrence Berkeley. Decades of federally funded deep science most investors have never thought about as a deal pipeline.</li>
+            <li><strong>Section 1:</strong> The technology transfer pathway. How IP moves from lab to license to commercial company.</li>
+            <li><strong>Section 2:</strong> What defunding the federal research infrastructure means for early-stage climate over the next decade.</li>
+            <li><strong>Section 3:</strong> Mars Materials. Exclusive license of national lab-derived technology.</li>
+          </ul>
+        </div>
+        <div class="issue-col">
+          <h4>Job Function for Pipeline Investors</h4>
+          <ul>
+            <li>Demonstrates <strong>BTC's sourcing sophistication</strong> — we see pipelines most funds do not know exist</li>
+            <li>Uses a <strong>live portfolio company</strong> to make the thesis concrete</li>
+            <li>Connects the policy threat to <strong>why acting now matters</strong></li>
+          </ul>
+        </div>
+        <div class="tie-in">
+          <strong>BTC Tie-In</strong>
+          "One of our portfolio companies holds an exclusive license on technology that originated inside a federally funded national lab. That asymmetry is not accidental. It is how we source."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: NOVEMBER -->
+  <div class="slide" id="slide-9">
+    <div class="slide-header">
+      <div class="slide-eyebrow">November — Score 10/10 — Direct Thesis Justification</div>
+      <h1>The Vintage Year Thesis</h1>
+      <p>Comparable macro environments — what patient capital at the trough produces</p>
+    </div>
+    <div class="slide-body">
+      <div class="issue-grid">
+        <div class="issue-col">
+          <h4>What Each Section Does</h4>
+          <ul>
+            <li><strong>Open:</strong> What the 2009/2010 clean energy vintage produced for funds that deployed during the trough. Draw the macro parallel.</li>
+            <li><strong>Section 1:</strong> What skittish capital does to entry pricing. The early-stage gap as a structural pricing inefficiency, not a risk indicator.</li>
+            <li><strong>Section 2:</strong> What the companies that survived the last trough had in common.</li>
+            <li><strong>Section 3:</strong> Why the window is finite. Entry pricing advantage compresses as confidence returns.</li>
+          </ul>
+        </div>
+        <div class="issue-col">
+          <h4>Job Function for Pipeline Investors</h4>
+          <ul>
+            <li>The <strong>closing argument</strong> for the investor at the edge of yes</li>
+            <li>Reframes hesitation as a <strong>timing risk</strong>, not a safety position</li>
+            <li>Synthesizes everything built across the prior five issues into <strong>a single investment case</strong></li>
+            <li>Seeds the <strong>Fund II conversation</strong></li>
+          </ul>
+        </div>
+        <div class="tie-in">
+          <strong>BTC Tie-In</strong>
+          "The best vintage years in venture are never obvious while you are in them. They become obvious in retrospect, to the people who were not in the room. We are in the room."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: DECEMBER -->
+  <div class="slide" id="slide-10">
+    <div class="slide-header">
+      <div class="slide-eyebrow">December — Score 7/10 — Context and Relationship</div>
+      <h1>Champagne</h1>
+      <p>Deployment retrospective — what we said we believed and what the year proved out</p>
+    </div>
+    <div class="slide-body">
+      <div class="issue-grid">
+        <div class="issue-col">
+          <h4>What Each Section Does</h4>
+          <ul>
+            <li><strong>Open:</strong> What we said in January and what the year proved out. A direct accountability moment.</li>
+            <li><strong>Section 1:</strong> Deployment retrospective. What we invested in, why, and what the early signals show.</li>
+            <li><strong>Section 2:</strong> The thesis in its current form, sharpened by a year of evidence.</li>
+            <li><strong>Close:</strong> What 2027 looks like and what Fund II is being built to do.</li>
+          </ul>
+        </div>
+        <div class="issue-col">
+          <h4>Job Function for Pipeline Investors</h4>
+          <ul>
+            <li>Builds <strong>credibility with committed LPs</strong> — demonstrates follow-through</li>
+            <li>Warms the <strong>Fund II pipeline</strong></li>
+            <li>Creates a <strong>shareable year-end artifact</strong> that travels beyond the existing list</li>
+            <li>Sets the tone for the next chapter — <strong>confidence, not hype</strong></li>
+          </ul>
+        </div>
+        <div class="tie-in">
+          <strong>BTC Tie-In</strong>
+          "We told you what we believed. Here is what we did about it. Here is what the evidence says so far. And here is where we are going next."
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav">
+  <button id="prev-btn" onclick="changeSlide(-1)" disabled>← Back</button>
+  <span class="slide-counter" id="counter">1 / 10</span>
+  <button id="next-btn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+  let current = 1;
+  const total = 10;
+
+  function changeSlide(dir) {
+    document.getElementById('slide-' + current).classList.remove('active');
+    current += dir;
+    document.getElementById('slide-' + current).classList.add('active');
+    document.getElementById('counter').textContent = current + ' / ' + total;
+    document.getElementById('prev-btn').disabled = current === 1;
+    document.getElementById('next-btn').disabled = current === total;
+  }
+</script>
+
+</body>
+</html>
