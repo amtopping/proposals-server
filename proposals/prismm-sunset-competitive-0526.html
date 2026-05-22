@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prismm vs. Sunset — Competitive Intelligence Brief · May 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coral: #f9655b;
+    --purple: #6658ea;
+    --yellow: #f5c070;
+    --navy: #1b2b45;
+    --white: #ffffff;
+    --navy-light: #243855;
+    --navy-muted: #3a506b;
+    --bg: #f4f6f9;
+    --border: rgba(27,43,69,0.12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--navy); line-height: 1.6; font-size: 15px; }
+
+  .header { background: var(--navy); padding: 64px 0 48px; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(102,88,234,0.3) 0%, transparent 70%); }
+  .header::after { content: ''; position: absolute; bottom: -40px; left: 10%; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(249,101,91,0.2) 0%, transparent 70%); }
+  .container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+  .header-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--yellow); margin-bottom: 16px; }
+  .header-title { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 900; color: var(--white); line-height: 1.1; margin-bottom: 20px; }
+  .header-title span { color: var(--coral); }
+  .header-sub { font-size: 16px; color: rgba(255,255,255,0.65); max-width: 540px; font-weight: 300; line-height: 1.7; }
+  .header-meta { margin-top: 32px; display: flex; gap: 24px; flex-wrap: wrap; }
+  .meta-tag { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 6px 14px; font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; }
+
+  main { padding: 56px 0 80px; }
+  .section { margin-bottom: 56px; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--coral); margin-bottom: 8px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--navy); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--border); }
+
+  .lead-callout { background: var(--navy); border-radius: 12px; padding: 32px 36px; margin-bottom: 48px; position: relative; overflow: hidden; }
+  .lead-callout::before { content: '"'; position: absolute; top: -10px; left: 24px; font-family: 'Playfair Display', serif; font-size: 120px; color: rgba(249,101,91,0.15); line-height: 1; }
+  .lead-callout p { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; color: var(--white); line-height: 1.65; position: relative; }
+  .lead-callout p em { color: var(--yellow); font-style: normal; }
+
+  .company-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+  .company-card { background: var(--white); border-radius: 10px; padding: 28px; border: 1px solid var(--border); }
+  .company-card.prismm { border-top: 4px solid var(--purple); }
+  .company-card.sunset { border-top: 4px solid var(--coral); }
+  .company-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .company-tagline { font-size: 12px; color: var(--navy-muted); margin-bottom: 16px; font-weight: 400; }
+  .company-desc { font-size: 14px; color: var(--navy-muted); line-height: 1.65; margin-bottom: 18px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 500; font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
+  .tag-purple { background: rgba(102,88,234,0.1); color: var(--purple); }
+  .tag-coral { background: rgba(249,101,91,0.1); color: var(--coral); }
+  .tag-yellow { background: rgba(245,192,112,0.15); color: #b8812a; }
+  .tag-navy { background: rgba(27,43,69,0.1); color: var(--navy); }
+  .tag-green { background: rgba(26,122,74,0.1); color: #1a7a4a; }
+
+  .matrix-wrapper { background: var(--white); border-radius: 12px; border: 1px solid var(--border); padding: 32px; margin-bottom: 40px; }
+  .matrix-title { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy-muted); margin-bottom: 24px; text-align: center; }
+  .matrix-grid { display: grid; grid-template-columns: 48px 1fr 1fr; grid-template-rows: 48px 1fr 1fr; gap: 3px; max-width: 600px; margin: 0 auto; }
+  .matrix-corner { background: transparent; }
+  .matrix-col-label, .matrix-row-label { display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy-muted); font-weight: 500; }
+  .matrix-row-label { writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); }
+  .matrix-cell { border-radius: 8px; padding: 20px; min-height: 130px; display: flex; flex-direction: column; justify-content: space-between; }
+  .cell-tl { background: rgba(102,88,234,0.06); border: 2px solid rgba(102,88,234,0.2); }
+  .cell-tr { background: rgba(245,192,112,0.1); border: 1px solid rgba(245,192,112,0.3); }
+  .cell-bl { background: rgba(249,101,91,0.06); border: 2px solid rgba(249,101,91,0.25); }
+  .cell-br { background: rgba(27,43,69,0.04); border: 1px solid var(--border); }
+  .cell-brand { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; }
+  .cell-brand.purple { color: var(--purple); }
+  .cell-brand.coral { color: var(--coral); }
+  .cell-desc { font-size: 12px; color: var(--navy-muted); line-height: 1.5; margin-top: 6px; }
+  .cell-badge { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 10px; font-family: 'DM Mono', monospace; letter-spacing: 0.05em; margin-top: 10px; width: fit-content; }
+  .badge-purple { background: rgba(102,88,234,0.15); color: var(--purple); }
+  .badge-coral { background: rgba(249,101,91,0.15); color: var(--coral); }
+  .badge-muted { background: rgba(27,43,69,0.08); color: var(--navy-muted); }
+
+  .table-wrap { background: var(--white); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 40px; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--navy); }
+  thead th { padding: 14px 20px; text-align: left; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.7); font-weight: 400; }
+  thead th:first-child { color: rgba(255,255,255,0.4); }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:nth-child(even) { background: rgba(27,43,69,0.02); }
+  tbody td { padding: 14px 20px; font-size: 13.5px; vertical-align: top; line-height: 1.55; }
+  tbody td:first-child { font-weight: 600; font-size: 12px; color: var(--navy-muted); width: 28%; font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
+  .cell-prismm { color: var(--purple); font-weight: 500; }
+  .cell-sunset { color: #c0392b; }
+  .advantage { color: #1a7a4a; font-weight: 500; }
+  .gap { color: #c0392b; }
+  .neutral { color: var(--navy-muted); }
+
+  .scenario-list { display: flex; flex-direction: column; gap: 16px; }
+  .scenario-card { background: var(--white); border-radius: 10px; border: 1px solid var(--border); border-left: 4px solid var(--border); padding: 22px 24px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; }
+  .scenario-card.high { border-left-color: var(--coral); }
+  .scenario-card.medium { border-left-color: var(--yellow); }
+  .scenario-card.low { border-left-color: #a0aec0; }
+  .scenario-name { font-weight: 600; font-size: 14px; margin-bottom: 6px; color: var(--navy); }
+  .scenario-body { font-size: 13px; color: var(--navy-muted); line-height: 1.6; }
+  .scenario-trigger { margin-top: 8px; font-size: 12px; color: var(--navy-muted); }
+  .scenario-trigger strong { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--navy); }
+  .scenario-badges { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+  .likelihood-badge, .impact-badge { padding: 4px 10px; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+  .l-high { background: rgba(249,101,91,0.12); color: var(--coral); }
+  .l-medium { background: rgba(245,192,112,0.2); color: #b8812a; }
+  .l-low { background: rgba(27,43,69,0.08); color: var(--navy-muted); }
+  .i-high { background: rgba(249,101,91,0.08); color: var(--coral); border: 1px solid rgba(249,101,91,0.2); }
+  .i-medium { background: rgba(245,192,112,0.1); color: #b8812a; border: 1px solid rgba(245,192,112,0.25); }
+
+  .battlecard { background: var(--navy); border-radius: 12px; padding: 32px 36px; color: var(--white); }
+  .battlecard-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 4px; color: var(--white); }
+  .battlecard-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 28px; }
+  .battlecard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .bc-block { background: rgba(255,255,255,0.06); border-radius: 8px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
+  .bc-block-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--yellow); margin-bottom: 12px; }
+  .bc-item { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 10px; padding-left: 14px; position: relative; }
+  .bc-item::before { content: '→'; position: absolute; left: 0; color: var(--coral); font-size: 12px; }
+
+  .gaps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .gap-card { background: var(--white); border-radius: 8px; padding: 20px 22px; border: 1px solid var(--border); border-top: 3px solid var(--yellow); }
+  .gap-q { font-size: 13.5px; font-weight: 600; color: var(--navy); margin-bottom: 6px; line-height: 1.4; }
+  .gap-why { font-size: 12px; color: var(--navy-muted); line-height: 1.5; }
+
+  .adv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .adv-card { background: var(--white); border-radius: 10px; padding: 24px; border: 1px solid var(--border); }
+  .adv-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .adv-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .adv-dot.purple { background: var(--purple); }
+  .adv-dot.coral { background: var(--coral); }
+  .adv-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; }
+  .adv-item { font-size: 13px; color: var(--navy-muted); line-height: 1.6; margin-bottom: 8px; padding-left: 16px; position: relative; }
+  .adv-item::before { content: '·'; position: absolute; left: 4px; font-size: 16px; line-height: 1.3; }
+
+  /* Framework coverage */
+  .framework-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .fw-card { background: var(--white); border-radius: 8px; padding: 16px 18px; border: 1px solid var(--border); }
+  .fw-status { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .fw-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .fw-dot.covered { background: #1a7a4a; }
+  .fw-dot.partial { background: #b8812a; }
+  .fw-dot.missing { background: var(--coral); }
+  .fw-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .fw-label.covered { color: #1a7a4a; }
+  .fw-label.partial { color: #b8812a; }
+  .fw-label.missing { color: var(--coral); }
+  .fw-name { font-weight: 600; font-size: 13px; color: var(--navy); margin-bottom: 4px; }
+  .fw-note { font-size: 11.5px; color: var(--navy-muted); line-height: 1.45; }
+
+  /* Online presence report card */
+  .presence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .presence-card { background: var(--white); border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
+  .presence-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); }
+  .presence-brand { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; }
+  .presence-grade { display: inline-block; margin-left: 10px; font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 700; }
+  .grade-a { color: #1a7a4a; }
+  .grade-b { color: #b8812a; }
+  .grade-c { color: var(--coral); }
+  .presence-body { padding: 18px 22px; }
+  .channel-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .channel-row:last-child { border-bottom: none; }
+  .channel-name { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.07em; color: var(--navy-muted); width: 110px; flex-shrink: 0; padding-top: 2px; }
+  .channel-detail { font-size: 13px; color: var(--navy); line-height: 1.45; flex: 1; }
+  .channel-score { margin-left: 12px; flex-shrink: 0; }
+  .score-pip { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 2px; }
+  .score-pip.on { background: var(--purple); }
+  .score-pip.on-coral { background: var(--coral); }
+  .score-pip.off { background: #d1d9e0; }
+  .presence-summary { margin-top: 14px; padding: 12px 14px; background: var(--bg); border-radius: 6px; font-size: 12.5px; color: var(--navy-muted); line-height: 1.55; }
+
+  /* Momentum section */
+  .momentum-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .momentum-col { }
+  .momentum-brand { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+  .momentum-brand.purple { border-color: var(--purple); }
+  .momentum-brand.coral { border-color: var(--coral); }
+  .momentum-item { background: var(--white); border-radius: 8px; padding: 16px 18px; border: 1px solid var(--border); margin-bottom: 12px; }
+  .momentum-date { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy-muted); margin-bottom: 6px; }
+  .momentum-headline { font-weight: 600; font-size: 13.5px; color: var(--navy); margin-bottom: 5px; line-height: 1.35; }
+  .momentum-body { font-size: 12.5px; color: var(--navy-muted); line-height: 1.55; }
+  .momentum-signal { display: inline-block; margin-top: 8px; padding: 3px 8px; border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.05em; }
+  .signal-major { background: rgba(102,88,234,0.1); color: var(--purple); }
+  .signal-channel { background: rgba(249,101,91,0.1); color: var(--coral); }
+  .signal-product { background: rgba(245,192,112,0.15); color: #b8812a; }
+  .signal-brand { background: rgba(27,43,69,0.08); color: var(--navy-muted); }
+  .momentum-summary { margin-top: 16px; padding: 16px 18px; border-radius: 8px; font-size: 13px; line-height: 1.65; }
+  .momentum-summary.prismm { background: rgba(102,88,234,0.06); border: 1px solid rgba(102,88,234,0.15); color: var(--navy); }
+  .momentum-summary.sunset { background: rgba(249,101,91,0.06); border: 1px solid rgba(249,101,91,0.15); color: var(--navy); }
+
+  footer { background: var(--navy); padding: 24px 0; text-align: center; }
+  footer p { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; }
+
+  @media (max-width: 640px) {
+    .company-grid, .adv-grid, .battlecard-grid, .gaps-grid, .presence-grid, .momentum-grid, .framework-grid { grid-template-columns: 1fr; }
+    .matrix-grid { display: none; }
+    .scenario-card { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <p class="header-eyebrow">Prismm · Internal Competitive Intelligence</p>
+    <h1 class="header-title">Prismm vs. <span>Sunset</span></h1>
+    <p class="header-sub">Who they are, what they're building, and why the institutional channel is the differentiator that matters.</p>
+    <div class="header-meta">
+      <span class="meta-tag">May 2026</span>
+      <span class="meta-tag">Internal Only</span>
+      <span class="meta-tag">Prepared by Keyona Meeks</span>
+      <span class="meta-tag">v2 — Updated</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="container">
+
+  <div class="lead-callout">
+    <p>Families are left scrambling after a loss <em>because their bank gave them nothing before it happened.</em> That's the problem Prismm solves — and the gap Sunset exposes every time it gets used.</p>
+  </div>
+
+  <!-- 01 COMPANY PROFILES -->
+  <section class="section">
+    <p class="section-label">01 — Company Profiles</p>
+    <h2 class="section-title">Who's in the room</h2>
+    <div class="company-grid">
+      <div class="company-card prismm">
+        <div class="company-name">Prismm</div>
+        <div class="company-tagline">Estate orchestration infrastructure · Community banks &amp; credit unions</div>
+        <p class="company-desc">B2B platform embedding wealth transfer workflows inside community financial institutions. Sells to the institution. Families use it through their bank. Founded by Martha Underwood (CEO). ABA Partner Network listed. Multiple patent filings.</p>
+        <div class="tag-row">
+          <span class="tag tag-purple">B2B</span>
+          <span class="tag tag-purple">Pre-death</span>
+          <span class="tag tag-purple">Banks &amp; CUs</span>
+          <span class="tag tag-navy">Institutional SaaS</span>
+          <span class="tag tag-green">Jack Henry FIN — May 2026</span>
+        </div>
+      </div>
+      <div class="company-card sunset">
+        <div class="company-name">Sunset</div>
+        <div class="company-tagline">Automated estate settlement · Direct-to-consumer</div>
+        <p class="company-desc">Free D2C software helping families locate, consolidate, and distribute a decedent's assets post-death. Revenue from bank partner interest on estate accounts. YC-backed. Founded 2024 by Stephen Walter (CEO) + Kaela Worthen. Salt Lake City, UT.</p>
+        <div class="tag-row">
+          <span class="tag tag-coral">D2C (free)</span>
+          <span class="tag tag-coral">Post-death only</span>
+          <span class="tag tag-yellow">SOC 2 Type II</span>
+          <span class="tag tag-navy">YC-backed · 2 rounds</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 MARKET POSITION (2x2) -->
+  <section class="section">
+    <p class="section-label">02 — Market Position</p>
+    <h2 class="section-title">Where each player sits</h2>
+    <div class="matrix-wrapper">
+      <p class="matrix-title">Pre/Post-death × Institution/Consumer</p>
+      <div class="matrix-grid">
+        <div class="matrix-corner"></div>
+        <div class="matrix-col-label">Institution</div>
+        <div class="matrix-col-label">Consumer</div>
+        <div class="matrix-row-label">Pre-death</div>
+        <div class="matrix-cell cell-tl">
+          <div>
+            <div class="cell-brand purple">Prismm</div>
+            <p class="cell-desc">Embedding planning workflows inside community banks &amp; credit unions before death occurs. Jack Henry FIN integrated.</p>
+          </div>
+          <span class="cell-badge badge-purple">Prismm's quadrant</span>
+        </div>
+        <div class="matrix-cell cell-tr">
+          <div>
+            <div class="cell-brand" style="color:#b8812a;">Trust &amp; Will, Everplans, Vanilla</div>
+            <p class="cell-desc">Consumer estate planning tools. No bank distribution channel. Prismm does not compete here directly.</p>
+          </div>
+          <span class="cell-badge badge-muted">Adjacent</span>
+        </div>
+        <div class="matrix-row-label">Post-death</div>
+        <div class="matrix-cell cell-br">
+          <div>
+            <div class="cell-brand" style="color:#888;">Vacant today</div>
+            <p class="cell-desc">Institutional post-death settlement infrastructure. No dominant player here yet — highest risk zone for Prismm.</p>
+          </div>
+          <span class="cell-badge badge-muted">Risk zone</span>
+        </div>
+        <div class="matrix-cell cell-bl">
+          <div>
+            <div class="cell-brand coral">Sunset</div>
+            <p class="cell-desc">D2C estate settlement tool. Families use it directly. Bank relationship is a revenue vehicle, not the product.</p>
+          </div>
+          <span class="cell-badge badge-coral">Sunset's quadrant</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--navy-muted);line-height:1.6;">Direct overlap today is low. The risk scenario is Sunset moving up and left — into institutional pre-death — or a community bank embedding Sunset as an aftercare benefit, connecting the quadrants without Prismm in the loop.</p>
+  </section>
+
+  <!-- 03 HEAD TO HEAD -->
+  <section class="section">
+    <p class="section-label">03 — Head to Head</p>
+    <h2 class="section-title">Dimension-by-dimension comparison</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Dimension</th><th>Prismm</th><th>Sunset</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Go-to-market</td><td class="cell-prismm">B2B → community banks &amp; CUs as distribution channel</td><td class="cell-sunset">Direct-to-consumer; families are the end user</td></tr>
+          <tr><td>Customer</td><td class="cell-prismm">Community financial institutions</td><td class="cell-sunset">Executors, families, personal representatives</td></tr>
+          <tr><td>Lifecycle timing</td><td class="cell-prismm advantage">Pre-death — longer runway, proactive relationship</td><td class="cell-sunset">Post-death only. Activated after death certificate issued.</td></tr>
+          <tr><td>Revenue model</td><td class="cell-prismm">Institutional SaaS licensing</td><td class="cell-sunset">Interest earned on estate accounts during settlement via bank partners. Families pay $0.</td></tr>
+          <tr><td>Bank relationship</td><td class="cell-prismm advantage">Sells into the bank — the institution is the customer and distribution channel</td><td class="cell-sunset">Partners with banks to hold estate funds. Bank is a revenue vehicle, not the buyer.</td></tr>
+          <tr><td>Community focus</td><td class="cell-prismm advantage">Explicit — community banks &amp; CUs only. Defensible niche.</td><td class="cell-sunset neutral">Not differentiated by institution type or size</td></tr>
+          <tr><td>Core banking integration</td><td class="cell-prismm advantage">Jack Henry FIN (May 2026) — SilverLake, CIF 20/20, Core Director, Symitar</td><td class="cell-sunset neutral">No institutional core banking integration publicly confirmed</td></tr>
+          <tr><td>Asset discovery</td><td class="cell-prismm neutral">Not core product feature (planning infrastructure)</td><td class="cell-sunset advantage">Nationwide, automated, 8 asset types, ~1-day speed. $300M+ discovered (self-reported, Sunset website, Dec 2025).</td></tr>
+          <tr><td>Probate support</td><td class="cell-prismm neutral">Out of current scope</td><td class="cell-sunset advantage">All 50 states, 3,000+ counties, e-notarization. 98% of estates reportedly don't need a lawyer.</td></tr>
+          <tr><td>Compliance</td><td class="cell-prismm advantage">SOC 2 Type II confirmed. Operates within institutional partners' regulatory infrastructure (OCC, NCUA, FDIC-ready workflows). Architecturally different risk profile than a D2C app.</td><td class="cell-sunset">SOC 2 Type II confirmed. SEC-registered investment adviser — likely tied to their adviser arm, not estate settlement directly. Worth monitoring for product signal.</td></tr>
+          <tr><td>Traction</td><td class="cell-prismm neutral">Early stage — institutional onboarding cycles are longer but switching costs are higher. Jack Henry FIN integration is the first public platform-level proof point.</td><td class="cell-sunset">10,000+ families, $300M+ in assets discovered (self-reported, verified on Sunset website Dec 2025). YC-backed.</td></tr>
+          <tr><td>Referral channel</td><td class="cell-prismm advantage">Estate attorneys, CPAs, financial advisors as co-hosts — activates during planning (earlier, stickier lifecycle moment)</td><td class="cell-sunset">Funeral director referral program with commissions — activates post-death only. Not a comparable channel.</td></tr>
+          <tr><td>Funding</td><td class="cell-prismm neutral">Not publicly disclosed</td><td class="cell-sunset">2 rounds per Crunchbase. YC S24 batch. Exact amount not publicly confirmed.</td></tr>
+          <tr><td>Team size</td><td class="cell-prismm neutral">Not publicly disclosed</td><td class="cell-sunset">5 employees listed on YC. Small team, high automation.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 04 STRATEGIC ADVANTAGES -->
+  <section class="section">
+    <p class="section-label">04 — Strategic Position</p>
+    <h2 class="section-title">Where each has an edge</h2>
+    <div class="adv-grid">
+      <div class="adv-card">
+        <div class="adv-header"><div class="adv-dot purple"></div><div class="adv-title">Prismm's advantages</div></div>
+        <div class="adv-item">Owns the bank relationship — not a service riding alongside it</div>
+        <div class="adv-item">Pre-death positioning means longer runway per customer and recurring institutional contract</div>
+        <div class="adv-item">Community bank focus is a defensible niche Sunset doesn't address</div>
+        <div class="adv-item">Jack Henry FIN integration unlocks the core banking install base — this is a major distribution lever</div>
+        <div class="adv-item">Compliance posture is architecturally built for institutional examination (OCC, NCUA, FDIC) — not a retrofit</div>
+        <div class="adv-item">Advisor/attorney channel builds a referral moat that activates earlier in the lifecycle</div>
+        <div class="adv-item">Patent-protected technology for triggered access, life event verification, and account transition automation</div>
+      </div>
+      <div class="adv-card">
+        <div class="adv-header"><div class="adv-dot coral"></div><div class="adv-title">Sunset's advantages</div></div>
+        <div class="adv-item">Free to families = near-zero acquisition friction and viral referral potential</div>
+        <div class="adv-item">10,000+ families and $300M+ discovered is real, public traction at a small team size</div>
+        <div class="adv-item">SOC 2 Type II confirmed — strong trust signal for any institutional conversation</div>
+        <div class="adv-item">Post-death settlement is urgent — families need it immediately, driving fast activation</div>
+        <div class="adv-item">Nationwide probate infrastructure (50 states, 3,000+ counties, e-notarization) is a meaningful and costly product investment</div>
+        <div class="adv-item">SEO content machine (learn.hellosunset.com) is building significant organic search presence in executor-related keywords</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 RISK SCENARIOS -->
+  <section class="section">
+    <p class="section-label">05 — Risk Scenarios</p>
+    <h2 class="section-title">What to watch and when to move</h2>
+    <div class="scenario-list">
+      <div class="scenario-card high">
+        <div>
+          <div class="scenario-name">Scenario A — Sunset moves upstream into pre-death planning</div>
+          <p class="scenario-body">Sunset currently disclaims pre-death planning. If they launch any planning tool — even lightweight — their existing D2C base gives them instant distribution that would take Prismm years to match via institutional channels.</p>
+          <p class="scenario-trigger"><strong>Watch for:</strong> Sunset hires a product lead with wealth management background. Blog post or PR framing them as "end-to-end." TOS changes referencing "planning." Series A with fintech-focused lead investor. Their SEC-registered adviser arm expanding scope.</p>
+        </div>
+        <div class="scenario-badges">
+          <span class="likelihood-badge l-medium">Likelihood: Medium</span>
+          <span class="impact-badge i-high">Impact: High</span>
+        </div>
+      </div>
+      <div class="scenario-card medium">
+        <div>
+          <div class="scenario-name">Scenario B — A community bank embeds Sunset as an aftercare benefit</div>
+          <p class="scenario-body">A CU or community bank integrates Sunset into their offboarding workflow — connecting Prismm's target channel to Sunset's product without Prismm in the loop. This is the quietest version of displacement. Now that Prismm is in the Jack Henry network, this risk is more visible but the moat is also stronger.</p>
+          <p class="scenario-trigger"><strong>Watch for:</strong> Sunset job postings for enterprise or bank partnership roles. Any press mention of a bank integration. RFP language from target CUs mentioning "post-death settlement."</p>
+        </div>
+        <div class="scenario-badges">
+          <span class="likelihood-badge l-low">Likelihood: Low today</span>
+          <span class="impact-badge i-medium">Impact: Medium</span>
+        </div>
+      </div>
+      <div class="scenario-card medium">
+        <div>
+          <div class="scenario-name">Scenario C — Sunset's funeral director channel expands to bank advisors</div>
+          <p class="scenario-body">Sunset's referral model runs through funeral directors today. If they add financial advisors or bank relationship managers as a referral channel, they begin competing for the same trust relationships Prismm's advisor co-host strategy is building.</p>
+          <p class="scenario-trigger"><strong>Watch for:</strong> Sunset attending financial advisor or bank advisor conferences. Any advisor-specific product or partner landing page. Testimonials from bank advisors in their marketing.</p>
+        </div>
+        <div class="scenario-badges">
+          <span class="likelihood-badge l-low">Likelihood: Low</span>
+          <span class="impact-badge i-medium">Impact: Medium</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 BATTLECARD -->
+  <section class="section">
+    <p class="section-label">06 — Sales Conversation</p>
+    <h2 class="section-title">When Sunset comes up in a bank pitch</h2>
+    <div class="battlecard">
+      <div class="battlecard-title">Battlecard</div>
+      <p class="battlecard-sub">Use when a bank prospect asks about Sunset or estate settlement tools during a Prismm conversation.</p>
+      <div class="battlecard-grid">
+        <div class="bc-block">
+          <div class="bc-block-title">What to say</div>
+          <div class="bc-item">Sunset is a family tool. Prismm is bank infrastructure. They don't compete — they describe what happens when a bank does nothing before a customer dies.</div>
+          <div class="bc-item">Sunset is reactive. A family opens it after the loss. Prismm is what your institution does before that moment ever arrives.</div>
+          <div class="bc-item">Every time a family uses Sunset, it's evidence your bank left them without a plan. Prismm closes that gap while the relationship is still yours to own.</div>
+          <div class="bc-item">Prismm is now in the Jack Henry Fintech Integration Network. If you're running SilverLake, CIF 20/20, or Symitar, we're already compatible with your core.</div>
+        </div>
+        <div class="bc-block">
+          <div class="bc-block-title">Why pre-death creates lock-in</div>
+          <div class="bc-item">Pre-death infrastructure is embedded in the relationship — it's part of how the institution serves the member, not a tool the family finds on their own after death.</div>
+          <div class="bc-item">Once a bank has a wealth transfer workflow embedded, switching costs are institutional. It's not one family choosing a different app — it's the bank making a platform decision.</div>
+          <div class="bc-item">Prismm's advisor/attorney co-host channel builds referral relationships Sunset's funeral director model can't replicate at the planning stage.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 OPEN INTEL GAPS -->
+  <section class="section">
+    <p class="section-label">07 — Open Questions</p>
+    <h2 class="section-title">What we don't know yet</h2>
+    <div class="gaps-grid">
+      <div class="gap-card">
+        <p class="gap-q">Who are Sunset's bank partners and how many?</p>
+        <p class="gap-why">Their revenue model depends on estate account interest — depth of that banking network signals how embedded they're becoming institutionally.</p>
+      </div>
+      <div class="gap-card">
+        <p class="gap-q">What does Sunset's current funding and cap table look like?</p>
+        <p class="gap-why">YC-backed with 2 rounds per Crunchbase but amounts not confirmed. A fintech-forward lead investor in a Series A would signal upstream expansion intent.</p>
+      </div>
+      <div class="gap-card">
+        <p class="gap-q">Is Sunset's SEC registration relevant to estate settlement or future-signaling?</p>
+        <p class="gap-why">SEC registration is likely tied to an investment adviser arm. If that arm expands, it could precede pre-death financial planning features.</p>
+      </div>
+      <div class="gap-card">
+        <p class="gap-q">What's the unit economics behind "$300M+ discovered"?</p>
+        <p class="gap-why">Average estate account size and hold duration determines per-family revenue. This makes the traction number meaningful, not just large.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 FRAMEWORK COVERAGE CHECK -->
+  <section class="section">
+    <p class="section-label">08 — Framework Coverage</p>
+    <h2 class="section-title">Does this brief cover what it should?</h2>
+    <p style="font-size:13.5px;color:var(--navy-muted);margin-bottom:20px;line-height:1.65;">Checked against the Productboard competitive analysis framework. Green = covered, amber = partial, red = gap to address in next revision.</p>
+    <div class="framework-grid">
+      <div class="fw-card">
+        <div class="fw-status"><div class="fw-dot covered"></div><span class="fw-label covered">Covered</span></div>
+        <div class="fw-name">Product features &amp; capabilities</div>
+        <div class="fw-note">Head-to-head table covers feature-level comparison across all relevant dimensions.</div>
+      </div>
+      <div class="fw-card">
+        <div class="fw-status"><div class="fw-dot covered"></div><span class="fw-label covered">Covered</span></div>
+        <div class="fw-name">Target market &amp; positioning</div>
+        <div class="fw-note">Company profiles, 2×2 matrix, and comparison table all address this explicitly.</div>
+      </div>
+      <div class="fw-card">
+        <div class="fw-status"><div class="fw-dot covered"></div><span class="fw-label covered">Covered</span></div>
+        <div class="fw-name">Strengths &amp; weaknesses</div>
+        <div class="fw-note">Dedicated advantages section with honest assessment of both sides.</div>
+      </div>
+      <div class="fw-card">
+        <div class="fw-status"><div class="fw-dot covered"></div><span class="fw-label covered">Covered</span></div>
+        <div class="fw-name">Go-to-market strategy</div>
+        <div class="fw-note">Sales motion, referral channels, and distribution model covered for both.</div>
+      </div>
+      <div class="fw-card">
+        <div class="fw-status"><div class="fw-dot covered"></div><span class="fw-label covered">Covered</span></div>
+        <div class="fw-name">Customer traction</div>
+        <div class="fw-note">Sunset's numbers sourced and dated. Prismm's institutional proof points noted.</div>
+      </div>
+      <div class="fw-card">
+        <div class="fw-status"><div class="fw-dot covered"></div><span class="fw-label covered">Covered</span></div>
+        <div class="fw-name">Pricing &amp; business model</div>
+        <div class="fw-note">Revenue models (SaaS vs. interest income vs. D2C free) covered in profiles and table.</div>
+      </div>
+      <div class="fw-card">
+        <div class="fw-status"><div class="fw-dot partial"></div><span class="fw-label partial">Partial</span></div>
+        <div class="fw-name">Company &amp; team</div>
+        <div class="fw-note">Founders named. Funding depth unclear. Headcount unknown for Prismm. Sunset = 5 per YC.</div>
+      </div>
+      <div class="fw-card">
+        <div class="fw-status"><div class="fw-dot partial"></div><span class="fw-label partial">Partial</span></div>
+        <div class="fw-name">Technology &amp; innovation</div>
+        <div class="fw-note">Jack Henry integration and patent filings noted. Sunset's tech stack (data integrations, AI use) not analyzed.</div>
+      </div>
+      <div class="fw-card">
+        <div class="fw-status"><div class="fw-dot missing"></div><span class="fw-label missing">Gap</span></div>
+        <div class="fw-name">Broader competitive set</div>
+        <div class="fw-note">Trust &amp; Will, Everplans, Vanilla named in 2×2 but not analyzed. No full landscape scan. Substitute solutions (attorneys, spreadsheets) not explored.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 ONLINE PRESENCE REPORT CARD -->
+  <section class="section">
+    <p class="section-label">09 — Online Presence Report Card</p>
+    <h2 class="section-title">How effectively are they communicating across channels</h2>
+    <div class="presence-grid">
+
+      <div class="presence-card">
+        <div class="presence-header">
+          <span class="presence-brand" style="color:var(--purple);">Prismm</span>
+          <span class="presence-grade grade-b">B</span>
+          <div style="font-size:12px;color:var(--navy-muted);margin-top:4px;">Strong positioning, limited reach</div>
+        </div>
+        <div class="presence-body">
+          <div class="channel-row">
+            <div class="channel-name">Website</div>
+            <div class="channel-detail">getprismm.com is clean, institutional, and sharp. "Estate orchestration infrastructure" is clearly defined. CTA is a strategic briefing, not a free trial — right for B2B. Dashboard screenshot adds credibility.</div>
+            <div class="channel-score">
+              <span class="score-pip on"></span><span class="score-pip on"></span><span class="score-pip on"></span><span class="score-pip on"></span><span class="score-pip off"></span>
+            </div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">LinkedIn</div>
+            <div class="channel-detail">409 followers. Active on banking/wealth transfer topics. Content is relevant to ICP but reach is very small. No virality visible. Founder voice not prominent.</div>
+            <div class="channel-score">
+              <span class="score-pip on"></span><span class="score-pip on"></span><span class="score-pip off"></span><span class="score-pip off"></span><span class="score-pip off"></span>
+            </div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">Press</div>
+            <div class="channel-detail">Jack Henry FIN press release (May 2026) via Business Wire — real earned media. ABA Partner Network listing adds institutional credibility. Inc.com profile live.</div>
+            <div class="channel-score">
+              <span class="score-pip on"></span><span class="score-pip on"></span><span class="score-pip on"></span><span class="score-pip off"></span><span class="score-pip off"></span>
+            </div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">Content</div>
+            <div class="channel-detail">Resources section on site. No blog or content engine visible. No SEO play targeting community bank decision-makers found.</div>
+            <div class="channel-score">
+              <span class="score-pip on"></span><span class="score-pip off"></span><span class="score-pip off"></span><span class="score-pip off"></span><span class="score-pip off"></span>
+            </div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">Messaging</div>
+            <div class="channel-detail">Some legacy "digital vault" language still visible on older profiles (LinkedIn bio, Facebook, Inc.com) vs. "estate orchestration infrastructure" on the live site. Inconsistency in external presence.</div>
+            <div class="channel-score">
+              <span class="score-pip on"></span><span class="score-pip on"></span><span class="score-pip off"></span><span class="score-pip off"></span><span class="score-pip off"></span>
+            </div>
+          </div>
+        </div>
+        <div style="padding:0 22px 18px;">
+          <div class="presence-summary">Prismm's website is doing the right job for a B2B sales motion — it positions, it qualifies, it converts. The gap is amplification. 409 LinkedIn followers and no content engine means Prismm is invisible to people who aren't already in the funnel. The stale "digital vault" messaging on external profiles is the most urgent fix — it dilutes the institutional positioning every time someone searches the brand.</div>
+        </div>
+      </div>
+
+      <div class="presence-card">
+        <div class="presence-header">
+          <span class="presence-brand" style="color:var(--coral);">Sunset</span>
+          <span class="presence-grade grade-a">A−</span>
+          <div style="font-size:12px;color:var(--navy-muted);margin-top:4px;">Content machine, search-optimized, CEO-led</div>
+        </div>
+        <div class="presence-body">
+          <div class="channel-row">
+            <div class="channel-name">Website</div>
+            <div class="channel-detail">hellosunset.com is clean, empathetic, consumer-focused. Clear free-to-use value prop above the fold. Emotional tone appropriate for bereaved families. Trust signals (SOC 2, FDIC, free) prominent.</div>
+            <div class="channel-score">
+              <span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip off"></span>
+            </div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">Content / SEO</div>
+            <div class="channel-detail">learn.hellosunset.com is an AI-optimized content machine. Dozens of executor guides, state-by-state probate resources, comparison articles ("Sunset vs. attorneys"), and a Press &amp; Impact Hub targeting reporters and AI assistants. Dominant in executor-intent search.</div>
+            <div class="channel-score">
+              <span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip on-coral"></span>
+            </div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">Press</div>
+            <div class="channel-detail">Multiple FuneralVision features (Dec 2025). Funeral Director Daily coverage. Executorium product launch coverage. CEO interview published. Niche but highly targeted for their referral channel.</div>
+            <div class="channel-score">
+              <span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip off"></span><span class="score-pip off"></span>
+            </div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">CEO Presence</div>
+            <div class="channel-detail">Stephen Walter active on LinkedIn. Quoted in multiple press articles. Personal voice visible. The brand's public credibility is largely CEO-driven rather than institutional.</div>
+            <div class="channel-score">
+              <span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip off"></span><span class="score-pip off"></span>
+            </div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">Partnerships</div>
+            <div class="channel-detail">Dedicated partnerships page. Funeral director referral program with commissions documented publicly. Insurance industry partnerships mentioned. Structured acquisition channel.</div>
+            <div class="channel-score">
+              <span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip on-coral"></span><span class="score-pip off"></span>
+            </div>
+          </div>
+        </div>
+        <div style="padding:0 22px 18px;">
+          <div class="presence-summary">Sunset's content machine is genuinely impressive for a team of 5. learn.hellosunset.com is an SEO moat — it captures families at the exact moment they're searching for answers after a death. The gap is institutional credibility. Sunset communicates excellently to families and funeral directors, but there's no evidence of messaging designed to sell into banks or credit unions. Their online presence is built entirely for D2C, which is consistent with their strategy — and limited by it.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 10 RECENT MOMENTUM -->
+  <section class="section">
+    <p class="section-label">10 — Recent Momentum</p>
+    <h2 class="section-title">What's happened in the last six months</h2>
+    <p style="font-size:13.5px;color:var(--navy-muted);margin-bottom:24px;line-height:1.65;">Nov 2025 – May 2026. Sourced from press releases, company websites, and third-party coverage.</p>
+    <div class="momentum-grid">
+
+      <div class="momentum-col">
+        <div class="momentum-brand purple">Prismm</div>
+
+        <div class="momentum-item">
+          <div class="momentum-date">May 2026 — 3 weeks ago</div>
+          <div class="momentum-headline">Joins Jack Henry Fintech Integration Network</div>
+          <p class="momentum-body">Prismm Anchor™ now integrates with SilverLake®, CIF 20/20®, Core Director®, and Symitar® via jXchange™ and SymXchange™. This is the first public platform-level proof point — it puts Prismm inside the core banking infrastructure that the majority of community banks and credit unions run on. Martha Underwood quoted in Business Wire press release.</p>
+          <span class="momentum-signal signal-major">Major milestone</span>
+        </div>
+
+        <div class="momentum-item">
+          <div class="momentum-date">Ongoing · 2025–2026</div>
+          <div class="momentum-headline">ABA Partner Network listing active</div>
+          <p class="momentum-body">Listed in the American Bankers Association partner directory as "the evolution of the safety deposit box, helping banks retain deposits, generate fee income, and build client loyalty." Institutional channel signal — ABA listing is a warm intro to member banks.</p>
+          <span class="momentum-signal signal-channel">Channel build</span>
+        </div>
+
+        <div class="momentum-item">
+          <div class="momentum-date">2024–2025</div>
+          <div class="momentum-headline">T3 Technology Tools for Today — attended</div>
+          <p class="momentum-body">Prismm attended T3 (the primary fintech/advisor conference). Shella Sylla visible at booth. Coverage noted the platform as being "for securing important documents" for financial advisors — older positioning but validates advisor channel presence.</p>
+          <span class="momentum-signal signal-brand">Conference presence</span>
+        </div>
+
+        <div class="momentum-item">
+          <div class="momentum-date">Active — 2025–2026</div>
+          <div class="momentum-headline">Website repositioned to "estate orchestration infrastructure"</div>
+          <p class="momentum-body">getprismm.com now leads with "estate orchestration infrastructure for banks and credit unions" — a notable sharpening from earlier "digital vault" messaging. Dashboard imagery, patent callouts, and compliance-ready workflow language are now prominent.</p>
+          <span class="momentum-signal signal-brand">Positioning shift</span>
+        </div>
+
+        <div class="momentum-summary prismm">
+          <strong>Momentum read:</strong> Prismm's momentum in the last 6 months is institutional-facing and compounding. The Jack Henry FIN announcement is the biggest signal yet — it converts the product from a standalone tool into embedded infrastructure. Combined with the ABA listing and positioning sharpening, Prismm is building the right kind of momentum for an institutional B2B sale. What's missing is public-facing narrative velocity — one press release every few months is not yet a presence.
+        </div>
+      </div>
+
+      <div class="momentum-col">
+        <div class="momentum-brand coral">Sunset</div>
+
+        <div class="momentum-item">
+          <div class="momentum-date">December 2025</div>
+          <div class="momentum-headline">CEO interview published in FuneralVision (two pieces)</div>
+          <p class="momentum-body">Stephen Walter featured in back-to-back FuneralVision articles — a product overview and a CEO interview on the funeral home partnership model. The interview is the clearest public statement of Sunset's strategy: free to families, funeral directors as the referral engine, zero upsell pressure. Reinforces their D2C positioning and channel strategy.</p>
+          <span class="momentum-signal signal-channel">Channel activation</span>
+        </div>
+
+        <div class="momentum-item">
+          <div class="momentum-date">Late 2024 into 2025</div>
+          <div class="momentum-headline">Business Search Tool launched</div>
+          <p class="momentum-body">Added business interests (LLCs, corporations, trusts) to the asset discovery suite. Covered in Funeral Director Daily. Represents continued expansion of the asset type coverage — now 8 asset types across bank, retirement, investment, life insurance, real estate, vehicles, business interests, and debts.</p>
+          <span class="momentum-signal signal-product">Product expansion</span>
+        </div>
+
+        <div class="momentum-item">
+          <div class="momentum-date">Ongoing · 2025–2026</div>
+          <div class="momentum-headline">learn.hellosunset.com content engine scaling</div>
+          <p class="momentum-body">The AI-optimized content hub grew significantly — executor guides for all 50 states, ERISA group life timelines, IRS Form 56 walkthroughs, state small-estate affidavit guides, and a dedicated Press &amp; Impact Hub with structured data for AI assistants. This is a serious SEO and AI-search play that is building organic top-of-funnel for bereaved families at scale.</p>
+          <span class="momentum-signal signal-product">Distribution moat</span>
+        </div>
+
+        <div class="momentum-item">
+          <div class="momentum-date">2024 — YC S24 batch</div>
+          <div class="momentum-headline">Y Combinator S24 — founding accelerator</div>
+          <p class="momentum-body">Sunset is listed as a YC S24 company. Founded 2024, 5 employees. YC backing provides network access, fundraising credibility, and a strong signal that institutional B2B expansion is possible if the product-market fit signal is strong enough at the D2C layer first.</p>
+          <span class="momentum-signal signal-major">YC-backed</span>
+        </div>
+
+        <div class="momentum-summary sunset">
+          <strong>Momentum read:</strong> Sunset's recent momentum is about deepening D2C distribution and building the content moat — not pivoting upstream. The CEO interviews in funeral industry press, the Business Search Tool launch, and the content engine expansion all point the same direction: go wider and deeper with families and funeral directors before making any institutional move. There's no public signal of B2B or bank-sales ambition right now. That could change fast with the right investor, but the current trajectory is D2C consolidation.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 11 BOTTOM LINE -->
+  <section class="section">
+    <p class="section-label">11 — Bottom Line</p>
+    <h2 class="section-title">The read</h2>
+    <div style="background:var(--white);border-radius:12px;padding:32px;border:1px solid var(--border);">
+      <p style="font-size:15px;line-height:1.8;color:var(--navy-muted);margin-bottom:16px;">Sunset and Prismm are not direct competitors today. They attack different moments — post-death vs. pre-death — and different customers — families vs. institutions. Direct overlap is structurally low.</p>
+      <p style="font-size:15px;line-height:1.8;color:var(--navy-muted);margin-bottom:16px;">Sunset has D2C distribution, real public traction, and a content engine that will compound. Prismm just hit its first major institutional proof point with the Jack Henry FIN integration — that's a different kind of momentum, slower to build and harder to displace.</p>
+      <p style="font-size:15px;line-height:1.8;color:var(--navy-muted);margin-bottom:16px;">The risk is not Sunset beating Prismm in a head-to-head. The risk is Sunset expanding upstream, or getting embedded in a bank's offboarding workflow, before Prismm has locked in the institutional relationship at that institution. Prismm's online presence gap — stale messaging on external profiles, no content engine, thin LinkedIn presence — means the institutional brand is underdeveloped relative to the product's actual progress.</p>
+      <p style="font-size:15px;line-height:1.8;color:var(--navy);font-weight:500;">The opportunity: Prismm can position community banks as the antidote to exactly what Sunset exposes. Families are left scrambling after a loss because their bank gave them nothing before it happened. Prismm is what changes that. And now that it's inside the Jack Henry network, the infrastructure case is real — the narrative just needs to catch up.</p>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer>
+  <p>Prismm · Internal Competitive Brief · May 2026 · v2 · Prepared by Keyona Meeks · Confidential</p>
+</footer>
+
+</body>
+</html>
