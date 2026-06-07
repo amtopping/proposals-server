@@ -6,6 +6,7 @@
   <title>Proposal Publisher — Ship a page in one chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -88,9 +89,7 @@
     .step:last-child { border-bottom: none; }
 
     .step-num { font-size: 10px; color: var(--text-tertiary); padding-top: 3px; letter-spacing: 0.05em; }
-
     .step-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 5px; }
-
     .step-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 8px; }
 
     .tag {
@@ -134,6 +133,121 @@
       margin-top: 2rem;
       text-align: right;
       letter-spacing: 0.04em;
+    }
+
+    /* HTML to PNG section */
+    .png-section {
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 0.5px solid var(--border);
+    }
+
+    .png-section h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .png-section h2 em { font-style: italic; color: var(--teal-mid); }
+
+    .png-section .sub {
+      margin-bottom: 1.5rem;
+    }
+
+    .png-editor {
+      background: #fff;
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .png-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 0.5px solid var(--border);
+      background: #f7f6f3;
+    }
+
+    .png-toolbar-label {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+
+    .png-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      background: var(--teal-mid);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 16px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: background 0.15s;
+    }
+
+    .png-btn:hover { background: var(--teal-dark); }
+    .png-btn:disabled { background: var(--text-tertiary); cursor: not-allowed; }
+
+    .png-textarea {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      width: 100%;
+      min-height: 180px;
+      padding: 14px;
+      border: none;
+      outline: none;
+      resize: vertical;
+      background: #fff;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .png-preview-wrap {
+      border-top: 0.5px solid var(--border);
+      padding: 16px;
+      background: #f7f6f3;
+      display: none;
+    }
+
+    .png-preview-wrap.visible { display: block; }
+
+    .png-preview-label {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 10px;
+    }
+
+    .png-preview-img {
+      max-width: 100%;
+      border-radius: 4px;
+      border: 0.5px solid var(--border);
+      display: block;
+    }
+
+    .png-download {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 11px;
+      color: var(--teal-mid);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--teal-muted);
+      padding-bottom: 1px;
+    }
+
+    .png-status {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 8px;
     }
   </style>
 </head>
@@ -186,6 +300,81 @@
     </div>
 
     <p class="made-with">made with Claude + proposal-publisher skill</p>
+
+    <!-- HTML to PNG Section -->
+    <div class="png-section">
+      <h2>HTML <em>to PNG</em></h2>
+      <p class="sub">Paste any HTML below and convert it to a PNG image you can download instantly. Rendered right in the browser — no server, no upload.</p>
+
+      <div class="png-editor">
+        <div class="png-toolbar">
+          <span class="png-toolbar-label">HTML input</span>
+          <button class="png-btn" id="convertBtn" onclick="convertToPng()">Convert to PNG</button>
+        </div>
+        <textarea class="png-textarea" id="htmlInput" placeholder="Paste your HTML here…&#10;&#10;Example:&#10;&lt;div style=&quot;padding:40px;background:#E1F5EE;font-family:monospace;color:#085041;&quot;&gt;&#10;  &lt;h1&gt;Hello world&lt;/h1&gt;&#10;&lt;/div&gt;"></textarea>
+        <div class="png-preview-wrap" id="previewWrap">
+          <p class="png-preview-label">Preview</p>
+          <img class="png-preview-img" id="previewImg" src="" alt="PNG preview">
+          <a class="png-download" id="downloadLink" href="#" download="export.png">Download PNG</a>
+          <p class="png-status" id="status"></p>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <script>
+    function convertToPng() {
+      const html = document.getElementById('htmlInput').value.trim();
+      const btn = document.getElementById('convertBtn');
+
+      if (!html) {
+        alert('Paste some HTML first.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Rendering…';
+
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:800px;height:600px;border:none;visibility:hidden;';
+      document.body.appendChild(iframe);
+
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{box-sizing:border-box;}body{margin:0;padding:0;}</style></head><body>' + html + '</body></html>');
+      doc.close();
+
+      setTimeout(function() {
+        html2canvas(doc.body, {
+          useCORS: true,
+          scale: 2,
+          backgroundColor: '#ffffff',
+          width: 800,
+          windowWidth: 800
+        }).then(function(canvas) {
+          const dataUrl = canvas.toDataURL('image/png');
+          const img = document.getElementById('previewImg');
+          const link = document.getElementById('downloadLink');
+          const wrap = document.getElementById('previewWrap');
+          const status = document.getElementById('status');
+
+          img.src = dataUrl;
+          link.href = dataUrl;
+          wrap.classList.add('visible');
+          status.textContent = canvas.width / 2 + ' × ' + canvas.height / 2 + 'px · @2x for retina';
+
+          document.body.removeChild(iframe);
+          btn.disabled = false;
+          btn.textContent = 'Convert to PNG';
+          wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }).catch(function(err) {
+          alert('Render failed: ' + err.message);
+          document.body.removeChild(iframe);
+          btn.disabled = false;
+          btn.textContent = 'Convert to PNG';
+        });
+      }, 300);
+    }
+  </script>
 </body>
 </html>
