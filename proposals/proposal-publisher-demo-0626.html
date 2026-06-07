@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposal Publisher — Ship a page in one chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal-dark: #085041;
+      --teal-mid: #0F6E56;
+      --teal-light: #E1F5EE;
+      --teal-muted: #9FE1CB;
+      --text-primary: #1a1a18;
+      --text-secondary: #5f5e5a;
+      --text-tertiary: #888780;
+      --border: rgba(0,0,0,0.1);
+      --bg: #faf9f6;
+    }
+
+    body {
+      font-family: 'DM Mono', monospace;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .wrap { max-width: 600px; width: 100%; }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--teal-mid);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      background: var(--teal-muted);
+    }
+
+    h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(38px, 7vw, 54px);
+      line-height: 1.08;
+      color: var(--text-primary);
+      margin-bottom: 1.25rem;
+      font-weight: 400;
+    }
+
+    h1 em { font-style: italic; color: var(--teal-mid); }
+
+    .sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      max-width: 430px;
+      margin-bottom: 3rem;
+    }
+
+    hr { border: none; border-top: 0.5px solid var(--border); margin-bottom: 0; }
+
+    .steps { list-style: none; }
+
+    .step {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 0.5px solid var(--border);
+      align-items: start;
+    }
+
+    .step:last-child { border-bottom: none; }
+
+    .step-num { font-size: 10px; color: var(--text-tertiary); padding-top: 3px; letter-spacing: 0.05em; }
+
+    .step-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 5px; }
+
+    .step-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 8px; }
+
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      border-radius: 4px;
+      padding: 3px 9px;
+      letter-spacing: 0.02em;
+    }
+
+    .footer {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .live-url { font-size: 11px; color: var(--teal-mid); letter-spacing: -0.01em; }
+
+    .blink { animation: blink 1.1s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .badge {
+      font-size: 10px;
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      border-radius: 20px;
+      padding: 5px 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .made-with {
+      font-size: 10px;
+      color: var(--text-tertiary);
+      margin-top: 2rem;
+      text-align: right;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="eyebrow">Claude × GitHub × Railway</p>
+    <h1>Ship a page.<br><em>In one chat.</em></h1>
+    <p class="sub">Design a proposal, one-pager, or pitch in conversation — then push it live with a permanent URL. No terminal. No deploys. Just chat.</p>
+
+    <hr>
+
+    <ol class="steps">
+      <li class="step">
+        <span class="step-num">01</span>
+        <div>
+          <p class="step-title">Design in conversation</p>
+          <p class="step-desc">Describe what you need. Claude builds a complete, beautiful HTML page — right here in chat.</p>
+          <span class="tag">HTML · CSS · no external deps</span>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-num">02</span>
+        <div>
+          <p class="step-title">Approve when ready</p>
+          <p class="step-desc">Preview in the artifact panel. Say "ship it" when you're happy.</p>
+          <span class="tag">nothing moves without your OK</span>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-num">03</span>
+        <div>
+          <p class="step-title">Claude pushes to GitHub</p>
+          <p class="step-desc">A unique slug is created. The file is committed to the proposals server repo.</p>
+          <span class="tag">proposals/your-slug-0626.html</span>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-num">04</span>
+        <div>
+          <p class="step-title">Railway deploys in ~30s</p>
+          <p class="step-desc">Auto-deploy fires on every push. Your page is live at a permanent URL.</p>
+          <span class="tag">no terminal · no CI · just chat</span>
+        </div>
+      </li>
+    </ol>
+
+    <div class="footer">
+      <span class="live-url">proposals-server-production-2593.up.railway.app<span class="blink">_</span></span>
+      <span class="badge">live in ~30s</span>
+    </div>
+
+    <p class="made-with">made with Claude + proposal-publisher skill</p>
+  </div>
+</body>
+</html>
